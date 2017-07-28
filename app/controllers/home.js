@@ -3,7 +3,7 @@ var express = require('express'),
   mongoose = require('mongoose'),
   Article = mongoose.model('Article'),
   User = mongoose.model('User');
-
+var moment = require('moment');
 module.exports = function (app) {
   app.use('/', router);
 };
@@ -93,6 +93,7 @@ router.get('/add', function (req, res, next) {
  * [description] 提交文章信息
  */
 router.post('/add', function (req, res, next) {
+    console.log(moment().format('L'));
     var message={};
     if(req.body.title===''||req.body.info===''||req.body.topic===''||req.body.cate===''){
         message.code=1;
@@ -100,13 +101,13 @@ router.post('/add', function (req, res, next) {
         res.json(message);
         return;
     }else{
-        console.log(req.cookies.userInfo.name);
         var art = new Article({
             title:req.body.title,
             topic:req.body.topic,
             text:req.body.info,
             author:req.cookies.userInfo.name,
-            cate:req.body.cate
+            cate:req.body.cate,
+            date:moment().format('L')
         });
         art.save().then(function(info){
             message.code=0;

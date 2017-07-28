@@ -7,7 +7,7 @@ var ArticleSchema = new Schema({
   title: String,
   topic: String,
   text: String,
-  date:{type:Date,default:Date.now},
+  date:String,
   author:String,
   cate:String,
 
