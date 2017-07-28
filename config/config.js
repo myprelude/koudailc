@@ -8,7 +8,7 @@ var config = {
     app: {
       name: 'bolg'
     },
-    port: process.env.PORT || 3000,
+    port: process.env.PORT || 80,
     db: 'mongodb://localhost/nodebolg'
   },
 
@@ -17,7 +17,7 @@ var config = {
     app: {
       name: 'bolg'
     },
-    port: process.env.PORT || 3000,
+    port: process.env.PORT || 80,
     db: 'mongodb://localhost/bolg-test'
   },
 
@@ -26,7 +26,7 @@ var config = {
     app: {
       name: 'bolg'
     },
-    port: process.env.PORT || 3000,
+    port: process.env.PORT || 80,
     db: 'mongodb://localhost/bolg-production'
   }
 };
