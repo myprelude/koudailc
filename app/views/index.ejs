@@ -1,0 +1,46 @@
+<% include header %>
+    <!--content start-->
+    <div id="content">
+    	
+         <!--left-->
+         <div class="left" id="c_left">
+           <div class="s_tuijian">
+           <h2>文章<span>推荐</span></h2>
+           </div>
+          <div class="content_text">
+           
+           
+            
+           <% art.forEach(function(item){%>
+           		<div class="wz">
+	            <h3><a href="#" title="<%=item.title%>">##<%=item.title%></a></h3>
+	             <dl>
+	               <dt><img src="images/s3.jpg" width="200" height="123" alt=""></dt>
+	               <dd>
+	                 <p class="dd_text_1"><%=item.topic%></p>
+	               <p class="dd_text_2">
+	               <span class="left author"><%=item.author%></span><span class="left sj">时间:<%=item.date%></span>
+	               <span class="left fl">分类:<a href="javascript:;" title="学无止境">口袋记</a></span><span class="left yd"><a href="/page?id=<%=item._id%>" title="阅读全文">阅读全文</a>
+	               </span>
+	                <div class="clear"></div>
+	               </p>
+	               </dd>
+	               <div class="clear"></div>
+	             </dl>
+	            </div>
+           	<%})%>
+            <!--wz-->
+           
+           <!--wz end-->
+              
+                             
+           </div>
+         </div>
+         <!--left end-->
+		<% include right %>
+         <!--right end-->
+         <div class="clear"></div>
+    </div>
+    <!--content end-->
+
+<% include footer %>

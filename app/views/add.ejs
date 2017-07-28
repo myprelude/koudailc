@@ -1,0 +1,67 @@
+<% include header %>
+<link rel="stylesheet" href="css/wangEditor.css">
+<!--content start-->
+    <div id="content">
+       <!--left-->
+         <div class="left" id="about_me">
+           <div class="weizi">
+           <div class="wz_text">当前位置：<a href="#">首页</a>><h1>添加文章</h1></div>
+           </div>
+           <div class='title'>
+           	<textarea placeholder="文章的标题" id='titleC'></textarea>
+           </div>
+           <div class='title'>
+           	<textarea placeholder="输入文章主题" id='titleT'></textarea>
+           </div>
+           <div class='title'>
+           	<select name="" id="cate">
+           		<option value="1">口袋记</option>
+           		<option value="2">日常记</option>
+           	</select>
+           </div>
+           <div class="about_content">
+             <div id='div3'></div>
+           </div>
+           <div style='text-align:center;padding-top:20px;'><button id='onAdd' style='outline:none;border:1px solid #eee;padding:6px 12px;'>添加文章</button></div>
+           <div id='txt'></div>
+         </div>
+         <!--end left -->
+         <% include right %>
+         <!--end  right-->
+         <div class="clear"></div>
+         
+    </div>
+    <!--content end-->
+<% include footer %>
+<script type="text/javascript" src="js/wangEditor.min.js"></script>
+<script type="text/javascript">
+    var E = window.wangEditor;
+    var editor = new E('#div3');
+    editor.customConfig.uploadImgServer = 'www.scopeman.cn';
+    editor.create();
+    $('#onAdd').click(function(){
+    	var title = $('#titleC').val();
+    	var info = editor.txt.html();
+    	var cate = $('#cate').val();
+    	var topic = $('#titleT').val();
+    	if(title===''||info===''){
+    		alert('请输入内容')
+    	}else{
+    		$.ajax({
+    			type:'post',
+    			url:'add',
+    			data:{title:title,info:info,cate:cate,topic:topic},
+    			success:function(date){
+    				if(date.code===0){
+    					$('#titleC').val('');
+    					$('#cate').val('');
+    					$('#titleT').val('');
+    					editor.txt.html('');
+    					alert('文章发表成功！');
+    				}
+    			}
+    		})
+    	}
+    })
+    
+</script>

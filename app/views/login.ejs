@@ -1,0 +1,36 @@
+<% include header %>
+<style>
+	form{width:300px;margin:0 auto;text-align:center}
+</style>
+<form action="">
+	<div>
+		<label for="#username">用户名:</label>
+		<input type="text" id='username'>
+	</div>
+	<div>
+		<label for="#password">密　码:</label>
+		<input type="password" id='password'>
+	</div>
+	<div><input id='login' value='登录' type='button' /></div>
+</form>
+<% include footer %>
+<script>
+	$('#login').click(function(){
+		var name = $('#username').val();
+		var password = $('#password').val();
+		if(name===''||password===''){
+			alert('输入不能为空')
+		}else{
+			$.ajax({
+				url:'/login',
+				type:'post',
+				data:{name:name,password:password},
+				success:function(data){
+					if(data.code===0){
+						window.location.href='http://localhost:3000/add';
+					}
+				}
+			})
+		}
+	})
+</script>
