@@ -139,7 +139,7 @@ router.get('/add', function (req, res, next) {
     if(req.cookies.userInfo!==undefined&&req.cookies.userInfo.sign){
         if(req.query.id==undefined){
             res.render('add',{
-                arts:{title:'',topic:'',text:''}
+                arts:{title:'',topic:'',text:'',_id:''}
             });
         }else{
             var id = req.query.id;
@@ -165,19 +165,33 @@ router.post('/add', function (req, res, next) {
         res.json(message);
         return;
     }else{
-        var art = new Article({
-            title:req.body.title,
-            topic:req.body.topic,
-            text:req.body.info,
-            author:req.cookies.userInfo.name,
-            cate:req.body.cate,
-            date:moment().format('L')
-        });
-        art.save().then(function(info){
-            message.code=0;
-            message.message='文章添加成功';
-            res.json(message);
-        })
+        if(req.body.id){
+            Article.update({_id:req.body.id},{title:req.body.title,
+                topic:req.body.topic,
+                text:req.body.info,
+                author:req.cookies.userInfo.name,
+                cate:req.body.cate,
+                date:moment().format('L')
+            }).then(function(data){
+                message.code=0;
+                message.message='文章添加成功';
+                res.json(message);
+            })
+        }else{
+            var art = new Article({
+                title:req.body.title,
+                topic:req.body.topic,
+                text:req.body.info,
+                author:req.cookies.userInfo.name,
+                cate:req.body.cate,
+                date:moment().format('L')
+            });
+            art.save().then(function(info){
+                message.code=0;
+                message.message='文章添加成功';
+                res.json(message);
+            })       
+         }
     }
 });
 /**

@@ -2,7 +2,7 @@
 <link rel="stylesheet" href="css/wangEditor.css">
 
 <!--content start-->
-    <div id="content"><%-arts._id%>
+    <div id="content">
        <!--left-->
         <div class="left" id="about_me">
            <div class="weizi">
@@ -51,7 +51,7 @@
     		$.ajax({
     			type:'post',
     			url:'add',
-    			data:{title:title,info:info,cate:cate,topic:topic},
+    			data:{title:title,info:info,cate:cate,topic:topic,id:'<%=arts._id%>'},
     			success:function(date){
     				if(date.code===0){
     					$('#titleC').val('');
