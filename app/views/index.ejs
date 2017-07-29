@@ -29,9 +29,10 @@
 	             </dl>
 	            </div>
            	<%})%>
-            <!--wz-->
-           
-           <!--wz end-->
+            <!--分页
+           <div class='page'><a >上一页</a><a >2</a><a >下一页</a><span>一共3页</span></div>-->
+           <div id='pageBox'></div>
+           <!--分页 end-->
               
                              
            </div>
@@ -44,3 +45,19 @@
     <!--content end-->
 
 <% include footer %>
+<script>
+  (function(){
+    var Page = function(configDate){
+      this.count=configDate.count;
+      this.id=$(configDate.id);
+      this.index=configDate.index;
+      this.create();
+    }
+    Page.prototype.create=function(){
+      var dom = "<div class='page'><a href='/index?page="+(this.index-1==0?this.count:this.index-1)+" ' class='pre'>上一页</a><a class='index'>"+this.index+"</a><a href='/index?page="+(this.index==this.count?1:this.index+1)+" ' class='next'>下一页</a><span>一共"+this.count+"页</span></div>";
+      this.id.append(dom);
+    }
+    window.Page = Page;
+  })();
+new Page({count:<%-count%>,id:'#pageBox',index:<%-page%>});
+</script>

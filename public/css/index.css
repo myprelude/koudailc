@@ -86,6 +86,11 @@ text-align:center;padddding:2px 5px;border:1px solid #AC9696;border-radius:2px;}
 #footer{max-width:1000px;height:50px;margin:10px auto;border-top:1px solid #ccc;}
 #footer p{text-align:center;font-size:14px;color:#231C25;}
 #footer p a{color:#231C25;}
+/*分页css*/
+.page{padding:10px 0;font-size: 0px;text-align: center;}
+.page a{display: inline-block;font-size: 16px;padding:5px 12px;border:1px solid #aaa;border-radius: 3px;margin-right: 5px}
+.page a:hover{background:#eee;color:#D3535D;}
+.page span{font-size: 16px}
 /*手机端media screen*/
 @media only screen and (max-width:1000px){
 	#c_left{width:100%;}

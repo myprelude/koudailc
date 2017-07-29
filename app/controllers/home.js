@@ -2,30 +2,47 @@ var express = require('express'),
   router = express.Router(),
   mongoose = require('mongoose'),
   Article = mongoose.model('Article'),
-  User = mongoose.model('User');
+  User = mongoose.model('User'),
+  Riji = mongoose.model('Riji');
 var moment = require('moment');
 module.exports = function (app) {
   app.use('/', router);
 };
 
 router.get('/', function (req, res, next) {
-  Article.find(function (err, articles) {
-    if (err) return next(err);
-    res.render('index',{
-        art:articles
-    });
-  });
+  var count = 0;
+    var page = req.query.page?req.query.page:1;
+    Article.find().skip((page-1)*5).limit(5).exec(function(e,articles){
+        if (e) return next(e);
+        Article.find(function (err, r) {
+            if (err) return next(err);
+            count = r.length;
+             res.render('index',{
+                art:articles,
+                count:Math.ceil(count/5),
+                page:page
+            });
+          });  
+    })
 });
 /**
  * [description] index
  */
 router.get('/index', function (req, res, next) {
-    Article.find(function (err, articles) {
-        if (err) return next(err);
-        res.render('index',{
-            art:articles
-        });
-      });
+    var count = 0;
+    var page = req.query.page?req.query.page:1;
+    Article.find().skip((page-1)*5).limit(5).exec(function(e,articles){
+        if (e) return next(e);
+        Article.find(function (err, r) {
+            if (err) return next(err);
+            count = r.length;
+             res.render('index',{
+                art:articles,
+                count:Math.ceil(count/5),
+                page:page
+            });
+          });  
+    })
 });
 /**
  * [description] 文章详情页
@@ -57,14 +74,47 @@ router.get('/about', function (req, res, next) {
  * [description] 口袋每日
  */
 router.get('/shuo', function (req, res, next) {
+    var count = 0,show;
+    var page = req.query.page?req.query.page:1;
     if(req.cookies.userInfo!==undefined&&req.cookies.userInfo.sign){
-        res.render('shuo',{
-            show:true
-        });
+    show=true;}else{ show=false;}
+    Riji.find().skip((page-1)*5).limit(5).exec(function(e,articles){
+        console.log(articles);
+        if (e) return next(e);
+        Riji.find(function (err, r) {
+            if (err) return next(err);
+            count = r.length;
+             res.render('shuo',{
+                art:articles,
+                count:Math.ceil(count/5),
+                page:page,
+                show:show
+            });
+          });  
+    })
+});
+/**
+ * [description]添加口袋每日
+ */
+router.post('/shuo', function (req, res, next) {
+    var message={};
+    if(req.body.title===''||req.body.info===''){
+        message.code=1;
+        message.message='信息填写不完整';
+        res.json(message);
+        return;
     }else{
-        res.render('shuo',{
-            show:false
-        }); 
+        var art = new Riji({
+            title:req.body.title,
+            text:req.body.info,
+            author:req.cookies.userInfo.name,
+            date:moment().format('L')
+        });
+        art.save().then(function(info){
+            message.code=0;
+            message.message='文章添加成功';
+            res.json(message);
+        })
     }
 });
 /**
@@ -101,7 +151,6 @@ router.get('/add', function (req, res, next) {
  * [description] 提交文章信息
  */
 router.post('/add', function (req, res, next) {
-    console.log(moment().format('L'));
     var message={};
     if(req.body.title===''||req.body.info===''||req.body.topic===''||req.body.cate===''){
         message.code=1;

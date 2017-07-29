@@ -1,25 +1,99 @@
 <% include header %>
 <!--content start-->
-    <div id="say">
-     <div class="weizi">
+<style>
+  .w-e-text1 {
+  padding: 0 10px;
+}
+.w-e-text1 p,
+.w-e-text1 h1,
+.w-e-text1 h2,
+.w-e-text1 h3,
+.w-e-text1 h4,
+.w-e-text1 h5,
+.w-e-text1 table,
+.w-e-text1 pre {
+  margin: 10px 0;
+  line-height: 1.5;
+}
+.w-e-text1 ul,
+.w-e-text1 ol {
+  margin: 10px 0 10px 0px;
+}
+.w-e-text1 blockquote {
+  display: block;
+  border-left: 8px solid #d0e5f2;
+  padding: 5px 10px;
+  margin: 10px 0;
+  line-height: 1.4;
+  font-size: 100%;
+  background-color: #f1f1f1;
+}
+.w-e-text1 code {
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+  background-color: #f1f1f1;
+  border-radius: 3px;
+  padding: 3px 5px;
+  margin: 0 3px;
+}
+.w-e-text1 pre code {
+  display: block;
+}
+.w-e-text1 table {
+  border-top: 1px solid #ccc;
+  border-left: 1px solid #ccc;
+}
+.w-e-text1 table td,
+.w-e-text1 table th {
+  border-bottom: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+  padding: 3px 5px;
+}
+.w-e-text1 table th {
+  border-bottom: 2px solid #ccc;
+  text-align: center;
+}
+.w-e-text1:focus {
+  outline: none;
+}
+.w-e-text1 img {
+  cursor: pointer;
+}
+.w-e-text1 img:hover {
+  box-shadow: 0 0 5px #333;
+}
+.w-e-text1 img.w-e-selected {
+  border: 2px solid #1e88e5;
+}
+.w-e-text1 img.w-e-selected:hover {
+  box-shadow: none;
+}
+
+</style>
+
+
+    <div id="say" class='w-e-text1'>
+     <div class="weizi" >
            <div class="wz_text">当前位置：<a href="#">首页</a>><h1>口袋小记</h1></div>
            </div>
-           <span class="dateview">2014-5-31</span>----<span>小记录</span>
+           <% art.forEach(function(item){%>
+           <span class="dateview"><%-item.date%></span>----<span><%-item.title%></span>
              <ul class="say_box">
                <div class="sy">
-                   <p> 那个可以任意挥霍的年纪，人们叫它'青春'。<span>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Maiores unde tempore reiciendis, provident earum dolore ratione nihil hic aliquid assumenda enim, ad expedita porro sapiente necessitatibus quisquam eius consectetur dolorum?</span>
-                   <span>Deserunt sed cumque rem sit veniam inventore amet officiis tempore, magnam voluptatum similique ipsam minima saepe quidem at. Quia quos quod adipisci, commodi, architecto deleniti? Ipsum, mollitia, atque. Distinctio, laudantium.</span>
-                   <span>Doloremque, harum fugit repellat minus porro expedita quis, assumenda perspiciatis molestiae tempore dolorum dolor reiciendis sint rem quisquam animi maxime neque eaque incidunt? Provident quam, quo eligendi dolorum dolore sit!</span></p>
+                   <%-item.text%>
                </div> 
             </ul>
+          <%})%>
+          <div id='pageBox'></div>
             <% if(show){%>
             
             <!--添加每日一说-->
-            <div style='background:#fff'>
+            <div style='background:#fff' class='id'>
             <div class='title'>
             <textarea placeholder="文章的标题" id='titleS'></textarea>
            </div>
-            <div id='div3' ></div>
+            <div id='div1' ></div>
             <div style='text-align:center;padding:20px 0;'><button id='onAdd' style='outline:none;border:1px solid #eee;padding:6px 12px;'>水一水</button></div>
             </div>
            <%}%>
@@ -32,7 +106,7 @@
 <script type="text/javascript" src="js/wangEditor.min.js"></script>
 <script type="text/javascript">
     var E = window.wangEditor;
-    var editor = new E('#div3');
+    var editor = new E('#div1');
     editor.customConfig.menus = [
         'bold',  // 粗体
         'foreColor',  // 文字颜色
@@ -46,5 +120,41 @@
     ];
     editor.customConfig.uploadImgServer = 'www.scopeman.cn';
     editor.create();
+     $('#onAdd').click(function(){
+      var title = $('#titleS').val();
+      var info = editor.txt.html();
+      if(title===''||info===''){
+        alert('请输入内容')
+      }else{
+        $.ajax({
+          type:'post',
+          url:'shuo',
+          data:{title:title,info:info},
+          success:function(date){
+            if(date.code===0){
+              $('#titleS').val('');
+              editor.txt.html('');
+              alert('说说发表成功！');
+            }
+          }
+        })
+      }
+    })
 </script>
 <%}%>
+<script>
+  (function(){
+    var Page = function(configDate){
+      this.count=configDate.count;
+      this.id=$(configDate.id);
+      this.index=configDate.index;
+      this.create();
+    }
+    Page.prototype.create=function(){
+      var dom = "<div class='page'><a href='/shuo?page="+(this.index-1==0?this.count:this.index-1)+" ' class='pre'>上一页</a><a class='index'>"+this.index+"</a><a href='/shuo?page="+(this.index==this.count?1:this.index+1)+" ' class='next'>下一页</a><span>一共"+this.count+"页</span></div>";
+      this.id.append(dom);
+    }
+    window.Page = Page;
+  })();
+new Page({count:<%-count%>,id:'#pageBox',index:<%-page%>});
+</script>
