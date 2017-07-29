@@ -131,7 +131,7 @@
     </div>
     <!--content end-->
 <div id="footer">
-     <p>Design by:<a href="http://www.duanliang920.com" target="_blank">口袋理财</a> 2017-7-27</p>
+     <p>Design by:<a href="http://www.koudailc.com" target="_blank">口袋理财</a> 2017-7-27</p>
     </div>
     <!--footer end-->
 </body>
@@ -139,4 +139,17 @@
 <script>
   var str = '<%-art.text%>';
   $('.about_content').html(str);
+  // nav 
+$('.m1').click(function(){
+  $('.mobile-nav').slideToggle();
+})
+$('.m2').click(function(){
+  alert('口袋H5项目活动即将上线！');
+})
+$('.m3').click(function(){
+  $('.teamInfo').slideDown();
+})
+$('.closeInfo').click(function(){
+  $('.teamInfo').fadeOut();
+})
 </script>
