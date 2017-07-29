@@ -138,7 +138,9 @@ router.get('/learn', function (req, res, next) {
 router.get('/add', function (req, res, next) {
     if(req.cookies.userInfo!==undefined&&req.cookies.userInfo.sign){
         if(req.query.id==undefined){
-            res.render('add');
+            res.render('add',{
+                arts:{title:'',topic:'',text:''}
+            });
         }else{
             var id = req.query.id;
              Article.findOne({_id:id}).then(function(pageDate){
