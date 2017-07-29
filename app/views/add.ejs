@@ -1,17 +1,18 @@
 <% include header %>
 <link rel="stylesheet" href="css/wangEditor.css">
+
 <!--content start-->
-    <div id="content">
+    <div id="content"><%-arts._id%>
        <!--left-->
-         <div class="left" id="about_me">
+        <div class="left" id="about_me">
            <div class="weizi">
            <div class="wz_text">当前位置：<a href="#">首页</a>><h1>添加文章</h1></div>
            </div>
            <div class='title'>
-           	<textarea placeholder="文章的标题" id='titleC'></textarea>
+           	<textarea placeholder="文章的标题" id='titleC' ><%-arts.title%></textarea>
            </div>
            <div class='title'>
-           	<textarea placeholder="输入文章主题" id='titleT'></textarea>
+           	<textarea placeholder="输入文章主题" id='titleT'><%-arts.topic%></textarea>
            </div>
            <div class='title'>
            	<select name="" id="cate">
@@ -20,7 +21,7 @@
            	</select>
            </div>
            <div class="about_content">
-             <div id='div3'></div>
+             <div id='div3'><%-arts.text%></div>
            </div>
            <div style='text-align:center;padding-top:20px;'><button id='onAdd' style='outline:none;border:1px solid #eee;padding:6px 12px;'>添加文章</button></div>
            <div id='txt'></div>

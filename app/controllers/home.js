@@ -10,8 +10,10 @@ module.exports = function (app) {
 };
 
 router.get('/', function (req, res, next) {
-  var count = 0;
+  var count = 0,show;
     var page = req.query.page?req.query.page:1;
+     if(req.cookies.userInfo!==undefined&&req.cookies.userInfo.sign){
+    show=true;}else{ show=false;}
     Article.find().skip((page-1)*5).limit(5).exec(function(e,articles){
         if (e) return next(e);
         Article.find(function (err, r) {
@@ -20,7 +22,8 @@ router.get('/', function (req, res, next) {
              res.render('index',{
                 art:articles,
                 count:Math.ceil(count/5),
-                page:page
+                page:page,
+                show:show
             });
           });  
     })
@@ -29,8 +32,10 @@ router.get('/', function (req, res, next) {
  * [description] index
  */
 router.get('/index', function (req, res, next) {
-    var count = 0;
+    var count = 0,show;
     var page = req.query.page?req.query.page:1;
+     if(req.cookies.userInfo!==undefined&&req.cookies.userInfo.sign){
+    show=true;}else{ show=false;}
     Article.find().skip((page-1)*5).limit(5).exec(function(e,articles){
         if (e) return next(e);
         Article.find(function (err, r) {
@@ -39,7 +44,8 @@ router.get('/index', function (req, res, next) {
              res.render('index',{
                 art:articles,
                 count:Math.ceil(count/5),
-                page:page
+                page:page,
+                show:show
             });
           });  
     })
@@ -48,16 +54,8 @@ router.get('/index', function (req, res, next) {
  * [description] 文章详情页
  */
 router.get('/page', function (req, res, next) {
-    console.log(req.query.id);
     var id = req.query.id;
      Article.findOne({_id:id}).then(function(pageInfo){
-        if(!pageInfo){
-           res.render('error',{
-                message:'没有对应的文章',
-                status:'404 Not found',
-                stack:'不要瞎搞 我们服务器受不了'
-            }); 
-        }
         res.render('page',{
             art:pageInfo
         });
@@ -79,7 +77,6 @@ router.get('/shuo', function (req, res, next) {
     if(req.cookies.userInfo!==undefined&&req.cookies.userInfo.sign){
     show=true;}else{ show=false;}
     Riji.find().skip((page-1)*5).limit(5).exec(function(e,articles){
-        console.log(articles);
         if (e) return next(e);
         Riji.find(function (err, r) {
             if (err) return next(err);
@@ -140,10 +137,18 @@ router.get('/learn', function (req, res, next) {
  */
 router.get('/add', function (req, res, next) {
     if(req.cookies.userInfo!==undefined&&req.cookies.userInfo.sign){
-        res.render('add');
+        if(req.query.id==undefined){
+            res.render('add');
+        }else{
+            var id = req.query.id;
+             Article.findOne({_id:id}).then(function(pageDate){
+                res.render('add',{
+                    arts:pageDate,
+                });
+            });
+        }
     }else{
-        res.redirect('/login')
-       
+        res.redirect('/login')  
     }
     
 });
