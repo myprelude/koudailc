@@ -19,12 +19,12 @@ img{display:block;border:0px;}
 #nava{display:block;color:#fff;width:140px;height:30px;background:#829696;border-radius:3px;}
 .mobile{display:none;position:relative;}
 .mobile ul{width:100%;}
-.mobile ul li{width:33.333%;float:left;margin:20px 0;text-align: center;}
+.mobile ul li{width:33.333%;float:left;margin:10px 0;text-align: center;}
 .mobile ul li img{width:32px;height:32px;margin:0 auto;}
-.mobile .mobile-nav{display:none;position: absolute;top:72px;left:0;width:100%;;background: rgba(0,0,0,.8);text-align: center;}
+.mobile .mobile-nav{display:none;position: absolute;top:52px;left:0;width:100%;;background: rgba(0,0,0,.8);text-align: center;z-index:10000;}
 .mobile .mobile-nav a{color:#664666;font-weight: bold;}
 .mobile .mobile-nav li{width:100%;float:none;margin:5px 0;font-size: 16px;padding:5px 0;}
-.teamInfo{display:none;position: fixed;top:0;left:0;right:0;bottom:0;background: #fff;}
+.teamInfo{display:none;position: fixed;top:0;left:0;right:0;bottom:0;background: #fff;z-index:10000;}
 
 /*header end*/
 #content{max-width:1000px;margin:5px auto;}
@@ -40,15 +40,14 @@ color:#D242DF;font-size:18px;margin-left:5px;}
 .wz h3 a{color:#D3535D;}
 .wz h3:hover{padding-left:20px; transition: all 0.5s;-webkit-transition: all 0.5s; -moz-transition: all 0.5s; -o-transition: all 0.5s;}
 .wz dl{width:730px;margin-top:3px;}
-.wz dl dt{float:left;width:204px;height:127px;margin-left:5px;display:block;border:1px solid #ccc;}
-.wz dl dt img{padding:2px;}
+.wz dl dt{float:left;padding:2px;width:204px;height:127px;margin-left:5px;display:block;border:1px solid #ccc;overflow: hidden;}
 .wz dl dd{float:left;width:505px;overflow:hidden;margin-left:5px;}
 .wz dl dd .dd_text_1{height:80px;display:block;overflow:hidden;}
 .wz dl dd .dd_text_2{line-height:30px;margin-top:10px;}
 .wz dl dd .dd_text_2 span{padding-left:15px;}
-.wz dl dd .dd_text_2 .author{display:block;width:60px;height:30px; 
-background:url("../images/tx.jpg") 5px 7px no-repeat;padding-left:25px;margin-left:20px;}
-.wz dl dd .dd_text_2 .sj{display:block;width:120px;height:30px;
+.wz dl dd .dd_text_2 .author{display:block;height:30px; 
+background:url("../images/tx.jpg") 5px 7px no-repeat;padding-left:25px;margin-left:20px;padding-right:10px;}
+.wz dl dd .dd_text_2 .sj{display:block;height:30px;
 background:url("../images/sj.jpg") 5px 7px no-repeat;padding-left:25px;}
 .wz dl dd .dd_text_2 .fl{display:block;width:110px;heigt:30px;text-align:center;}
 .wz dl dd .dd_text_2 .fl a{color:#1D1718;}
@@ -110,4 +109,6 @@ text-align:center;padddding:2px 5px;border:1px solid #AC9696;border-radius:2px;}
 	#header p{display:none;}
 	#nav{display:none;}
 	.mobile{display:block;}
+	.wz dl dt{margin-left:0;width:100%;}
+	#content{padding:5px 5px;}
 }

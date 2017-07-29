@@ -57,7 +57,15 @@ router.get('/about', function (req, res, next) {
  * [description] 口袋每日
  */
 router.get('/shuo', function (req, res, next) {
-    res.render('shuo');
+    if(req.cookies.userInfo!==undefined&&req.cookies.userInfo.sign){
+        res.render('shuo',{
+            show:true
+        });
+    }else{
+        res.render('shuo',{
+            show:false
+        }); 
+    }
 });
 /**
  * [description] 杂

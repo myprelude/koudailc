@@ -12,6 +12,39 @@
                    <span>Doloremque, harum fugit repellat minus porro expedita quis, assumenda perspiciatis molestiae tempore dolorum dolor reiciendis sint rem quisquam animi maxime neque eaque incidunt? Provident quam, quo eligendi dolorum dolore sit!</span></p>
                </div> 
             </ul>
+            <% if(show){%>
+            
+            <!--添加每日一说-->
+            <div style='background:#fff'>
+            <div class='title'>
+            <textarea placeholder="文章的标题" id='titleS'></textarea>
+           </div>
+            <div id='div3' ></div>
+            <div style='text-align:center;padding:20px 0;'><button id='onAdd' style='outline:none;border:1px solid #eee;padding:6px 12px;'>水一水</button></div>
+            </div>
+           <%}%>
      </div>
     <!--content end-->
 <% include footer %>
+<% if(show){%>
+
+<link rel="stylesheet" href="css/wangEditor.css">
+<script type="text/javascript" src="js/wangEditor.min.js"></script>
+<script type="text/javascript">
+    var E = window.wangEditor;
+    var editor = new E('#div3');
+    editor.customConfig.menus = [
+        'bold',  // 粗体
+        'foreColor',  // 文字颜色
+        'link',  // 插入链接
+        'list',  // 列表
+        'justify',  // 对齐方式
+        'quote',  // 引用
+        'image',  // 插入图片
+        'undo',  // 撤销
+        'redo'  // 重复
+    ];
+    editor.customConfig.uploadImgServer = 'www.scopeman.cn';
+    editor.create();
+</script>
+<%}%>

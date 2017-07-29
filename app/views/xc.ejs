@@ -1,118 +1,140 @@
 <% include header %>
+<script src="js/pinterest_grid.js"></script>  
+    <style type="text/css">
+        #gallery-wrapper {
+        position: relative;
+        max-width: 94%;
+        width: 94%;
+        margin:50px auto;
+        }
+        img.thumb {
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+        }
+        .white-panel {
+        box-sizing: border-box;
+        position: absolute;
+        background: white;
+        border-radius: 5px;
+        box-shadow: 0px 1px 2px rgba(0,0,0,0.3);
+        padding: 5px;
+        }
+        .white-panel h1 {
+        font-size: 1em;
+        }
+        .white-panel h1 a {
+        color: #A92733;
+        }
+        .white-panel:hover {
+        box-shadow: 1px 1px 10px rgba(0,0,0,0.5);
+        margin-top: -5px;
+        -webkit-transition: all 0.3s ease-in-out;
+        -moz-transition: all 0.3s ease-in-out;
+        -o-transition: all 0.3s ease-in-out;
+        transition: all 0.3s ease-in-out;
+        }
+    </style>
+    <!--[if IE]>
+        <script src="http://libs.useso.com/js/html5shiv/3.7/html5shiv.min.js"></script>
+    <![endif]-->
 <!--content start-->
     <div id="content_xc">
          <div class="weizi">
            <div class="wz_text">当前位置：<a href="#">首页</a>><h1>口袋活动</h1></div>
          </div>
          <div class="xc_content">
-          <div class="con-bg">
-              <div class="w960 mt_10">
-               <div class="w650">
-                <ul class="tips" id="wf-main" style="display:none" >
-                        <li class="wf-cld"><img src="images/photo/8.jpg"  width="200" height="178" alt="" /></li>         
-                        <li class="wf-cld"><img src="images/photo/1.jpg" height="147" width="200" alt="" /></li>
-                        <li class="wf-cld"><img src="images/photo/2.jpg"  width="200" height="267" alt="" /></li>
-                        <li class="wf-cld"><img src="images/photo/3.jpg"  width="200" height="125" alt="" /></li>
-                        <li class="wf-cld"><img src="images/photo/4.jpg" width="200" height="299" alt="" /></li>
-                        <li class="wf-cld"><img src="images/photo/5.jpg" width="200" height="125" alt="" /></li>
-                        <li class="wf-cld"><img src="images/photo/6.jpg" width="200" height="267" alt="" /></li>
-                        <li class="wf-cld"><img src="images/photo/7.jpg" width="200" height="135" alt="" /></li>
-                        <li class="wf-cld"><img src="images/photo/9.jpg"  width="200" height="300" alt="" /></li>
-                        <li class="wf-cld"><img src="images/photo/10.jpg"  width="200" height="107" alt="" /></li>
-                        <li class="wf-cld"><img rel="lazy" lazy_src="images/photo/8.jpg"  width="200" height="178" alt="" /></li>
-                        <li class="wf-cld"><img rel="lazy" lazy_src="images/photo/1.jpg" height="147" width="200" alt="" /></li>
-                        <li class="wf-cld"><img rel="lazy" lazy_src="images/photo/2.jpg"  width="200" height="267" alt="" /></li>
-                        <li class="wf-cld"><img rel="lazy" lazy_src="images/photo/3.jpg"  width="200" height="125" alt="" /></li>
-                        <li class="wf-cld"><img rel="lazy" lazy_src="images/photo/4.jpg" width="200" height="299" alt="" /></li>
-                        <li class="wf-cld"><img rel="lazy" lazy_src="images/photo/5.jpg" width="200" height="125" alt="" /></li>
-                        <li class="wf-cld"><img rel="lazy" lazy_src="images/photo/6.jpg" width="200" height="267"alt="" /></li>
-                        <li class="wf-cld"><img rel="lazy" lazy_src="images/photo/7.jpg" width="200" height="135" alt="" /></li>
-                        <li class="wf-cld"><img rel="lazy" lazy_src="images/photo/9.jpg"  width="200" height="300" alt="" /></li>
-                        <li class="wf-cld"><img rel="lazy" lazy_src="images/photo/10.jpg"  width="200" height="107" alt="" /></li>
-                        <li class="wf-cld"><img rel="lazy" lazy_src="images/photo/2.jpg"  width="200" height="267" alt="" /></li>
-                        <li class="wf-cld"><img rel="lazy" lazy_src="images/photo/3.jpg"  width="200" height="125" alt="" /></li>
-                        <li class="wf-cld"><img rel="lazy" lazy_src="images/photo/8.jpg"  width="200" height="178" alt="" /></li>
-                        <li class="wf-cld"><img rel="lazy" lazy_src="images/photo/1.jpg" height="147" width="200" alt="" /></li>
-                        <li class="wf-cld"><img rel="lazy" lazy_src="images/photo/2.jpg"  width="200" height="267" alt="" /></li>
-                        <li class="wf-cld"><img rel="lazy" lazy_src="images/photo/3.jpg"  width="200" height="125" alt="" /></li>
-                        <li class="wf-cld"><img rel="lazy" lazy_src="images/photo/4.jpg" width="200" height="299" alt="" /></li>
-                        <li class="wf-cld"><img rel="lazy" lazy_src="images/photo/5.jpg" width="200" height="125" alt="" /></li>
-                        <li class="wf-cld"><img rel="lazy" lazy_src="images/photo/6.jpg" width="200" height="267"alt="" /></li>
-                        <li class="wf-cld"><img rel="lazy" lazy_src="images/photo/7.jpg" width="200" height="135" alt="" /></li>
-                        <li class="wf-cld"><img rel="lazy" lazy_src="images/photo/9.jpg"  width="200" height="300" alt="" /></li>
-                        <li class="wf-cld"><img rel="lazy" lazy_src="images/photo/10.jpg"  width="200" height="107" alt="" /></li>
-                        <li class="wf-cld"><img rel="lazy" lazy_src="images/photo/2.jpg"  width="200" height="267" alt="" /></li>
-                        <li class="wf-cld"><img rel="lazy" lazy_src="images/photo/3.jpg"  width="200" height="125" alt="" /></li>
-                    </ul>
-               </div>
-             </div>
+          <section id="gallery-wrapper">
+        <article class="white-panel">
+            <img src="images/photo/1.jpg" class="thumb">
+            <h1><a href="#">Title 1</a></h1>
+            <p>Description 1</p>
+        </article>
+        <article class="white-panel">
+            <img src="images/photo/2.jpg" class="thumb">
+            <h1><a href="#">Title 2</a></h1>
+            <p>Description 2</p>
+        </article>
+        <article class="white-panel">
+            <img src="images/photo/3.jpg" class="thumb">
+            <h1><a href="#">Title 3</a></h1>
+            <p>Description 3</p>
+        </article>
+        <article class="white-panel">
+            <img src="images/photo/4.jpg" class="thumb">
+            <h1><a href="#">Title 4</a></h1>
+            <p>Description 4</p>
+        </article>
+        <article class="white-panel">
+            <img src="images/photo/5.jpg" class="thumb">
+            <h1><a href="#">Title 5</a></h1>
+            <p>Description 5</p>
+        </article>
+        <article class="white-panel">
+            <img src="images/photo/6.jpg" class="thumb">
+            <h1><a href="#">Title 6</a></h1>
+            <p>Description 6</p>
+        </article>
+        <article class="white-panel">
+            <img src="images/photo/7.jpg" class="thumb">
+            <h1><a href="#">Title 7</a></h1>
+            <p>Description 7</p>
+        </article>
+        <article class="white-panel">
+            <img src="images/photo/8.jpg" class="thumb">
+            <h1><a href="#">Title 8</a></h1>
+            <p>Description 8</p>
+        </article>
+        <article class="white-panel">
+            <img src="images/photo/9.jpg" class="thumb">
+            <h1><a href="#">Title 1</a></h1>
+            <p>Description 9</p>
+        </article>
+        <article class="white-panel">
+            <img src="images/photo/2.jpg" class="thumb">
+            <h1><a href="#">Title 10</a></h1>
+            <p>Description 10</p>
+        </article>
+        <article class="white-panel">
+            <img src="images/photo/3.jpg" class="thumb">
+            <h1><a href="#">Title 11</a></h1>
+            <p>Description 11</p>
+        </article>
+        <article class="white-panel">
+            <img src="images/photo/7.jpg" class="thumb">
+            <h1><a href="#">Title 12</a></h1>
+            <p>Description 12</p>
+        </article>
+        <article class="white-panel">
+            <img src="images/photo/5.jpg" class="thumb">
+            <h1><a href="#">Title 13</a></h1>
+            <p>Description 13</p>
+        </article>
+        <article class="white-panel">
+            <img src="images/photo/6.jpg" class="thumb">
+            <h1><a href="#">Title 14</a></h1>
+            <p>Description 14</p>
+        </article>
+        <article class="white-panel">
+            <img src="images/photo/4.jpg" class="thumb">
+            <h1><a href="#">Title 15</a></h1>
+            <p>Description 15</p>
+        </article>
+    </section>
            </div>
          </div>
     </div>
     <!--content end-->
 <% include footer %>
-<script type="text/javascript" src="js/common.js"></script>
-<script type="text/javascript" src="js/waterfall.js" ></script> 
-<script>
-
-    var timer, m = 0, m1 = $("img[rel='lazy']").length;
-
-    function fade() {
-
-        $("img[rel='lazy']").each(function () {
-
-            var $scroTop = $(this).offset();
-
-            if ($scroTop.top <= $(window).scrollTop() + $(window).height()) {
-
-                $(this).hide();
-
-                $(this).attr("src", $(this).attr("lazy_src"));
-
-                $(this).attr("top", $scroTop.top);
-
-                $(this).removeAttr("rel");
-
-                $(this).removeAttr("lazy_src");
-
-                $(this).fadeIn(600);
-
-                var _left = $(this).parent().parent().attr("_left");
-
-                if (_left != undefined)
-
-                    $(this).parent().parent().animate({ left: _left }, 400);
-
-                m++;
-
-            }
-
+<script type="text/javascript">
+        $(function(){
+            $("#gallery-wrapper").pinterest_grid({
+                no_columns: 3,
+                padding_x: 8,
+                padding_y: 10,
+                margin_bottom: 50,
+                single_column_breakpoint: 500
+            });
+            
         });
-
-        if (m < m1) { timer = window.setTimeout(fade, 300); }
-
-        else { window.clearTimeout(timer); }
-
-    }
-
-    $(function () {
-
-        $("#wf-main img[rel='lazy']").each(function (i) {
-
-            var _left = $(this).parent().parent().css("left").replace("px", "");
-
-            $(this).parent().parent().attr("_left", _left);
-
-            $(this).parent().parent().css("left", 0);
-
-        });
-
-        fade();
-
-    });
-
-    $(".loading").hide();
-
-    $("#wf-main").show();
-
-</script> 
+    </script>

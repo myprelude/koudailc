@@ -9,6 +9,9 @@ obj.id='nava'
 $('.m1').click(function(){
 	$('.mobile-nav').slideToggle();
 })
+$('.m2').click(function(){
+	alert('口袋H5项目活动即将上线！');
+})
 $('.m3').click(function(){
 	$('.teamInfo').slideDown();
 })
