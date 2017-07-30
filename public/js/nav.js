@@ -15,6 +15,6 @@ $('.m2').click(function(){
 $('.m3').click(function(){
 	$('.teamInfo').slideDown();
 })
-$('.closeInfo').click(function(){
+$('.go').click(function(){
 	$('.teamInfo').fadeOut();
 })
