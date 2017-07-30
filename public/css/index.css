@@ -24,8 +24,10 @@ img{display:block;border:0px;}
 .mobile .mobile-nav{display:none;position: absolute;top:52px;left:0;width:100%;;background: rgba(0,0,0,.8);text-align: center;z-index:10000;}
 .mobile .mobile-nav a{color:#664666;font-weight: bold;}
 .mobile .mobile-nav li{width:100%;float:none;margin:5px 0;font-size: 16px;padding:5px 0;}
-.teamInfo{display:none;position: fixed;top:0;left:0;right:0;bottom:0;background: #fff;z-index:10000;}
-
+.teamInfo{display:none;position: fixed;top:0;left:0;right:0;bottom:0;background: #fff;z-index:10000;padding:20px 10px;}
+.qq{width:64%;margin:0 auto;}
+.teamInfo h3{line-height: 30px}
+.teamInfo ul{margin:10px 0;}
 /*header end*/
 #content{max-width:1000px;margin:5px auto;}
 #c_left{width:730px; background:#fff;border-radius:1px;}
