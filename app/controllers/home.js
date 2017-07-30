@@ -14,7 +14,7 @@ router.get('/', function (req, res, next) {
     var page = req.query.page?req.query.page:1;
      if(req.cookies.userInfo!==undefined&&req.cookies.userInfo.sign){
     show=true;}else{ show=false;}
-    Article.find().skip((page-1)*5).limit(5).exec(function(e,articles){
+    Article.find().sort({_id:-1}).skip((page-1)*5).limit(5).exec(function(e,articles){
         if (e) return next(e);
         Article.find(function (err, r) {
             if (err) return next(err);
@@ -36,7 +36,7 @@ router.get('/index', function (req, res, next) {
     var page = req.query.page?req.query.page:1;
      if(req.cookies.userInfo!==undefined&&req.cookies.userInfo.sign){
     show=true;}else{ show=false;}
-    Article.find().skip((page-1)*5).limit(5).exec(function(e,articles){
+    Article.find().sort({_id:-1}).skip((page-1)*5).limit(5).exec(function(e,articles){
         if (e) return next(e);
         Article.find(function (err, r) {
             if (err) return next(err);
@@ -76,7 +76,7 @@ router.get('/shuo', function (req, res, next) {
     var page = req.query.page?req.query.page:1;
     if(req.cookies.userInfo!==undefined&&req.cookies.userInfo.sign){
     show=true;}else{ show=false;}
-    Riji.find().skip((page-1)*5).limit(5).exec(function(e,articles){
+    Riji.find().sort({_id:-1}).skip((page-1)*5).limit(5).exec(function(e,articles){
         if (e) return next(e);
         Riji.find(function (err, r) {
             if (err) return next(err);
