@@ -31,7 +31,7 @@ router.get('/', function (req, res, next) {
 /**
  * [description] index
  */
-router.get('/index', function (req, res, next) {
+router.get('/index.html', function (req, res, next) {
     var count = 0,show;
     var page = req.query.page?req.query.page:1;
      if(req.cookies.userInfo!==undefined&&req.cookies.userInfo.sign){
@@ -53,7 +53,7 @@ router.get('/index', function (req, res, next) {
 /**
  * [description] 文章详情页
  */
-router.get('/page', function (req, res, next) {
+router.get('/page.html', function (req, res, next) {
     var id = req.query.id;
      Article.findOne({_id:id}).then(function(pageInfo){
         res.render('page',{
@@ -65,13 +65,13 @@ router.get('/page', function (req, res, next) {
 /**
  * [description] 关于我们
  */
-router.get('/about', function (req, res, next) {
+router.get('/about.html', function (req, res, next) {
     res.render('about');
 });
 /**
  * [description] 口袋每日
  */
-router.get('/shuo', function (req, res, next) {
+router.get('/shuo.html', function (req, res, next) {
     var count = 0,show;
     var page = req.query.page?req.query.page:1;
     if(req.cookies.userInfo!==undefined&&req.cookies.userInfo.sign){
@@ -93,7 +93,7 @@ router.get('/shuo', function (req, res, next) {
 /**
  * [description]添加口袋每日
  */
-router.post('/shuo', function (req, res, next) {
+router.post('/shuo.html', function (req, res, next) {
     var message={};
     if(req.body.title===''||req.body.info===''){
         message.code=1;
@@ -117,25 +117,25 @@ router.post('/shuo', function (req, res, next) {
 /**
  * [description] 杂
  */
-router.get('/riji', function (req, res, next) {
+router.get('/riji.html', function (req, res, next) {
     res.render('riji');
 });
 /**
  * [description] 口袋活动
  */
-router.get('/xc', function (req, res, next) {
+router.get('/xc.html', function (req, res, next) {
     res.render('xc');
 });
 /**
  * [description] 学无止境
  */
-router.get('/learn', function (req, res, next) {
+router.get('/learn.html', function (req, res, next) {
     res.render('learn');
 });
 /**
  * [description] 添加文章
  */
-router.get('/add', function (req, res, next) {
+router.get('/add.html', function (req, res, next) {
     if(req.cookies.userInfo!==undefined&&req.cookies.userInfo.sign){
         if(req.query.id==undefined){
             res.render('add',{
@@ -157,7 +157,7 @@ router.get('/add', function (req, res, next) {
 /**
  * [description] 提交文章信息
  */
-router.post('/add', function (req, res, next) {
+router.post('/add.html', function (req, res, next) {
     var message={};
     if(req.body.title===''||req.body.info===''||req.body.topic===''||req.body.cate===''){
         message.code=1;
@@ -197,10 +197,10 @@ router.post('/add', function (req, res, next) {
 /**
  * [description] login
  */
-router.get('/login', function (req, res, next) {
+router.get('/login.html', function (req, res, next) {
     res.render('login');
 });
-router.post('/login', function (req, res, next) {
+router.post('/login.html', function (req, res, next) {
     var name = req.body.name;
     var password = req.body.password;
     var responseMessage={};

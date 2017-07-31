@@ -6,7 +6,7 @@
        <!--left-->
         <div class="left" id="about_me">
            <div class="weizi">
-           <div class="wz_text">当前位置：<a href="#">首页</a>><h1>添加文章</h1></div>
+           <div class="wz_text">当前位置：<a href="index.html">首页</a>><h1>添加文章</h1></div>
            </div>
            <div class='title'>
            	<textarea placeholder="文章的标题" id='titleC' ><%-arts.title%></textarea>
@@ -50,7 +50,7 @@
     	}else{
     		$.ajax({
     			type:'post',
-    			url:'add',
+    			url:'add.html',
     			data:{title:title,info:info,cate:cate,topic:topic,id:'<%=arts._id%>'},
     			success:function(date){
     				if(date.code===0){
