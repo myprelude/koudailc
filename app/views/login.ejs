@@ -22,12 +22,12 @@
 			alert('输入不能为空')
 		}else{
 			$.ajax({
-				url:'/login',
+				url:'/login.html',
 				type:'post',
 				data:{name:name,password:password},
 				success:function(data){
 					if(data.code===0){
-						window.location.href='http://www.scopeman.cn/add';
+						window.location.href='http://www.scopeman.cn/add.html';
 					}
 				}
 			})
