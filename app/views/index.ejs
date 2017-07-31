@@ -59,7 +59,7 @@
       this.create();
     }
     Page.prototype.create=function(){
-      var dom = "<div class='page-show'><a href='/index?page="+(this.index-1==0?this.count:this.index-1)+" ' class='pre'>上一页</a><a class='index'>"+this.index+"</a><a href='/index?page="+(this.index==this.count?1:this.index+1)+" ' class='next'>下一页</a><span>一共"+this.count+"页</span></div>";
+      var dom = "<div class='page-show'><a href='/index.html?page="+(this.index-1==0?this.count:this.index-1)+" ' class='pre'>上一页</a><a class='index'>"+this.index+"</a><a href='/index.html?page="+(this.index==this.count?1:this.index+1)+" ' class='next'>下一页</a><span>一共"+this.count+"页</span></div>";
       this.id.append(dom);
     }
     window.Page = Page;
