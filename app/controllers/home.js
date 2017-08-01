@@ -275,3 +275,50 @@ router.post('/login.html', function (req, res, next) {
         return;
     })
 });
+/**
+ * [description] delate 
+ */
+router.post('/del.html', function (req, res, next) {
+    var message={};
+    if(req.cookies.userInfo!==undefined&&req.cookies.userInfo.sign){
+        if(req.cookies.userInfo.name=='admin'){
+            Article.remove({_id:req.body.id}).then(function(){
+                message.code=0;
+                message.message='删除成功';
+                res.json(message);
+                return;
+            })
+            
+        }else{
+            message.code=1;
+            message.message='您不是不具备这个删除权限';
+            res.json(message);
+            return;
+        }
+        
+    }else{
+        res.redirect('/login.html');
+    }
+});
+router.post('/del1.html', function (req, res, next) {
+    var message={};
+    if(req.cookies.userInfo!==undefined&&req.cookies.userInfo.sign){
+        if(req.cookies.userInfo.name=='koudai_ming'){
+            Riji.remove({_id:req.body.id}).then(function(){
+                message.code=0;
+                message.message='删除成功';
+                res.json(message);
+                return;
+            })
+            
+        }else{
+            message.code=1;
+            message.message='您不是不具备这个删除权限';
+            res.json(message);
+            return;
+        }
+        
+    }else{
+        res.redirect('/login.html');
+    }
+});

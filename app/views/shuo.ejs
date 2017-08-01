@@ -27,7 +27,7 @@
                    <%-item.text%>
                </div> 
             </ul>
-            <div><a href='add.html?type=shuo&id=<%-item._id%>'>编辑</a></div>
+            <div><a href='add.html?type=shuo&id=<%-item._id%>'>编辑</a> <span onclick='del("<%-item._id%>")'>删除</span></div>
           <%})%>
           <div id='pageBox'></div>
      </div>
@@ -48,4 +48,22 @@
     window.Page = Page;
   })();
 new Page({count:<%-count%>,id:'#pageBox',index:<%-page%>});
+function del(id){
+  if(confirm('你是否确定删除？')){
+    $.ajax({
+      url:'/del1.html',
+      type:'post',
+      data:{id:id},
+      success:function(data){
+        if(data.code==0){
+          alert('您成功删除');
+        }
+        else if(data.code==1){
+          alert(data.message);
+        }
+      }
+    })
+  }
+  
+}
 </script>

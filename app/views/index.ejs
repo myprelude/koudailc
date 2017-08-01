@@ -24,6 +24,9 @@
                  <span class='left yd'>
                  <a href="/add.html?type=index&id=<%=item._id%>" >编辑</a>
                  </span>
+                 <span class='left yd'>
+                  <a class='del' onclick="del('<%=item._id%>')">删除</a>
+                 </span>
                  <%}%>
 	                <div class="clear"></div>
 	               </p>
@@ -63,4 +66,23 @@
     window.Page = Page;
   })();
 new Page({count:<%-count%>,id:'#pageBox',index:<%-page%>});
+function del(id){
+  if(confirm('你是否确定删除？')){
+    $.ajax({
+      url:'/del.html',
+      type:'post',
+      data:{id:id},
+      success:function(data){
+        if(data.code==0){
+          alert('您成功删除');
+        }
+        else if(data.code==1){
+          alert(data.message);
+        }
+      }
+    })
+  }
+  
+}
+  
 </script>
