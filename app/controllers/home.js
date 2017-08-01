@@ -1,6 +1,7 @@
 var express = require('express'),
   router = express.Router(),
   mongoose = require('mongoose'),
+  formidable = require('formidable'),
   Article = mongoose.model('Article'),
   User = mongoose.model('User'),
   Riji = mongoose.model('Riji');
