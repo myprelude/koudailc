@@ -1,32 +1,45 @@
 <% include header %>
 <link rel="stylesheet" href="css/wangEditor.css">
-
 <!--content start-->
     <div id="content">
-       <!--left-->
-        <div class="left" id="about_me">
+          <div class="left" id="about_me">
            <div class="weizi">
-           <div class="wz_text">当前位置：<a href="index.html">首页</a>><h1>添加文章</h1></div>
+            <div class="wz_text">当前位置：<a href="index.html">首页</a>><h1>添加文章</h1></div>
+           </div>
+           <% if(type=='index'){%>
+           <div class='title'>
+            <textarea placeholder="文章的标题" id='titleC' ><%-arts.title%></textarea>
            </div>
            <div class='title'>
-           	<textarea placeholder="文章的标题" id='titleC' ><%-arts.title%></textarea>
+            <textarea placeholder="输入文章主题" id='titleT'><%-arts.topic%></textarea>
            </div>
            <div class='title'>
-           	<textarea placeholder="输入文章主题" id='titleT'><%-arts.topic%></textarea>
-           </div>
-           <div class='title'>
-           	<select name="" id="cate">
-           		<option value="1">口袋记</option>
-           		<option value="2">日常记</option>
-           	</select>
+            <select name="" id="cate">
+              <option value="1">口袋记</option>
+              <option value="2">日常记</option>
+            </select>
            </div>
            <div class="about_content">
              <div id='div3'><%-arts.text%></div>
            </div>
            <div style='text-align:center;padding-top:20px;'><button id='onAdd' style='outline:none;border:1px solid #eee;padding:6px 12px;'>添加文章</button></div>
-           <div id='txt'></div>
+            <%}%>
+            <% if(type=='shuo'){%>
+              <div style='background:#fff' class='id'>
+                <div class='title'>
+                  <textarea placeholder="文章的标题" id='titleS'><%-arts.title%></textarea>
+                </div>
+                <div class="about_content">
+                  <div id='div1'><%-arts.text%></div>
+                </div>
+                <div style='text-align:center;padding:20px 0;'><button id='onAdd1' style='outline:none;border:1px solid #eee;padding:6px 12px;'>水一水</button></div>
+              </div>
+            <%}%>
+           
          </div>
-         <!--end left -->
+   
+       <!--left-->
+                 <!--end left -->
          <% include right %>
          <!--end  right-->
          <div class="clear"></div>
@@ -35,6 +48,7 @@
     <!--content end-->
 <% include footer %>
 <script type="text/javascript" src="js/wangEditor.min.js"></script>
+<% if(type=='index'){%>
 <script type="text/javascript">
     var E = window.wangEditor;
     var editor = new E('#div3');
@@ -43,6 +57,7 @@
     $('#onAdd').click(function(){
     	var title = $('#titleC').val();
     	var info = editor.txt.html();
+      console.log(info);
     	var cate = $('#cate').val();
     	var topic = $('#titleT').val();
     	if(title===''||info===''){
@@ -64,5 +79,45 @@
     		})
     	}
     })
-    
 </script>
+<%}%>
+<% if(type=='shuo'){%>
+<script type="text/javascript">
+    var E = window.wangEditor;
+    var editor1 = new E('#div1');
+    editor1.customConfig.menus = [
+        'bold',  // 粗体
+        'foreColor',  // 文字颜色
+        'link',  // 插入链接
+        'list',  // 列表
+        'justify',  // 对齐方式
+        'quote',  // 引用
+        'image',  // 插入图片
+        'undo',  // 撤销
+        'redo'  // 重复
+    ];
+    editor1.customConfig.uploadImgShowBase64 = true;
+    editor1.create();
+     $('#onAdd1').click(function(){
+      var title = $('#titleS').val();
+      var info = editor1.txt.html();
+      if(title===''||info===''){
+        alert('请输入内容')
+      }else{
+        $.ajax({
+          type:'post',
+          url:'shuo.html?',
+          data:{title:title,info:info,id:'<%=arts._id%>',date:'<%=arts.date%>'},
+          success:function(date){
+            if(date.code===0){
+              $('#titleS').val('');
+              editor1.txt.html('');
+              alert('说说发表成功！');
+              window.location.reload();
+            }
+          }
+        })
+      }
+    })
+</script>
+<%}%>

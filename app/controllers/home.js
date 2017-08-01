@@ -102,17 +102,31 @@ router.post('/shuo.html', function (req, res, next) {
         res.json(message);
         return;
     }else{
-        var art = new Riji({
-            title:req.body.title,
-            text:req.body.info,
-            author:req.cookies.userInfo.name,
-            date:moment().format('L')
-        });
-        art.save().then(function(info){
-            message.code=0;
-            message.message='文章添加成功';
-            res.json(message);
-        })
+        if(req.body.id){
+            Riji.update({_id:req.body.id},{
+                title:req.body.title,
+                text:req.body.info,
+                author:req.cookies.userInfo.name,
+                date:req.body.date
+            }).then(function(data){
+                message.code=0;
+                message.message='文章添加成功';
+                res.json(message);
+            })
+        }else{
+            var art = new Riji({
+                title:req.body.title,
+                text:req.body.info,
+                author:req.cookies.userInfo.name,
+                date:moment().format('L')
+            });
+            art.save().then(function(info){
+                message.code=0;
+                message.message='文章添加成功';
+                res.json(message);
+            })
+        }
+        
     }
 });
 /**
@@ -139,16 +153,39 @@ router.get('/learn.html', function (req, res, next) {
 router.get('/add.html', function (req, res, next) {
     if(req.cookies.userInfo!==undefined&&req.cookies.userInfo.sign){
         if(req.query.id==undefined){
-            res.render('add',{
-                arts:{title:'',topic:'',text:'',_id:''}
-            });
-        }else{
-            var id = req.query.id;
-             Article.findOne({_id:id}).then(function(pageDate){
+            if(req.query.type=='shuo'){
                 res.render('add',{
-                    arts:pageDate,
+                    arts:{title:'',text:'',_id:'',date:''},
+                    type:'shuo'
                 });
-            });
+            }else if(req.query.type=='index'){
+                res.render('add',{
+                    arts:{title:'',topic:'',text:'',_id:''},
+                    type:'index'
+                });
+            }else{
+                res.redirect('/index.html')
+            }
+            
+        }else{
+            var id = req.query.id,type = req.query.type;
+            if(type=='index'){
+                Article.findOne({_id:id}).then(function(pageDate){
+                    res.render('add',{
+                        arts:pageDate,
+                        type:type
+                    });
+                });
+            }else if(type=='shuo'){
+                Riji.findOne({_id:id}).then(function(pageDate){
+                    console.log(pageDate);
+                    res.render('add',{
+                        arts:pageDate,
+                        type:type
+                    });
+                });
+            }
+             
         }
     }else{
         res.redirect('/login.html')  
