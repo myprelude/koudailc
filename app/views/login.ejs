@@ -1,17 +1,49 @@
 <% include header %>
 <style>
-	form{width:300px;margin:0 auto;text-align:center}
+	form{width:300px;margin:0 auto;text-align:center;}
+	.onId{
+		height:50px;
+		line-height:50px;
+		margin-top: 10px;
+	}
+	.onId input{
+		box-sizing: border-box;
+		vertical-align: middle;
+		width:100%;
+		height:50px;
+		outline:none;
+		border:1px solid #eee;
+		-webkit-tap-highlight-color:rgba(0,0,0,0);
+		padding-left: 20px;
+		border-radius:5px;
+	}
+	.on input{
+		width:100px;
+		outline: none;
+		border:none;
+		border-radius: 5px;
+		text-align: center;
+		margin-top: 10px;
+		height:40px;
+		line-height: 40px;
+		background: #F55522;
+		color:#eee;
+	}
+	@media only screen and (max-width:760px){
+		form{
+			width:100%;
+			padding:10px;
+		}
+	}
 </style>
 <form action="">
-	<div>
-		<label for="#username">用户名:</label>
-		<input type="text" id='username'>
+	<div class='onId'>
+		<input type="text" id='username' placeholder="请输入用户名">
 	</div>
-	<div>
-		<label for="#password">密　码:</label>
-		<input type="password" id='password'>
+	<div class='onId'>
+		<input type="password" id='password' placeholder="请输入密码">
 	</div>
-	<div><input id='login' value='登录' type='button' /></div>
+	<div class='on'><input id='login' value='登录' type='button' /></div>
 </form>
 <% include footer %>
 <script>
