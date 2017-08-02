@@ -61,7 +61,7 @@
 .w-e-text img {
   cursor: pointer;
   border-radius: 8px;
-  margin-top:4px;
+  margin:4px;
   max-width:100%;
 }
 .w-e-text img:hover {
@@ -83,6 +83,18 @@
             <div class="wz_text">当前位置：<a href="index.html">首页</a>><h1>添加文章</h1></div>
            </div>
            <% if(type=='index'){%>
+           <style>
+            .w-e-text th img{
+                display: inline-block;
+                max-width:45%;
+              }
+              @media only screen and (max-width:760px){
+                .w-e-text th img{
+                  display: block;
+                  max-width: 100%;
+                }
+              }
+           </style>
            <div class='title'>
             <textarea placeholder="文章的标题" id='titleC' ><%-arts.title%></textarea>
            </div>
@@ -105,7 +117,6 @@
                 .w-e-text img {
                   cursor: pointer;
                   border-radius: 8px;
-                  margin:4px;
                   max-width:400px;
                   display:inline-block;
                 }
