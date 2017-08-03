@@ -53,7 +53,7 @@ background:url("../images/tx.jpg") 5px 7px no-repeat;padding-left:25px;margin-le
 background:url("../images/sj.jpg") 5px 7px no-repeat;padding-left:25px;}
 .wz dl dd .dd_text_2 .fl{display:block;width:110px;heigt:30px;text-align:center;}
 .wz dl dd .dd_text_2 .fl a{color:#1D1718;}
-.wz dl dd .dd_text_2 .yd{display:block;width:110px;height:30px;text-align:center;margin-top:3px;}
+.wz dl dd .dd_text_2 .yd{display:block;height:30px;text-align:center;margin-top:3px;}
 .wz dl dd .dd_text_2 .yd a{color:#F55522;display:block;width:80px;height:22px;line-height:22px;
 text-align:center;padddding:2px 5px;border:1px solid #AC9696;border-radius:2px;}
 .wz dl dd .dd_text_2 .yd a:hover{color:#f36;}
