@@ -18,12 +18,13 @@
 		this.toShow = config.toShow;// 展示触发事件
 		this.toHide = config.toHide;// 隐藏触发事件
 		this.go = config.go;//点击返回触发事件
+		this.hidetime = config.hidetime || 2000;//设置隐藏时间 
 		this.init();
 	}
 	Go.prototype = {
 		constructor:Go,
 		init:function(){
-			var sate,_this = this;
+			var sate,_this = this,timer=null;
 			if(this.state=='center'){
 				sate='top:50%';
 			}
@@ -35,19 +36,15 @@
 			$(window).on('scroll',throttle(scroll,50));
 			function scroll(){
 				if($(window).scrollTop()>=_this.scrollTop){
-					if(_this.aimation=='show'){
-						$('.GoTop-box').show(function(){
-							if(_this.hide){
-								setTimeout(function(){
-									$('.GoTop-box').css('display','none');
-								},1500)
-							}
-						});
-						_this.toShow&&_this.toShow();
-					}else{
-						$('.GoTop-box').css('display','block').addClass(_this.aimation);
-						_this.toShow&&_this.toShow();
+					$('.GoTop-box').css('display','block').addClass(_this.aimation);
+					if(_this.hide){
+						clearTimeout(timer);
+						timer=setTimeout(function(){
+							$('.GoTop-box').css('display','none');
+							_this.toHide&&_this.toHide();
+						},2000)
 					}
+					_this.toShow&&_this.toShow();
 				}else{
 					if($('.GoTop-box').css('display')=='block'){
 						_this.toHide&&_this.toHide();
@@ -68,6 +65,7 @@
 			$(window).on('load',function(){
 				scroll();
 			})
+
 		}
 	}
 	//公共函数  
