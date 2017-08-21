@@ -307,12 +307,13 @@
       }
 
       var simulatedEvent = document.createEvent('MouseEvent'); 
-
-      simulatedEvent.initMouseEvent(
+      if(frist = void 0){
+        simulatedEvent.initMouseEvent(
         type, true, true, window, 1, 
         first.screenX, first.screenY, first.clientX, first.clientY, 
         false, false, false, false, 0/*left*/, null
       );
+      }
 
       first.target.dispatchEvent(simulatedEvent);
     });
