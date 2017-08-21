@@ -315,7 +315,6 @@
       );
 
       first.target.dispatchEvent(simulatedEvent);
-      console.log(first);
     });
   };
 })(jQuery);
