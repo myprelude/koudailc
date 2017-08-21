@@ -307,15 +307,15 @@
       }
 
       var simulatedEvent = document.createEvent('MouseEvent'); 
-      if(frist == void 0){
-        simulatedEvent.initMouseEvent(
+      simulatedEvent.initMouseEvent(
         type, true, true, window, 1, 
         first.screenX, first.screenY, first.clientX, first.clientY, 
         false, false, false, false, 0/*left*/, null
       );
+      if(first==void 0){
+        first.target.dispatchEvent(simulatedEvent);
       }
-
-      first.target.dispatchEvent(simulatedEvent);
+      
     });
   };
 })(jQuery);
