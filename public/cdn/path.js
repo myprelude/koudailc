@@ -307,10 +307,10 @@
       }
 
       var simulatedEvent = document.createEvent('MouseEvent'); 
-console.log(frist);
+
       simulatedEvent.initMouseEvent(
         type, true, true, window, 1, 
-        first.screenX, first.screenY, first.clientX, first.clientY, 
+        window.screenX, window.screenY, window.clientX, window.clientY, 
         false, false, false, false, 0/*left*/, null
       );
 
