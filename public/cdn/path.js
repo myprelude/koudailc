@@ -1,310 +1,307 @@
-/******************************************
- * Websanova.com
- *
- * Resources for web entrepreneurs
- *
- * @author          Websanova
- * @copyright       Copyright (c) 2012 Websanova.
- * @license         This wScratchPad jQuery plug-in is dual licensed under the MIT and GPL licenses.
- * @link            http://www.websanova.com
- * @github      http://github.com/websanova/wScratchPad
- * @version         Version 1.4.4
- *
- ******************************************/
-(function($)
-{
-  $.fn.wScratchPad = function(option, settings)
-  {
-    if(typeof option === 'object')
-    {
-      settings = option;
-    }
-    else if(typeof option == 'string')
-    {
-      var values = [];
+(function ($) {
+  'use strict';
 
-      var elements = this.each(function()
-      {
-        var data = $(this).data('_wScratchPad');
+  function ScratchPad(el, options) {
+    this.$el = $(el);
+    this.options = options;
 
-        if(data)
-        {
-          if(option === 'reset') { data.reset(); }
-          else if(option === 'clear') { data.clear(); }
-          else if(option === 'enabled') { data.enabled = settings === true; }
-          else if($.fn.wScratchPad.defaultSettings[option] !== undefined)
-          {
-            if(settings !== undefined) { data.settings[option] = settings; }
-            else { values.push(data.settings[option]); }
-          }
-        }
-      });
+    this.init = false;
+    this.enabled = true;
 
-      if(values.length === 1) { return values[0]; }
-      if(values.length > 0) { return values; }
-      else { return elements; }
-    }
-    
-    settings = $.extend({}, $.fn.wScratchPad.defaultSettings, settings || {});
+    this._generate();
+  }
 
-    return this.each(function()
-    {
-      var elem = $(this);
-      var $settings = jQuery.extend(true, {}, settings);
+  ScratchPad.prototype = {
+    _generate: function () {
 
-      //test for HTML5 canvas
-      var test = document.createElement('canvas');
-      if(!test.getContext)
-      {
-        elem.html("Browser does not support HTML5 canvas, please upgrade to a more modern browser.");
-        return false; 
+      // Throw message if canvas is not supported.
+      if (!$.support.canvas) {
+        this.$el.append('Canvas is not supported in this browser.');
+        return true;
       }
 
-      var sp = new ScratchPad($settings, elem);
-      
-      elem.append(sp.generate());
-      
-      //get number of pixels of canvas for percent calculations 
-      sp.pixels = sp.canvas.width * sp.canvas.height;
-      
-      elem.data('_wScratchPad', sp);
-      
-      sp.init();
-    });
-  };
-
-  $.fn.wScratchPad.defaultSettings =
-  {
-    width     : 210,          // set width - best to match image width
-    height      : 100,          // set height - best to match image height
-    image     : 'images/slide1.jpg',  // set image path
-    image2      : null,         // set overlay image path - if set color is not used
-    color     : '#336699',      // set scratch color - if image2 is not set uses color
-    overlay     : 'none',       // set the type of overlay effect 'none', 'lighter' - only used with color
-    size      : 10,         // set size of scratcher
-    realtimePercent : false,                // Update scratch percent only on the mouseup/touchend (for better performances on mobile device)
-    scratchDown   : null,         // scratchDown callback
-    scratchUp   : null,         // scratchUp callback
-    scratchMove   : null,         // scratcMove callback
-    cursor      : null          // Set path to custom cursor
-  };
-  
-  function ScratchPad(settings, elem)
-  {
-    this.sp = null;
-    this.settings = settings;
-    this.$elem = elem;
-    
-    this.enabled = true;
-    this.scratch = false;
-    
-    this.canvas = null;
-    this.ctx = null;
-    
-    return this;
-  }
-  
-  ScratchPad.prototype = 
-  {
-    generate: function()
-    {
-      var $this = this;
-      
+      // Setup canvas and context.
       this.canvas = document.createElement('canvas');
       this.ctx = this.canvas.getContext('2d');
-      
-      this.sp =
-      $('<div></div>')
-      .css({position: 'relative'})
-      .append(
-        $(this.canvas)
-        .attr('width', this.settings.width + 'px')
-        .attr('height', this.settings.height + 'px')
-      )
-      
-      $(this.canvas)
-      .mousedown(function(e)
-      {
-        if(!$this.enabled) return true;
 
-        e.preventDefault();
-        e.stopPropagation();
-        
-        //reset canvas offset in case it has moved
-        $this.canvas_offset = $($this.canvas).offset();
-        
-        $this.scratch = true;
-        $this.scratchFunc(e, $this, 'Down');
-      })
-      .mousemove(function(e)
-      {
-        e.preventDefault();
-        e.stopPropagation();
-        
-        if($this.scratch) $this.scratchFunc(e, $this, 'Move');
-      })
-      .mouseup(function(e)
-      {
-        e.preventDefault();
-        e.stopPropagation();
-        
-        //make sure we are in draw mode otherwise this will fire on any mouse up.
-        if($this.scratch)
-        {
-          $this.scratch = false;
-          $this.scratchFunc(e, $this, 'Up');
-        }
-      });
+      // Make sure it's at least relative.
+      if (this.$el.css('position') === 'static') {
+        this.$el.css('position', 'relative');
+      }
 
-      this.bindMobile(this.sp);
+      this.$img = $('<img src=""/>').attr('crossOrigin', '').css({position: 'absolute', width: '100%', height: '100%'});
+
+      // Make sure we sett style width height here for elastic stretch
+      // and better support for mobile if we are resizing the scratch pad.
+      this.$scratchpad = $(this.canvas).css({position: 'absolute', width: '100%', height: '100%'});
       
-      return this.sp;
-    },
-    
-    bindMobile: function($el)
-    {
-      $el.bind('touchstart touchmove touchend touchcancel', function ()
-      {
-        var touches = event.changedTouches, first = touches[0], type = ""; 
+      // Setup event handlers.
+      this.$scratchpad
+      .mousedown($.proxy(function (e) {
 
-        switch (event.type)
-        {
-          case "touchstart": type = "mousedown"; break; 
-          case "touchmove": type = "mousemove"; break; 
-          case "touchend": type = "mouseup"; break; 
-          default: return;
+        // If disabled we just return true which menas
+        // our our this.scratch will remain as false.
+        if (!this.enabled) {
+          return true;
         }
 
-        var simulatedEvent = document.createEvent("MouseEvent"); 
-
-        simulatedEvent.initMouseEvent(type, true, true, window, 1, first.screenX, first.screenY, first.clientX, first.clientY, false, false, false, false, 0/*left*/, null);
-        first.target.dispatchEvent(simulatedEvent);
-        event.preventDefault();
-      });
-    },
-
-    init: function()
-    {
-      this.sp.css('width', this.settings.width);
-      this.sp.css('height', this.settings.height);
-      this.sp.css('cursor', (this.settings.cursor ? 'url("' + this.settings.cursor + '"), default' : 'default'));
-
-      $(this.canvas).css({cursor: (this.settings.cursor ? 'url("' + this.settings.cursor + '"), default' : 'default')});
-      
-      this.canvas.width = this.settings.width;
-      this.canvas.height = this.settings.height;
-      
-      this.pixels = this.canvas.width * this.canvas.height;
-      
-      if(this.settings.image2)
-      {
-        this.drawImage(this.settings.image2);
-      }
-      else
-      {
-        if(this.settings.overlay != 'none')
-        {
-          if(this.settings.image)
-          {
-            this.drawImage(this.settings.image);
-          }
-          this.ctx.globalCompositeOperation = this.settings.overlay;
-        }
-        else
-        {
-          this.setBgImage();
-        }
+        this.canvasOffset = $(this.canvas).offset();
         
-        this.ctx.fillStyle = this.settings.color;
-        this.ctx.beginPath();
-        this.ctx.rect(0, 0, this.settings.width, this.settings.height)
-        this.ctx.fill();
+        this.scratch = true;
+        this._scratchFunc(e, 'Down');
+      }, this))
+      .mousemove($.proxy(function (e) {
+        if (this.scratch) {
+          this._scratchFunc(e, 'Move');
+        }
+      }, this))
+      .mouseup($.proxy(function (e) {
+        if (this.scratch) {
+          this.scratch = false;
+          this._scratchFunc(e, 'Up');
+        }
+      }, this));
+
+      // Run options
+      this._setOptions();
+
+      // Apepnd items
+      this.$el.append(this.$img).append(this.$scratchpad);
+
+      // Initialize and reset
+      this.init = true;
+      this.reset();
+    },
+
+    reset: function () {
+      var _this = this,
+          width = Math.ceil(this.$el.innerWidth()),
+          height = Math.ceil(this.$el.innerHeight());
+
+      // Set number of pixels required for getting scratch percentage.
+      this.pixels = width * height;
+
+      // We'll do a hard reset for the height here in case
+      // we need to run this at differnt sizes.
+      this.$scratchpad.attr('width', width).attr('height', height);
+
+      // Default to image hidden in case no bg or color is set.
+      this.$img.hide();
+
+      // Set bg.
+      if (this.options.bg) {
+        if (this.options.bg.charAt(0) === '#') {
+          this.$el.css('backgroundColor', this.options.bg);
+        }
+        else {
+          this.$img.show().attr('src', this.options.bg).show();
+        }
+      }
+
+      // Set fg.
+      if (this.options.fg) {
+        if (this.options.fg.charAt(0) === '#') {
+          this.ctx.fillStyle = this.options.fg;
+          this.ctx.beginPath();
+          this.ctx.rect(0, 0, width, height);
+          this.ctx.fill();
+        }
+        else {
+          // Have to load image before we can use it.
+          $(new Image())
+          .attr('src', this.options.fg)
+          .load(function () {
+            _this.ctx.drawImage(this, 0, 0, width, height);
+          });
+        }
       }
     },
 
-    reset: function()
-    {
-      this.ctx.globalCompositeOperation = 'source-over';
-      this.init();
+    clear: function () {
+      this.ctx.clearRect(0, 0, Math.ceil(this.$el.innerWidth()), Math.ceil(this.$el.innerHeight()));
     },
 
-    clear: function()
-    {
-      this.ctx.clearRect(0, 0, this.settings.width, this.settings.height);
+    enable: function (enabled) {
+      this.enabled = enabled === true ? true : false;
     },
 
-    setBgImage: function()
-    {
-      if(this.settings.image)
-      {
-        this.sp.css({backgroundImage: 'url('+this.settings.image+')'});
+    destroy: function () {
+      this.$el.children().remove();
+      $.removeData(this.$el, 'wScratchPad');
+    },
+
+    _setOptions: function () {
+      var opt, func;
+
+      for (opt in this.options) {
+        this.options[opt] = this.$el.attr('data-' + opt) || this.options[opt];
+        func = 'set' + opt.charAt(0).toUpperCase() + opt.substring(1);
+
+        if (this[func]) {
+          this[func](this.options[opt]);
+        }
       }
     },
 
-    drawImage: function(imagePath)
-    {
-      var $this = this;
-      var img = new Image();
-        img.src = imagePath;
-        $(img).load(function(){
-          $this.ctx.drawImage(img, 0, 0);
-          $this.setBgImage();
-        })
-    },
-
-    scratchFunc: function(e, $this, event)
-    {
-      e.pageX = Math.floor(e.pageX - $this.canvas_offset.left);
-      e.pageY = Math.floor(e.pageY - $this.canvas_offset.top);
-      
-      $this['scratch' + event](e, $this);
-      
-      if(this.settings.realtimePercent || event == "Up") {
-        if($this.settings['scratch' + event]) $this.settings['scratch' + event].apply($this, [e, $this.scratchPercentage($this)]);
+    setBg: function () {
+      if (this.init) {
+        this.reset();
       }
     },
 
-    scratchPercentage: function($this)
-    {
-      var hits = 0;
-      var imageData = $this.ctx.getImageData(0,0,$this.canvas.width,$this.canvas.height)
-      
-      for(var i=0, ii=imageData.data.length; i<ii; i=i+4)
-      {
-        if(imageData.data[i] == 0 && imageData.data[i+1] == 0 && imageData.data[i+2] == 0 && imageData.data[i+3] == 0) hits++;
-      }
-      
-      return (hits / $this.pixels) * 100;
+    setFg: function () {
+      this.setBg();
     },
 
-    scratchDown: function(e, $this)
-    {
-      $this.ctx.globalCompositeOperation = 'destination-out';
-      $this.ctx.lineJoin = "round";
-      $this.ctx.lineCap = "round";
-      $this.ctx.strokeStyle = $this.settings.color;
-      $this.ctx.lineWidth = $this.settings.size;
+    setCursor: function (cursor) {
+      this.$el.css('cursor', cursor);
+    },
+
+    _scratchFunc: function (e, event) {
+      e.pageX = Math.floor(e.pageX - this.canvasOffset.left);
+      e.pageY = Math.floor(e.pageY - this.canvasOffset.top);
+      
+      this['_scratch' + event](e);
+      
+      if (this.options.realtime || event === 'Up') {
+        if (this.options['scratch' + event]) {
+          this.options['scratch' + event].apply(this, [e, this._scratchPercent()]);
+        }
+      }
+    },
+
+    _scratchPercent: function() {
+      var hits = 0,
+          imageData = this.ctx.getImageData(0,0, this.canvas.width, this.canvas.height);
+      
+      for (var i=0, ii=imageData.data.length; i<ii; i=i+4) {
+        if (imageData.data[i] === 0 && imageData.data[i+1] === 0 && imageData.data[i+2] === 0 && imageData.data[i+3] === 0) {
+          hits++;
+        }
+      }
+      
+      return (hits / this.pixels) * 100;
+    },
+
+    _scratchDown: function (e) {
+      this.ctx.globalCompositeOperation = 'destination-out';
+      this.ctx.lineJoin = 'round';
+      this.ctx.lineCap = 'round';
+      this.ctx.strokeStyle = this.options.color;
+      this.ctx.lineWidth = this.options.size;
       
       //draw single dot in case of a click without a move
-      $this.ctx.beginPath();
-      $this.ctx.arc(e.pageX, e.pageY, $this.settings.size/2, 0, Math.PI*2, true);
-      $this.ctx.closePath();
-      $this.ctx.fill();
+      this.ctx.beginPath();
+      this.ctx.arc(e.pageX, e.pageY, this.options.size/2, 0, Math.PI*2, true);
+      this.ctx.closePath();
+      this.ctx.fill();
       
       //start the path for a drag
-      $this.ctx.beginPath();
-      $this.ctx.moveTo(e.pageX, e.pageY);
+      this.ctx.beginPath();
+      this.ctx.moveTo(e.pageX, e.pageY);
     },
     
-    scratchMove: function(e, $this)
-    {
-      $this.ctx.lineTo(e.pageX, e.pageY);
-      $this.ctx.stroke();
+    _scratchMove: function (e) {
+      this.ctx.lineTo(e.pageX, e.pageY);
+      this.ctx.stroke();
     },
     
-    scratchUp: function(e, $this)
-    {
-      $this.ctx.closePath();
-    },
-  }
+    _scratchUp: function () {
+      this.ctx.closePath();
+    }
+  };
+
+  $.support.canvas = (document.createElement('canvas')).getContext;
+
+  $.fn.wScratchPad = function (options, value) {
+    function get() {
+      var wScratchPad = $.data(this, 'wScratchPad');
+
+      if (!wScratchPad) {
+        wScratchPad = new ScratchPad(this, $.extend(true, {}, options));
+        $.data(this, 'wScratchPad', wScratchPad);
+      }
+
+      return wScratchPad;
+    }
+
+    if (typeof options === 'string') {
+      var wScratchPad,
+          values = [],
+          func = (value !== undefined ? 'set' : 'get') + options.charAt(0).toUpperCase() + options.substring(1),
+
+          setOpt = function () {
+            if (wScratchPad.options[options]) { wScratchPad.options[options] = value; }
+            if (wScratchPad[func]) { wScratchPad[func].apply(wScratchPad, [value]); }
+          },
+
+          getOpt = function () {
+            if (wScratchPad[func]) { return wScratchPad[func].apply(wScratchPad, [value]); }
+            else if (wScratchPad.options[options]) { return wScratchPad.options[options]; }
+            else { return undefined; }
+          },
+
+          runOpt = function () {
+            wScratchPad = $.data(this, 'wScratchPad');
+
+            if (wScratchPad) {
+              if (wScratchPad[options]) { wScratchPad[options].apply(wScratchPad, [value]); }
+              else if (value !== undefined) { setOpt(); }
+              else {  values.push(getOpt()); }
+            }
+          };
+
+      this.each(runOpt);
+
+      return values.length ? (values.length === 1 ? values[0] : values) : this;
+    }
+
+    options = $.extend({}, $.fn.wScratchPad.defaults, options);
+
+    return this.each(get);
+  };
+
+  $.fn.wScratchPad.defaults = {
+    size        : 5,          // The size of the brush/scratch.
+    bg          : '#cacaca',  // Background (image path or hex color).
+    fg          : '#6699ff',  // Foreground (image path or hex color).
+    realtime    : true,       // Calculates percentage in realitime
+    scratchDown : null,       // Set scratchDown callback.
+    scratchUp   : null,       // Set scratchUp callback.
+    scratchMove : null,       // Set scratcMove callback.
+    cursor      : 'crosshair' // Set cursor.
+  };
+
+  $.fn.bindMobileEvents = function () {
+    $(this).on('touchstart touchmove touchend touchcancel', function () {
+      var touches = (event.changedTouches || event.originalEvent.targetTouches),
+          first = touches[0],
+          type = '';
+
+      switch (event.type) {
+      case 'touchstart':
+        type = 'mousedown';
+        break;
+      case 'touchmove':
+        type = 'mousemove';
+        event.preventDefault();
+        break;
+      case 'touchend':
+        type = 'mouseup';
+        break;
+      default:
+        return;
+      }
+
+      var simulatedEvent = document.createEvent('MouseEvent'); 
+
+      simulatedEvent.initMouseEvent(
+        type, true, true, window, 1, 
+        first.screenX, first.screenY, first.clientX, first.clientY, 
+        false, false, false, false, 0/*left*/, null
+      );
+
+      first.target.dispatchEvent(simulatedEvent);
+    });
+  };
 })(jQuery);
