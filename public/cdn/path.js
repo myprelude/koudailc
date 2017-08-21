@@ -35,6 +35,8 @@
       // and better support for mobile if we are resizing the scratch pad.
       this.$scratchpad = $(this.canvas).css({position: 'absolute', width: '100%', height: '100%'});
       
+      this.$scratchpad.bindMobileEvents();
+
       // Setup event handlers.
       this.$scratchpad
       .mousedown($.proxy(function (e) {
@@ -76,7 +78,8 @@
     reset: function () {
       var _this = this,
           width = Math.ceil(this.$el.innerWidth()),
-          height = Math.ceil(this.$el.innerHeight());
+          height = Math.ceil(this.$el.innerHeight()),
+          devicePixelRatio = window.devicePixelRatio || 1;
 
       // Set number of pixels required for getting scratch percentage.
       this.pixels = width * height;
@@ -84,6 +87,12 @@
       // We'll do a hard reset for the height here in case
       // we need to run this at differnt sizes.
       this.$scratchpad.attr('width', width).attr('height', height);
+
+      this.canvas.setAttribute('width', width * devicePixelRatio);
+      this.canvas.setAttribute('height', height * devicePixelRatio);
+      this.ctx.scale(devicePixelRatio, devicePixelRatio);
+
+      this.pixels = width * devicePixelRatio * height * devicePixelRatio;
 
       // Default to image hidden in case no bg or color is set.
       this.$img.hide();
@@ -94,7 +103,8 @@
           this.$el.css('backgroundColor', this.options.bg);
         }
         else {
-          this.$img.show().attr('src', this.options.bg).show();
+          this.$el.css('backgroundColor', '');
+          this.$img.attr('src', this.options.bg);
         }
       }
 
@@ -105,13 +115,16 @@
           this.ctx.beginPath();
           this.ctx.rect(0, 0, width, height);
           this.ctx.fill();
+          this.$img.show();
         }
         else {
           // Have to load image before we can use it.
           $(new Image())
+          .attr('crossOrigin', '')
           .attr('src', this.options.fg)
           .load(function () {
             _this.ctx.drawImage(this, 0, 0, width, height);
+            _this.$img.show();
           });
         }
       }
@@ -273,7 +286,7 @@
   };
 
   $.fn.bindMobileEvents = function () {
-    $(this).on('touchstart touchmove touchend touchcancel', function () {
+    $(this).on('touchstart touchmove touchend touchcancel', function (event) {
       var touches = (event.changedTouches || event.originalEvent.targetTouches),
           first = touches[0],
           type = '';
