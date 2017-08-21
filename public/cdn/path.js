@@ -307,7 +307,7 @@
       }
 
       var simulatedEvent = document.createEvent('MouseEvent'); 
-      if(frist = void 0){
+      if(frist == void 0){
         simulatedEvent.initMouseEvent(
         type, true, true, window, 1, 
         first.screenX, first.screenY, first.clientX, first.clientY, 
