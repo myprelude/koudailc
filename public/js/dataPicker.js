@@ -112,9 +112,9 @@
 	 * @param  {[type]} data    [数据]
 	 * @return {[type]}         [description]
 	 */
-	function getdom(status1,status2,i,data){
+	function getdom(status,i,data){
 		var text='';
-		if(status1&&status2){
+		if(status[0]&&status[1]&&!status[2]){
 			if(i==0){
 				for(var j=0;j<data[i].length;j++){
 					text+='<li>'+data[i][j]+'</li>';
@@ -135,7 +135,7 @@
 					text+='<li>'+data[i][t][k][j]+'</li>';
 				}
 			}
-		}else if(status1&&!status2){
+		}else if(status[0]&&!status[1]&&!status[2]){
 			if(i==0||i==2){
 				for(var j=0;j<data[i].length;j++){
 					text+='<li>'+data[i][j]+'</li>';
@@ -147,7 +147,7 @@
 					text+='<li>'+data[i][t][j]+'</li>';
 				}
 			}
-		}else if(!status1&&status2){
+		}else if(!status[0]&&status[1]&&!status[2]){
 			if(i==0||i==1){
 				for(var j=0;j<data[i].length;j++){
 					text+='<li>'+data[i][j]+'</li>';
@@ -159,7 +159,20 @@
 					text+='<li>'+data[i][t][j]+'</li>';
 				}
 			}	
-		}else{
+		}else if(!status[0]&&status[1]&&status[2]){
+			if(i==0||i==1){
+				for(var j=0;j<data[i].length;j++){
+					text+='<li>'+data[i][j]+'</li>';
+				}
+			}
+			if(i==2){
+				var t = Math.floor(data[i-1].length/2);
+				for(var j=0;j<data[i][t].length;j++){
+					text+='<li>'+data[i][t][j]+'</li>';
+				}
+			}	
+		}
+		else{
 			for(var j=0;j<data[i].length;j++){
 				text+='<li>'+data[i][j]+'</li>';
 			}
@@ -211,7 +224,7 @@
 						}
 						node+='<div class="listBox"><ul>'+text+'</ul></div>';
 					}else{
-						text  = getdom(this.relate[0],this.relate[1],i,this.data);
+						text  = getdom(this.relate,i,this.data);
 						node+='<div class="listBox"><ul>'+text+'</ul></div>';	
 					}
 				}		
