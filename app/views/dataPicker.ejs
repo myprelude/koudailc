@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>手机联动插件--开发(口袋理财前端技术团队)</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+</head>
+<style>
+	#dataPicker-mask{
+		position: fixed;
+		top:0;
+		left:0;
+		bottom:0;
+		right:0;
+		background: rgba(0,0,0,0);
+		overflow: hidden;
+	}
+	.dataPicker-container{
+		position: absolute;
+		bottom:0;
+		width:100%;
+		left:0;
+		transform: translateY(100%);
+	}
+	.dataPicker-container div{
+		box-sizing: border-box;
+	}
+	.dataPicker-head{
+		height:45px;
+		line-height: 45px;
+		background: #efefef;
+		overflow: hidden;
+		text-align: center;
+		padding:0 15px;
+	}
+	.dataPicker-head div{
+		display: inline-block;
+	}
+	.dataPicker-head .dataPicker-conform{
+		float:left;
+		color:#1483FE;
+	}
+	.dataPicker-head .dataPicker-ok{
+		float:right;
+		color:#1483FE;
+	}
+	.dataPicker-info{
+		background: #D1D5D8;
+		position: relative;
+		overflow: hidden;
+	}
+	.dataPicker-info div{
+		float:left;
+		height:100%;
+	}
+	.dataPicker-info ul{
+		padding:0;
+		margin:0;
+		list-style: none;
+		width:100%;
+		max-height:100%;
+		text-align: center;
+	}
+	.dataPicker-info ul li{
+		box-sizing:border-box;
+		-moz-box-sizing:border-box; /* Firefox */
+		-webkit-box-sizing:border-box; /* Safari */
+	}
+	.dataPickerTop{
+		position: absolute;
+		width:100%;
+		top:0;
+		background: rgba(209,213,216,0.7);
+		pointer-events:none;
+	}
+	.dataPickerMiddle{
+		position: absolute;
+		width:100%;
+		border-top:1px solid #666;
+		border-bottom:1px solid #666;
+		pointer-events:none;
+	}
+	.dataPickerBottom{
+		position: absolute;
+		width:100%;
+		bottom:0;
+		background: rgba(209,213,216,0.7);
+		pointer-events:none;
+	}
+</style>
+<body>
+	<div>
+		<h3>城市/日期选择器</h3>
+		<a href="http://www.scopeman.cn">口袋理财前端技术团队</a>
+	</div>
+
+	demo:
+	<div style='height:30px;width:100%;border-radius:6px;background:#333333;text-align: center;line-height: 30px;color:#fff;margin-top:20px' class='test'>Test(三级联动)</div>
+	<div style='height:30px;width:100%;border-radius:6px;background:#333333;text-align: center;line-height: 30px;color:#fff;margin-top:20px' class='test1'>Test(1-2级联动)</div>
+	<div style='height:30px;width:100%;border-radius:6px;background:#333333;text-align: center;line-height: 30px;color:#fff;margin-top:20px' class='test2'>Test(1-3级联动)</div>
+	<div style='height:30px;width:100%;border-radius:6px;background:#333333;text-align: center;line-height: 30px;color:#fff;margin-top:20px' class='test3'>Test(2-3级联动)</div>
+	<div style='height:30px;width:100%;border-radius:6px;background:#333333;text-align: center;line-height: 30px;color:#fff;margin-top:20px' class='test4'>Test(相互独立)</div>
+	<div style='height:30px;width:100%;border-radius:6px;background:#333333;text-align: center;line-height: 30px;color:#fff;margin-top:20px' class='test5'>Test(相互独立 5级高度)</div>
+	<div style="padding:10px 20px;background:rgba(209,213,216,0.7);height:50px;margin-top:20px;">
+		<div>您选择的是：</div>
+		<div class='show' style='color:red'></div>
+	</div>
+</body>
+<script src='dataPicker.js?rel=1232sss1'></script>
+<script>
+	document.querySelector('.test').addEventListener('click',function(){
+		var dataPicker = new picker({
+			data:[
+				['上海','安徽','河北','河南','山东'],
+				[
+					['宝山','静安','徐汇','嘉定'],
+					['安庆','合肥','芜湖'],
+					['石家庄','承德','北戴河'],
+					['周口','郑州','井盖'],
+					['青岛','临沂','济南']
+				],
+				[
+					[
+						['宝山1','宝山2','宝山3'],
+						['静安1','静安1','静安1'],
+						['徐汇','徐汇','徐汇'],
+						['嘉定','嘉定','嘉定']
+					],
+					[
+						['安庆','安庆','安庆'],
+						['合肥','合肥','合肥'],
+						['芜湖','芜湖','芜湖'],
+					],
+					[
+						['石家庄','石家庄','石家庄'],
+						['承德','承德','承德'],
+						['北戴河','北戴河','北戴河'],
+					],
+					[
+						['周口','周口','周口'],
+						['郑州','郑州','郑州'],
+						['井盖','井盖','井盖'],
+					],
+					[
+						['青岛','青岛','青岛'],
+						['临沂','临沂','临沂'],
+						['济南','济南','济南'],
+					]
+				]
+			],
+			relate:[true,true],
+			line:3,
+			callback:function(id){
+				document.querySelector('.show').innerHTML = id;
+			},
+			title:'手机选择框'
+				
+		});
+		dataPicker.create();
+	})
+	document.querySelector('.test1').addEventListener('click',function(){
+		var dataPicker = new picker({
+			data:[
+				['上海','安徽','河北','河南','山东'],
+				[
+					['宝山','静安','徐汇','嘉定'],
+					['安庆','合肥','芜湖'],
+					['石家庄','承德','北戴河'],
+					['周口','郑州','井盖'],
+					['青岛','临沂','济南']
+				],
+				[
+					1,2,3,4,5
+				]
+			],
+			relate:[true,false],
+			line:3,
+			callback:function(id){
+				document.querySelector('.show').innerHTML = id;
+			},
+			title:'1-2联动'
+				
+		});
+		dataPicker.create();
+	})
+	document.querySelector('.test2').addEventListener('click',function(){
+		var dataPicker = new picker({
+			data:[
+				['上海','安徽','河北','河南','山东'],
+				[
+					1,2,3,4,5
+				],
+				[
+					[
+						11,11,11,11,11
+					],
+					[
+						22,22,22,22,22
+					],
+					[
+						33,33,33,33
+					],
+					[
+						44,44,44
+					],
+					[
+						55,55
+					]
+				]
+			],
+			relate:[false,true],
+			line:3,
+			callback:function(id){
+				document.querySelector('.show').innerHTML = id;
+			},
+			title:'1-3联动'
+				
+		});
+		dataPicker.create();
+	})
+	document.querySelector('.test3').addEventListener('click',function(){
+		var dataPicker = new picker({
+			data:[
+				[111,222,333],
+				[
+					'上海','安徽','河北','河南','山东'
+				],
+				[
+					['宝山','静安','徐汇','嘉定'],
+					['安庆','合肥','芜湖'],
+					['石家庄','承德','北戴河'],
+					['周口','郑州','井盖'],
+					['青岛','临沂','济南']
+				]
+			],
+			relate:[false,true,true],
+			line:3,
+			callback:function(id){
+				document.querySelector('.show').innerHTML = id;
+			},
+			title:'2-3联动'
+				
+		});
+		dataPicker.create();
+	})
+	document.querySelector('.test4').addEventListener('click',function(){
+		var dataPicker = new picker({
+			data:[
+				['上海','安徽','河北','河南','山东'],
+				[
+					1,2,3,4,5
+				],
+				[
+					'西瓜','橘子','葡萄'
+				]
+			],
+			relate:[],
+			line:3,
+			callback:function(id){
+				document.querySelector('.show').innerHTML = id;
+			},
+			title:'相互独立'
+				
+		});
+		dataPicker.create();
+	})
+	document.querySelector('.test5').addEventListener('click',function(){
+		var dataPicker = new picker({
+			data:[
+				['上海','安徽','河北','河南','山东'],
+				[
+					['宝山','静安','徐汇','嘉定'],
+					['安庆','合肥','芜湖'],
+					['石家庄','承德','北戴河'],
+					['周口','郑州','井盖'],
+					['青岛','临沂','济南']
+				],
+				[
+					[
+						['宝山1','宝山2','宝山3'],
+						['静安1','静安1','静安1'],
+						['徐汇','徐汇','徐汇'],
+						['嘉定','嘉定','嘉定']
+					],
+					[
+						['安庆','安庆','安庆'],
+						['合肥','合肥','合肥'],
+						['芜湖','芜湖','芜湖'],
+					],
+					[
+						['石家庄','石家庄','石家庄'],
+						['承德','承德','承德'],
+						['北戴河','北戴河','北戴河'],
+					],
+					[
+						['周口','周口','周口'],
+						['郑州','郑州','郑州'],
+						['井盖','井盖','井盖'],
+					],
+					[
+						['青岛','青岛','青岛'],
+						['临沂','临沂','临沂'],
+						['济南','济南','济南'],
+					]
+				]
+			],
+			relate:[true,true],
+			line:5,
+			callback:function(id){
+				document.querySelector('.show').innerHTML = id;
+			},
+			title:'三级联动-5'
+				
+		});
+		dataPicker.create();
+	})
+</script>
+</html>

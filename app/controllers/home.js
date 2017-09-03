@@ -70,6 +70,12 @@ router.get('/about.html', function (req, res, next) {
     res.render('about');
 });
 /**
+ * 插件
+ */
+router.get('/data.html', function (req, res, next) {
+    res.render('dataPicker');
+});
+/**
  * [description] 口袋每日
  */
 router.get('/shuo.html', function (req, res, next) {
