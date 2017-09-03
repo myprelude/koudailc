@@ -72,7 +72,7 @@ router.get('/about.html', function (req, res, next) {
 /**
  * 插件
  */
-router.get('/data.html', function (req, res, next) {
+router.get('/dataPicker.html', function (req, res, next) {
     res.render('dataPicker');
 });
 /**
