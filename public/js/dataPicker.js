@@ -80,7 +80,7 @@
     		for(var i=0;i<listdom.length;i++){
         		listdom[i].className =listdom[i].className.replace('active','');
        		}
-       		el.childNodes[0].style[transition]='transform 500ms ease';
+       		el.childNodes[0].style[transition]='all 500ms ease';
     		y1 = e.changedTouches[0].pageY;
     		t1 = new Date().getTime();
     		if(t1-t<100){
@@ -118,8 +118,6 @@
 			node = max-step;
 			listdom[node].className = 'active';
 			callback&&callback(node,el,index);
-			// document.removeEventListener("touchstart",remove);
-			// on(document,'touchstart',remove);
 		})
 
 	}
@@ -311,7 +309,7 @@
 				var lilen = selectUl[i].childNodes.length;
 				var trans = highlight+1-Math.ceil(lilen/2);
 				selectUl[i].style[transform]='translate3d(0,'+trans*_this.height+'px,0)';
-				// selectUl[i].style[transition]='transform 500ms ease';
+				selectUl[i].style[transition]='all 500ms ease';
 				selectUl[i].childNodes[Math.ceil(lilen/2)-1].className='active';
 				TouchScroll(selectDiv[i],this.height,this.line,trans,i,function(id,el,index){
 					if(selectUl.length==1){

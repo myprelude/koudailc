@@ -18,14 +18,16 @@
 		z-index:10000;
 	}
 	.dataPicker-container{
-		position: absolute;
+		position: fixed;
 		bottom:0;
 		left:0;
 		right:0;
 		width:100%;
 		z-index:100001;
-		-webkit-transition:transform 500ms ease-out;
-		transition:transform 500ms ease-out;
+		transform:translate3d(0,100%,0);
+		-webkit-transform:translate3d(0,100%,0);
+		-webkit-transition:all 500ms ease;
+		transition:all 500ms ease;
 	}
 	.dataPicker-container div{
 		box-sizing: border-box;
