@@ -303,7 +303,7 @@
 				var lilen = selectUl[i].childNodes.length;
 				var trans = highlight+1-Math.ceil(lilen/2);
 				selectUl[i].style[transform]='translate3d(0,'+trans*_this.height+'px,0)';
-				selectUl[i].style[transition]='transform 300ms ease-in-out'
+				selectUl[i].style[transition]='transform 300ms ease-in-out';
 				selectUl[i].childNodes[Math.ceil(lilen/2)-1].className='active';
 				TouchScroll(selectDiv[i],this.height,this.line,trans,i,function(id,el,index){
 					if(selectUl.length==1){
@@ -352,11 +352,12 @@
 						if(isArr(_this.relate)){
 							if(_this.relate[0]&&_this.relate[1]&&!_this.relate[2]){
 								if(index==0){
+									var lilen = selectUl[1].childNodes.length;
 									selectUl[1].innerHTML='';
-									selectUl[2].innerHTML='';
 									for(var x=0;x<_this.data[1][id].length;x++){
 										selectUl[1].innerHTML+="<li>"+_this.data[1][id][x]+"</li>";
 									}
+									selectUl[2].innerHTML='';
 									for(var y=0;y<_this.data[2][id][Math.ceil(lilen/2)-1].length;y++){
 										selectUl[2].innerHTML+="<li>"+_this.data[2][id][Math.ceil(lilen/2)-1][y]+"</li>";
 									}
