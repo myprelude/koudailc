@@ -30,6 +30,9 @@
 		}
 		return dayArr;
 	}
+	function remove(e){
+		e.preventDefault();
+	}
 	/**
 	 * [TouchScroll description]
 	 * @param {[type]}   el       [事件触发元素]
@@ -55,6 +58,7 @@
 			min = Math.ceil(line/2)-count;
 			e.stopPropagation();
         	e.preventDefault();
+        	el.childNodes[0].style[transition]='none';
         	y = e.changedTouches[0].pageY;
         	t = new Date().getTime();
 		})
@@ -66,7 +70,7 @@
 				return;
 			}
 			y1 = e.changedTouches[0].pageY;
-			el.childNodes[0].style[transform]='translate3d(0,'+(step*height+(y1-y)*ratio1)+'px,0)';				
+			el.childNodes[0].style[transform]='translate3d(0,'+(step*height+(y1-y))+'px,0)';				
 		})
 		on(el,'touchend',function(e){
 			e.stopPropagation();
@@ -75,10 +79,11 @@
     		var listdom = el.childNodes[0].childNodes;
     		for(var i=0;i<listdom.length;i++){
         		listdom[i].className =listdom[i].className.replace('active','');
-       		 }
+       		}
+       		el.childNodes[0].style[transition]='transform 500ms ease';
     		y1 = e.changedTouches[0].pageY;
     		t1 = new Date().getTime();
-    		if(t1-t<110){
+    		if(t1-t<100){
     			if(Math.abs(y1-y)<8){return;}
             	var st = y1-y>0?1:-1;
             	var kun = (Math.floor(Math.abs(y1-y)/ratio2)+1)*st+step;// 快速滚动时 滚动格子
@@ -94,11 +99,11 @@
         		if(  (st==1&&step==max)
         			|| (st==-1&&step==min)
         			|| Math.abs(y1-y)<(height/2)  ){
-				list.style[transform]='translate(0,'+step*height+'px)';
+				list.style[transform]='translate3d(0,'+step*height+'px,0)';
 				}else{
 					var stepAdd = Math.floor(Math.abs(y1-y)/height)*st+step;
 					step = getNum(st,max,min,stepAdd);
-					list.style[transform]='translate(0,'+step*height+'px)';
+					list.style[transform]='translate3d(0,'+step*height+'px,0)';
 				}
 				node =max-step;
 				listdom[node].className = 'active';
@@ -108,11 +113,13 @@
         	var st = y1-y>0?1:-1;
         	if(st==1&&step>=max){listdom[0].className='active';return}
         	if(st==-1&&step<=min){listdom[count-1].className = 'active';return;}
-        	list.style[transform]='translate(0,'+(step+1*st)*height+'px)';
+        	list.style[transform]='translate3d(0,'+(step+1*st)*height+'px,0)';
 			step = step+1*st;
 			node = max-step;
 			listdom[node].className = 'active';
 			callback&&callback(node,el,index);
+			// document.removeEventListener("touchstart",remove);
+			// on(document,'touchstart',remove);
 		})
 
 	}
@@ -273,6 +280,7 @@
 			dataMask.id = 'dataPicker-mask';
 			dataMask.innerHTML =dom ;
 			body.appendChild(dataMask);
+			on(document,'touchmove',remove);
 			var _this = this,checked=[];
 			var container = document.querySelector('.dataPicker-container');
 			var dataPicker = document.querySelector('.dataPicker-info');
@@ -285,7 +293,7 @@
 			var conform = container.querySelector('.dataPicker-conform');
 			var ok = container.querySelector('.dataPicker-ok');
 			var highlight = Math.floor(this.line/2);
-			container.style[transition] = 'transform 500ms ease-in-out';
+			// container.style[transition] = 'transform 500ms ease';
 			setTimeout(function(){
 				container.style[transform] = 'translate3d(0,0,0)';
 			},0)
@@ -303,7 +311,7 @@
 				var lilen = selectUl[i].childNodes.length;
 				var trans = highlight+1-Math.ceil(lilen/2);
 				selectUl[i].style[transform]='translate3d(0,'+trans*_this.height+'px,0)';
-				selectUl[i].style[transition]='transform 300ms ease-in-out';
+				// selectUl[i].style[transition]='transform 500ms ease';
 				selectUl[i].childNodes[Math.ceil(lilen/2)-1].className='active';
 				TouchScroll(selectDiv[i],this.height,this.line,trans,i,function(id,el,index){
 					if(selectUl.length==1){
@@ -464,9 +472,11 @@
 			}
 			setStyle(dataLi,this.height);
 			on(conform,'click',function(){
+				document.removeEventListener("touchmove",remove);
 				_this.hide(body,container,dataMask);
 			})
 			on(ok,'click',function(){
+				document.removeEventListener("touchmove",remove);
 				for(var i=0;i<selectUl.length;i++){
 					checked.push(selectUl[i].querySelector('.active').innerHTML);
 				}
