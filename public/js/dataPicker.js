@@ -19,6 +19,17 @@
 	function isArr(arr){
 		return Object.prototype.toString.call(arr)==='[object Array]';
 	}
+	function is_leap(year) {
+	 	return (year%100==0?(year%400==0?1:0):(year%4==0?1:0));
+	}
+	function getDay(year,month){
+		var day = new Array(31,28+is_leap(year),31,30,31,31,30,31,30,31,30,31);
+		var dayNum = day[month-1];
+		for(var i=1,dayArr=[];i<dayNum+1;i++){
+			dayArr.push(i);
+		}
+		return dayArr;
+	}
 	/**
 	 * [TouchScroll description]
 	 * @param {[type]}   el       [事件触发元素]
@@ -43,60 +54,61 @@
 			count = el.childNodes[0].childNodes.length;
 			min = Math.ceil(line/2)-count;
 			e.stopPropagation();
-	            	e.preventDefault();
-	            	y = e.changedTouches[0].pageY;
-	            	t = new Date().getTime();
+        	e.preventDefault();
+        	y = e.changedTouches[0].pageY;
+        	t = new Date().getTime();
 		})
 		on(el,'touchmove',function(e){
 			e.stopPropagation();
-           		e.preventDefault();
+           	e.preventDefault();
 			t1 = new Date().getTime();
 			if(t1-t<=300){
 				return;
 			}
 			y1 = e.changedTouches[0].pageY;
-			el.childNodes[0].style[transform]='translate(0,'+(step*height+(y1-y)*ratio1)+'px)';				
+			el.childNodes[0].style[transform]='translate3d(0,'+(step*height+(y1-y)*ratio1)+'px,0)';				
 		})
 		on(el,'touchend',function(e){
 			e.stopPropagation();
-            		e.preventDefault();
-            		var list = el.childNodes[0];
-            		var listdom = el.childNodes[0].childNodes;
-        		for(var i=0;i<listdom.length;i++){
-            			listdom[i].className =listdom[i].className.replace('active','');
-           		 }
-            		y1 = e.changedTouches[0].pageY;
-            		t1 = new Date().getTime();
-            		if(t1-t<110){
-		            	var st = y1-y>0?1:-1;
-		            	var kun = (Math.floor(Math.abs(y1-y)/ratio2)+1)*st+step;// 快速滚动时 滚动格子
-		            	step = getNum(st,max,min,kun);
-		            	list.style[transform]='translate(0,'+(step*height)+'px)';
-		            	node = max-step;
-		            	listdom[node].className = 'active';
-		            	callback&&callback(node,el,index);
-		            	return;
-	            }
-	            if(t1-t>=300){
-	            		var st = y1-y>0?1:-1;
-	            		if(  (st==1&&step==max)
-	            			|| (st==-1&&step==min)
-	            			|| Math.abs(y1-y)<(height/2)  ){
-        				list.style[transform]='translate(0,'+step*height+'px)';
-        			}else{
-        				var stepAdd = Math.floor(Math.abs(y1-y)/height)*st+step;
-        				step = getNum(st,max,min,stepAdd);
-        				list.style[transform]='translate(0,'+step*height+'px)';
+    		e.preventDefault();
+    		var list = el.childNodes[0];
+    		var listdom = el.childNodes[0].childNodes;
+    		for(var i=0;i<listdom.length;i++){
+        		listdom[i].className =listdom[i].className.replace('active','');
+       		 }
+    		y1 = e.changedTouches[0].pageY;
+    		t1 = new Date().getTime();
+    		if(t1-t<110){
+    			if(Math.abs(y1-y)<8){return;}
+            	var st = y1-y>0?1:-1;
+            	var kun = (Math.floor(Math.abs(y1-y)/ratio2)+1)*st+step;// 快速滚动时 滚动格子
+            	step = getNum(st,max,min,kun);
+            	list.style[transform]='translate3d(0,'+(step*height)+'px,0)';
+            	node = max-step;
+            	listdom[node].className = 'active';
+            	callback&&callback(node,el,index);
+            	return;
+        	}
+            if(t1-t>=300){
+        		var st = y1-y>0?1:-1;
+        		if(  (st==1&&step==max)
+        			|| (st==-1&&step==min)
+        			|| Math.abs(y1-y)<(height/2)  ){
+				list.style[transform]='translate(0,'+step*height+'px)';
+				}else{
+					var stepAdd = Math.floor(Math.abs(y1-y)/height)*st+step;
+					step = getNum(st,max,min,stepAdd);
+					list.style[transform]='translate(0,'+step*height+'px)';
 				}
 				node =max-step;
 				listdom[node].className = 'active';
 				callback&&callback(node,el,index);
 				return;
-	            }
-	            	var st = y1-y>0?1:-1;
-	            	if(st==1&&step>=max){listdom[0].className='active';return}
-	            	if(st==-1&&step<=min){listdom[count-1].className = 'active';return;}
-	            	list.style[transform]='translate(0,'+(step+1*st)*height+'px)';
+            }
+        	var st = y1-y>0?1:-1;
+        	if(st==1&&step>=max){listdom[0].className='active';return}
+        	if(st==-1&&step<=min){listdom[count-1].className = 'active';return;}
+        	list.style[transform]='translate(0,'+(step+1*st)*height+'px)';
 			step = step+1*st;
 			node = max-step;
 			listdom[node].className = 'active';
@@ -106,10 +118,9 @@
 	}
 	/**
 	 * [getdom 获取关联数组对象]
-	 * @param  {[type]} status1 [状态值]
-	 * @param  {[type]} status2 [状态值]
+	 * @param  {[type]} status [关联数组]
 	 * @param  {[type]} i       [下标]
-	 * @param  {[type]} data    [数据]
+	 * @param  {[type]} data    [下拉数据]
 	 * @return {[type]}         [description]
 	 */
 	function getdom(status,i,data){
@@ -201,12 +212,12 @@
 	}
 	function DataPicker(options){
 		this.title = options.title || '';
-		this.data = options.data || 'Data';
+		this.data = options.data || [];
 		this.line = options.line||5;
 		this.height = options.height||40;
 		this.separator = options.separator || '-';
 		this.callback = options.callback;
-		this.relate = options.relate||[];
+		this.relate = options.relate||'data';
 	}
 	DataPicker.prototype = {
 		constructor:DataPicker,
@@ -227,6 +238,14 @@
 						text  = getdom(this.relate,i,this.data);
 						node+='<div class="listBox"><ul>'+text+'</ul></div>';	
 					}
+				}		
+			}else if(this.relate=='data'||this.relate=='y-m-d'||this.relate=='m-d'||this.relate=='y-m'&&isArr(_this.data)){
+				for(var i = 0;i<this.data.length;i++){
+					text='';
+					for(var j=0;j<this.data[i].length;j++){
+						text+='<li>'+this.data[i][j]+'</li>'
+					}
+					node+='<div class="listBox"><ul>'+text+'</ul></div>';
 				}		
 			}else{
 				node = '<div class="listBox"></div>';
@@ -263,12 +282,12 @@
 			var dataLi = dataPicker.querySelectorAll('li');
 			var selectDiv = dataPicker.querySelectorAll('.listBox');
 			var selectUl = dataPicker.querySelectorAll('ul');
-			var conform = document.querySelector('.dataPicker-conform');
-			var ok = document.querySelector('.dataPicker-ok');
+			var conform = container.querySelector('.dataPicker-conform');
+			var ok = container.querySelector('.dataPicker-ok');
 			var highlight = Math.floor(this.line/2);
 			container.style[transition] = 'transform 500ms ease-in-out';
 			setTimeout(function(){
-				container.style[transform] = 'translate(0,0)';
+				container.style[transform] = 'translate3d(0,0,0)';
 			},0)
 			dataPickerTop.style.height = highlight*this.height+'px';
 			dataPickerMiddle.style.height = this.height+'px';
@@ -283,70 +302,150 @@
 			for(var i=0;i<selectUl.length;i++){
 				var lilen = selectUl[i].childNodes.length;
 				var trans = highlight+1-Math.ceil(lilen/2);
-				selectUl[i].style[transform]='translate(0,'+trans*_this.height+'px)';
-				selectUl[i].style[transition]='transform 500ms ease-in-out'
+				selectUl[i].style[transform]='translate3d(0,'+trans*_this.height+'px,0)';
+				selectUl[i].style[transition]='transform 300ms ease-in-out'
 				selectUl[i].childNodes[Math.ceil(lilen/2)-1].className='active';
 				TouchScroll(selectDiv[i],this.height,this.line,trans,i,function(id,el,index){
 					if(selectUl.length==1){
 						return;
 					}
 					if(selectUl.length==2){
-						if(index==0&&_this.relate[0]){
-							selectUl[1].innerHTML='';
-							for(var x=0;x<_this.data[1][id].length;x++){
-								selectUl[1].innerHTML+="<li>"+_this.data[1][id][x]+"</li>";
-							}
-							ref(1,2)
-						}
-					}
-					if(selectUl.length==3){
-						if(_this.relate[0]&&_this.relate[1]&&!_this.relate[2]){
-							if(index==0){
+						if(isArr(_this.relate)){
+							if(index==0&&_this.relate[0]){
 								selectUl[1].innerHTML='';
-								selectUl[2].innerHTML='';
 								for(var x=0;x<_this.data[1][id].length;x++){
 									selectUl[1].innerHTML+="<li>"+_this.data[1][id][x]+"</li>";
 								}
-								for(var y=0;y<_this.data[2][id][Math.ceil(lilen/2)-1].length;y++){
-									selectUl[2].innerHTML+="<li>"+_this.data[2][id][Math.ceil(lilen/2)-1][y]+"</li>";
-								}
-								ref(1,3)
-								
+								ref(1,2)
 							}
-							if(index==1){
-								for(var d=0,d1;d<selectUl[0].childNodes.length;d++){
-									if(selectUl[0].childNodes[d].className=='active'){
-										d1=d;
+						}
+						if(_this.relate=='y-m'){
+							return;
+						}
+						if(_this.relate=='m-d'){
+							if(index==0){
+								var year = new Date().getYear();
+								var month = el.querySelector('.active').innerHTML;
+								var day = getDay(year,month);
+								var lilen = el.nextElementSibling.querySelectorAll('li').length;
+								var cha = day.length-lilen;
+								var ul = el.nextElementSibling.querySelector('ul');
+								if(cha==0){return;}
+								if(cha>0){
+									for(var i=0;i<cha;i++){
+										ul.innerHTML+='<li>'+(lilen+1+i)+'</li>'
+									}	
+								}
+								if(cha<0){
+									
+									for(var i=0;i<Math.abs(cha);i++){
+										
+										ul.removeChild(ul.childNodes[lilen-i-1]);
 									}
 								}
-								selectUl[2].innerHTML='';
-								for(var x=0;x<_this.data[2][d1][id].length;x++){
-									selectUl[2].innerHTML+="<li>"+_this.data[2][d1][id][x]+"</li>";
+								
+								ref(1,2)
+							}
+						}
+					}
+					if(selectUl.length==3){
+						if(isArr(_this.relate)){
+							if(_this.relate[0]&&_this.relate[1]&&!_this.relate[2]){
+								if(index==0){
+									selectUl[1].innerHTML='';
+									selectUl[2].innerHTML='';
+									for(var x=0;x<_this.data[1][id].length;x++){
+										selectUl[1].innerHTML+="<li>"+_this.data[1][id][x]+"</li>";
+									}
+									for(var y=0;y<_this.data[2][id][Math.ceil(lilen/2)-1].length;y++){
+										selectUl[2].innerHTML+="<li>"+_this.data[2][id][Math.ceil(lilen/2)-1][y]+"</li>";
+									}
+									ref(1,3)
+									
 								}
-								ref(2,3)
+								if(index==1){
+									for(var d=0,d1;d<selectUl[0].childNodes.length;d++){
+										if(selectUl[0].childNodes[d].className=='active'){
+											d1=d;
+										}
+									}
+									selectUl[2].innerHTML='';
+									for(var x=0;x<_this.data[2][d1][id].length;x++){
+										selectUl[2].innerHTML+="<li>"+_this.data[2][d1][id][x]+"</li>";
+									}
+									ref(2,3)
+								}
 							}
-						}
-						if(index==0&&_this.relate[0]&&!_this.relate[1]&&!_this.relate[2]){
-							selectUl[1].innerHTML='';
-							for(var x=0;x<_this.data[1][id].length;x++){
-								selectUl[1].innerHTML+="<li>"+_this.data[1][id][x]+"</li>";
-							}
-							ref(1,2)
+							if(index==0&&_this.relate[0]&&!_this.relate[1]&&!_this.relate[2]){
+								selectUl[1].innerHTML='';
+								for(var x=0;x<_this.data[1][id].length;x++){
+									selectUl[1].innerHTML+="<li>"+_this.data[1][id][x]+"</li>";
+								}
+								ref(1,2)
 
-						}
-						if(index==0&&!_this.relate[0]&&_this.relate[1]&&!_this.relate[2]){
-							selectUl[2].innerHTML='';
-							for(var x=0;x<_this.data[2][id].length;x++){
-								selectUl[2].innerHTML+="<li>"+_this.data[2][id][x]+"</li>";
 							}
-							ref(2,3);
-						}
-						if(index==1&&!_this.relate[0]&&_this.relate[1]&&_this.relate[2]){
-							selectUl[2].innerHTML='';
-							for(var x=0;x<_this.data[2][id].length;x++){
-								selectUl[2].innerHTML+="<li>"+_this.data[2][id][x]+"</li>";
+							if(index==0&&!_this.relate[0]&&_this.relate[1]&&!_this.relate[2]){
+								selectUl[2].innerHTML='';
+								for(var x=0;x<_this.data[2][id].length;x++){
+									selectUl[2].innerHTML+="<li>"+_this.data[2][id][x]+"</li>";
+								}
+								ref(2,3);
 							}
-							ref(2,3);
+							if(index==1&&!_this.relate[0]&&_this.relate[1]&&_this.relate[2]){
+								selectUl[2].innerHTML='';
+								for(var x=0;x<_this.data[2][id].length;x++){
+									selectUl[2].innerHTML+="<li>"+_this.data[2][id][x]+"</li>";
+								}
+								ref(2,3);
+							}
+						}
+						if(_this.relate=='y-m-d'||_this.relate=='data'){
+							var year,month,day;
+							if(index==0){
+								year = el.querySelector('.active').innerHTML;
+								month = el.nextElementSibling.querySelector('.active').innerHTML;
+								day = getDay(year,month);
+								var lilen = el.nextElementSibling.nextElementSibling.querySelectorAll('li').length;
+								var cha = day.length-lilen;
+								var ul = el.nextElementSibling.nextElementSibling.querySelector('ul');
+								if(cha==0){return;}
+								if(cha>0){
+									for(var i=0;i<cha;i++){
+										ul.innerHTML+='<li>'+(lilen+1+i)+'</li>'
+									}	
+								}
+								if(cha<0){
+									for(var i=0;i<Math.abs(cha);i++){
+										ul.removeChild(ul.childNodes[lilen-i-1]);
+									}
+								}
+								
+								ref(2,3);
+							}
+							if(index==1){
+								year = el.previousElementSibling.querySelector('.active').innerHTML;
+								month = el.querySelector('.active').innerHTML;
+								day = getDay(year,month);
+								var lilen = el.nextElementSibling.querySelectorAll('li').length;
+								var cha = day.length-lilen;
+								var ul = el.nextElementSibling.querySelector('ul');
+								if(cha==0){return;}
+								if(cha>0){
+									for(var i=0;i<cha;i++){
+										ul.innerHTML+='<li>'+(lilen+1+i)+'</li>'
+									}	
+								}
+								if(cha<0){
+									for(var i=0;i<Math.abs(cha);i++){
+										ul.removeChild(ul.childNodes[lilen-i-1]);
+									}
+								}
+								ref(2,3);
+							}
+							if(index==2){
+								return;
+							}
+
 						}
 					}
 				});
@@ -356,7 +455,7 @@
 					for(var m=z;m<s;m++){
 						var lilen = selectUl[m].childNodes.length;
 						var trans = highlight+1-Math.ceil(lilen/2);
-						selectUl[m].style[transform]='translate(0,'+trans*_this.height+'px)';
+						selectUl[m].style[transform]='translate3d(0,'+trans*_this.height+'px,0)';
 						setStyle(selectUl[m].childNodes,_this.height);
 						selectUl[m].childNodes[Math.ceil(lilen/2)-1].className='active';
 					}
@@ -376,7 +475,7 @@
 		},
 		hide:function(body,container,dataMask){
 			var _this = this;
-			container.style[transform] = 'translateY(100%)';
+			container.style[transform] = 'translate3d(0,100%,0)';
 			setTimeout(function(){
 				body.removeChild(dataMask);
 			},600)
@@ -384,4 +483,5 @@
 	}
 
 	root['picker'] = DataPicker;
+
 })(window,document,Math)

@@ -6,6 +6,7 @@
 	<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
 </head>
 <style>
+/*联动器的样式 --start--*/
 	#dataPicker-mask{
 		position: fixed;
 		top:0;
@@ -87,6 +88,18 @@
 		background: rgba(209,213,216,0.7);
 		pointer-events:none;
 	}
+	/*联动器的样式 --end--*/
+
+/*其他不重要的页面样式*/
+pre{
+	background:rgba(0,0,0,0.9);
+	overflow: hidden;
+	overflow-x:scroll;
+	color:#efefef;
+}
+pre i{
+	color:#EDF06D;
+}
 </style>
 <body>
 	<div>
@@ -95,16 +108,36 @@
 	</div>
 
 	demo:
-	<div style='height:30px;width:100%;border-radius:6px;background:#333333;text-align: center;line-height: 30px;color:#fff;margin-top:20px' class='test'>Test(三级联动)</div>
-	<div style='height:30px;width:100%;border-radius:6px;background:#333333;text-align: center;line-height: 30px;color:#fff;margin-top:20px' class='test1'>Test(1-2级联动)</div>
-	<div style='height:30px;width:100%;border-radius:6px;background:#333333;text-align: center;line-height: 30px;color:#fff;margin-top:20px' class='test2'>Test(1-3级联动)</div>
-	<div style='height:30px;width:100%;border-radius:6px;background:#333333;text-align: center;line-height: 30px;color:#fff;margin-top:20px' class='test3'>Test(2-3级联动)</div>
-	<div style='height:30px;width:100%;border-radius:6px;background:#333333;text-align: center;line-height: 30px;color:#fff;margin-top:20px' class='test4'>Test(相互独立)</div>
-	<div style='height:30px;width:100%;border-radius:6px;background:#333333;text-align: center;line-height: 30px;color:#fff;margin-top:20px' class='test5'>Test(相互独立 5级高度)</div>
+	<div style='overflow:hidden;'>
+		<div style='height:30px;width:100%;border-radius:6px;background:#333333;text-align: center;line-height: 30px;color:#fff;float:left;margin:10px 1%;width:48%' class='test'>Test(三级联动)</div>
+		<div style='height:30px;width:100%;border-radius:6px;background:#333333;text-align: center;line-height: 30px;color:#fff;float:left;margin:10px 1%;width:48%' class='test1'>Test(1-2级联动)</div>
+		<div style='height:30px;width:100%;border-radius:6px;background:#333333;text-align: center;line-height: 30px;color:#fff;float:left;margin:10px 1%;width:48%' class='test2'>Test(1-3级联动)</div>
+		<div style='height:30px;width:100%;border-radius:6px;background:#333333;text-align: center;line-height: 30px;color:#fff;float:left;margin:10px 1%;width:48%' class='test3'>Test(2-3级联动)</div>
+		<div style='height:30px;width:100%;border-radius:6px;background:#333333;text-align: center;line-height: 30px;color:#fff;float:left;margin:10px 1%;width:48%' class='test4'>Test(相互独立)</div>
+		<div style='height:30px;width:100%;border-radius:6px;background:#333333;text-align: center;line-height: 30px;color:#fff;float:left;margin:10px 1%;width:48%' class='test5'>Test(相互独立 5级高度)</div>
+		<div style='height:30px;width:100%;border-radius:6px;background:#333333;text-align: center;line-height: 30px;color:#fff;float:left;margin:10px 1%;width:48%' class='test6'>Test(日期)</div>
+	</div>
 	<div style="padding:10px 20px;background:rgba(209,213,216,0.7);height:50px;margin-top:20px;">
 		<div>您选择的是：</div>
 		<div class='show' style='color:red'></div>
 	</div>
+	<h5>配置</h5>
+	<pre>
+var dataPicker = new picker({
+	data:[ <i>//参数数据</i>
+		['上海','安徽','河北','河南','山东'],
+		[1,2,3,4,5],
+		['西瓜','橘子','葡萄']
+	],
+	relate:[],<i>//是否是关联</i>
+	line:3,<i>//展示行数</i>
+	callback:function(id){  <i>//回调函数</i>
+		document.querySelector('.show').innerHTML = id;
+	},
+	title:'相互独立'<i>//头部信息</i>
+		
+});
+	</pre>
 </body>
 <script src='js/dataPicker.js'></script>
 <script>
@@ -310,6 +343,23 @@
 				document.querySelector('.show').innerHTML = id;
 			},
 			title:'三级联动-5'
+				
+		});
+		dataPicker.create();
+	})
+	document.querySelector('.test6').addEventListener('click',function(){
+		var dataPicker = new picker({
+			data:[
+				[2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024],
+				[1,2,3,4,5,6,7,8,9,10,11,12],
+				[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31]
+			],
+			relate:'y-m-d',
+			line:3,
+			callback:function(id){
+				document.querySelector('.show').innerHTML = id;
+			},
+			title:'日期选择'
 				
 		});
 		dataPicker.create();
