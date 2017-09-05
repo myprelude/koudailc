@@ -67,9 +67,9 @@
            	e.preventDefault();
 			t1 = new Date().getTime();
 			y1 = e.changedTouches[0].pageY;
-			if(t1-t<=120){
-				return;
-			}
+			// if(t1-t<=120){
+			// 	return;
+			// }
 			y1 = e.changedTouches[0].pageY;
 			el.childNodes[0].style[transform]='translate3d(0,'+(step*height+(y1-y))+'px,0)';			
 		})
@@ -85,11 +85,18 @@
     		y1 = e.changedTouches[0].pageY;
     		t1 = new Date().getTime();
     		if(t1-t<100){
-    			if(Math.abs(y1-y)<8){return;}
-            	var st = y1-y>0?1:-1;
-            	var kun = (Math.floor(Math.abs(y1-y)/ratio2)+1)*st+step;// 快速滚动时 滚动格子
-            	step = getNum(st,max,min,kun);
-            	list.style[transform]='translate3d(0,'+(step*height)+'px,0)';
+    			var st = y1-y>0?1:-1;
+            	if(Math.abs(y1-y)<(height/2)){
+					list.style[transform]='translate3d(0,'+step*height+'px,0)';
+				}else if(st==1&&step>=max){
+					list.style[transform]='translate3d(0,'+max*height+'px,0)';
+				}else if(st==-1&&step<=min){
+					list.style[transform]='translate3d(0,'+min*height+'px,0)';
+				}else{
+					var kun = (Math.floor(Math.abs(y1-y)/ratio2)+1)*st+step;// 快速滚动时 滚动格子
+            		step = getNum(st,max,min,kun);
+            		list.style[transform]='translate3d(0,'+(step*height)+'px,0)';
+				}
             	node = max-step;
             	listdom[node].className = 'active';
             	callback&&callback(node,index);
