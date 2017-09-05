@@ -80,9 +80,9 @@
        		el.childNodes[0].style[transition]='all 500ms ease';
     		y1 = e.changedTouches[0].pageY;
     		t1 = new Date().getTime();
-    		// if(Math.abs(y1-y)<2){
-    		// 	return;
-    		// }
+    		if(Math.abs(y1-y)<2){
+    			return;
+    		}
     		var st = y1-y>0?1:-1;
     		if(t1-t<=100){
     			el.childNodes[0].style[transition]='all 1000ms ease';
