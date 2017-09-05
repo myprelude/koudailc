@@ -66,11 +66,11 @@
 			e.stopPropagation();
            	e.preventDefault();
 			t1 = new Date().getTime();
+			y1 = e.changedTouches[0].pageY;
+			el.childNodes[0].style[transform]='translate3d(0,'+(step*height+(y1-y))+'px,0)';
 			if(t1-t<=300){
 				return;
-			}
-			y1 = e.changedTouches[0].pageY;
-			el.childNodes[0].style[transform]='translate3d(0,'+(step*height+(y1-y))+'px,0)';				
+			}				
 		})
 		on(el,'touchend',function(e){
 			e.stopPropagation();
