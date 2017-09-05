@@ -67,12 +67,11 @@
            	e.preventDefault();
 			t1 = new Date().getTime();
 			y1 = e.changedTouches[0].pageY;
-			if(t1-t<=100){
-				el.childNodes[0].style[transform]='translate3d(0,'+(step*height+(y1-y))+'px,0)';
+			if(t1-t<=120){
+				return;
 			}
-			if(t1-t>=300){
-				el.childNodes[0].style[transform]='translate3d(0,'+(step*height+(y1-y))+'px,0)';
-			}				
+			y1 = e.changedTouches[0].pageY;
+			el.childNodes[0].style[transform]='translate3d(0,'+(step*height+(y1-y))+'px,0)';			
 		})
 		on(el,'touchend',function(e){
 			e.stopPropagation();
@@ -98,10 +97,12 @@
         	}
             if(t1-t>=300){
         		var st = y1-y>0?1:-1;
-        		if(  (st==1&&step==max)
-        			|| (st==-1&&step==min)
-        			|| Math.abs(y1-y)<(height/2)  ){
-				list.style[transform]='translate3d(0,'+step*height+'px,0)';
+        		if(Math.abs(y1-y)<(height/2)){
+					list.style[transform]='translate3d(0,'+step*height+'px,0)';
+				}else if(st==1&&step>=max){
+					list.style[transform]='translate3d(0,'+max*height+'px,0)';
+				}else if(st==-1&&step<=min){
+					list.style[transform]='translate3d(0,'+min*height+'px,0)';
 				}else{
 					var stepAdd = Math.floor(Math.abs(y1-y)/height)*st+step;
 					step = getNum(st,max,min,stepAdd);
