@@ -73,7 +73,7 @@ router.get('/about.html', function (req, res, next) {
  * 插件
  */
 router.get('/dataPicker.html', function (req, res, next) {
-    res.render('dataPicker');
+    res.render('compont/dataPicker');
 });
 /**
  * [description] 口袋每日
@@ -138,8 +138,8 @@ router.post('/shuo.html', function (req, res, next) {
 /**
  * [description] 杂
  */
-router.get('/riji.html', function (req, res, next) {
-    res.render('riji');
+router.get('/dialog.html', function (req, res, next) {
+    res.render('compont/dialog');
 });
 /**
  * [description] 口袋活动

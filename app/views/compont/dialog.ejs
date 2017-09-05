@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" href="css/animate.css">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<script src="https://cdn.bootcss.com/jquery/2.0.2/jquery.min.js"></script>
+	<script src='js/dialog.js'></script>
+	<style>
+	.tip{
+		overflow: hidden;
+	}
+		.tip div{
+			float:left;
+			width:31.3333333%;
+			margin:0 1%;
+			height:40px;
+			line-height: 40px;
+			background:rgba(0,0,0,0.8);
+			text-align: center;
+			color:#fff;
+			border-radius:5px;
+		}
+		pre{
+			background:rgba(0,0,0,0.9);
+			overflow: hidden;
+			overflow-x:scroll;
+			color:#efefef;
+			margin-top:30px;
+		}
+		pre i{
+			color:#EDF06D;
+		}
+		.dialogDemo{
+			text-align: center;
+			border-radius: 8px;
+			width:90%;
+			display: none;
+			background: #fff;
+		}
+		.dialogDemo1{
+			text-align: center;
+			border-radius: 8px;
+			width:90%;
+			display: none;
+			background: #fff;
+		}
+		.btn span{
+			display: inline-block;
+			height:35px;
+			line-height: 35px;
+			border-radius: 5px;
+			color:#fff;
+			background: rgba(0,0,0,0.8);
+			width:30%;
+			margin:2%;
+			text-align:center;
+		}
+	</style>
+</head>
+<body>
+	<h2>弹出框/提示框</h2>
+	<h4>提示框</h4>
+	<div class='tip'>
+		<div class='t1'>普通提示</div>
+		<div class='t2'>下落动画</div>
+		<div class='t3'>自定义动画</div>
+	</div>
+	<h4>弹出框</h4>
+	<div class='tip'>
+		<div class='t4'>普通弹出框</div>
+		<div class='t5'>动画弹出</div>
+		<div class='t6'>添加回调</div>
+	</div>
+	<div class='dialogDemo'>
+		<h4>我是弹出层</h4>
+		Lorem ipsum dolor sit amet, consectetur adipisicing elit. enim? Harum nihil dolor  porro  illum temporibus. Deleniti!
+		<div class='btn'><span class='close'>关闭</span></div>
+	</div>
+	<div class='dialogDemo1'>
+		<h4>我是弹出层</h4>
+		Lorem ipsum dolor sit amet, consectetur adipisicing elit. enim? Harum nihil dolor  porro  illum temporibus. Deleniti!
+		<div class='btn'><span class='close'>关闭</span><span class='close1'>回调</span></div>
+	</div>
+	<pre>
+Dialog({
+	type:'',<i>//提示框类型</i>
+	dom:'',<i>// 提示框dom结构 可选</i>
+	effectIn:'',<i>// 进场动画 可选</i>
+	effectOut:'',<i>//出厂动画 可选</i>
+	closeBtn:'',<i>// 关闭按钮1</i>
+	closeBtn1:''<i>// 关闭按钮2 可选</i>
+	})
+	.on('remove',function(){
+		<i>//关闭按钮1 回调</i>
+	})
+	.on('close',function(){
+		<i>//关闭按钮2 回调</i>
+	})
+})
+	</pre>
+	<script>
+		$('.t1').on('click',function(){
+			Dialog({content:'原始提示'});
+		})
+		$('.t2').on('click',function(){
+			Dialog({effectIn:'animated bounceInDown',
+				effectOut:'animated bounceOutDown',
+				content:'动画效果'})
+		})
+		$('.t3').on('click',function(){
+			Dialog({effectIn:'animated bounceIn',
+			effectOut:'animated bounceOut',
+			content:'自定义动画'
+			})
+		})
+		$('.t4').on('click',function(){
+			Dialog({type:'dialog',
+				dom:'.dialogDemo',
+				closeBtn:'close'})
+		})
+		$('.t5').on('click',function(){
+			Dialog({type:'dialog',
+				dom:'.dialogDemo',
+				effectIn:'animated bounceIn',
+				closeBtn:'close',
+				effectOut:'animated bounceOut'})
+		})
+		$('.t6').on('click',function(){
+			Dialog({type:'dialog',
+				dom:'.dialogDemo1',
+				effectIn:'animated bounceInDown',
+				effectOut:'animated bounceOutDown',
+				closeBtn:'close',
+				closeBtn1:'close1'})
+			.on('remove',function(){
+				Dialog({type:'dialog',
+					dom:'.dialogDemo',
+					effectIn:'animated bounceInRight',
+					effectOut:'animated bounceOutLeft',
+					closeBtn:'close'})
+			}).on('close',function(){
+				Dialog({effectIn:'animated bounceIn',content:'我监听到关闭'})
+			})
+		})
+		
+	</script>
+</body>
+</html>
