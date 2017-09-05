@@ -84,7 +84,7 @@
     			return;
     		}
     		var st = y1-y>0?1:-1;
-    		if(t1-t<=150){
+    		if(t1-t<=120){
     			el.childNodes[0].style[transition]='all 1000ms ease';
             	var stepAdd = (Math.floor(Math.abs(y1-y)/ratio2)+1)*st+step;// 快速滚动时 滚动格子
             	step = getNum(st,max,min,stepAdd);	
