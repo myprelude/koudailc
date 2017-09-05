@@ -84,7 +84,7 @@
     			return;
     		}
     		var st = y1-y>0?1:-1;
-    		if(t1-t<=70){
+    		if(t1-t<=90){
             	var stepAdd = (Math.floor(Math.abs(y1-y)/ratio2)+1)*st+step;// 快速滚动时 滚动格子
             	step = getNum(st,max,min,stepAdd);	
             	
@@ -95,7 +95,7 @@
         		var stepAdd = Math.floor(Math.abs(y1-y)/height)*st+step;
 				step = getNum(st,max,min,stepAdd);
             }else{
-            	el.childNodes[0].style[transition]='all 1000ms ease';
+            	// el.childNodes[0].style[transition]='all 1000ms ease';
             	var stepAdd = 1*st+step;
 				step = getNum(st,max,min,stepAdd);
             }
