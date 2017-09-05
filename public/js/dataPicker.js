@@ -95,6 +95,7 @@
         		var stepAdd = Math.floor(Math.abs(y1-y)/height)*st+step;
 				step = getNum(st,max,min,stepAdd);
             }else{
+            	el.childNodes[0].style[transition]='all 1000ms ease';
             	var stepAdd = 1*st+step;
 				step = getNum(st,max,min,stepAdd);
             }
