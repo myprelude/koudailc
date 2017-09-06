@@ -141,6 +141,9 @@ router.post('/shuo.html', function (req, res, next) {
 router.get('/dialog.html', function (req, res, next) {
     res.render('compont/dialog');
 });
+router.get('/touch.html', function (req, res, next) {
+    res.render('compont/touch');
+});
 /**
  * [description] 口袋活动
  */
@@ -244,6 +247,7 @@ router.post('/add.html', function (req, res, next) {
 router.get('/login.html', function (req, res, next) {
     res.render('login');
 });
+
 router.post('/login.html', function (req, res, next) {
     var name = req.body.name;
     var password = req.body.password;

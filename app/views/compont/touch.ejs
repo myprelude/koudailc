@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<title>touch实现滚动(口袋理财前端技术团队)</title>
+	<link rel="stylesheet" href="css/animate.css">
+</head>
+<style>
+.bar{
+	text-align: center;
+	position: absolute;
+	bottom:10px;
+	width:100%;
+	left:0;
+}
+	.bar div{
+		width:10px;
+		height:10px;
+		border-radius: 5px;
+		display: inline-block;
+		background: rgba(0,0,0,0.8)
+	}
+	.bar div.active{
+		background: #fff;
+	}
+	pre{
+	background:rgba(0,0,0,0.9);
+	overflow: hidden;
+	overflow-x:scroll;
+	color:#efefef;
+}
+pre i{
+	color:#EDF06D;
+}
+.item h1{
+	margin:0;
+	padding:20px 0;
+}
+</style>
+<body>
+<h4>水平运动带指示</h4>
+<div style='overflow:hidden;position: relative; ' id='dd'>
+	<div id='d1' style='width:800%;overflow: hidden'>
+		<!-- <div style='width:16.6666%;height:120px;background:#2cd;float:left' calss='item'></div> -->
+		<div style='width:12.5%;height:120px;background:pink;float:left;text-align: center;color:#fff' class='item'><h1>水平滚动</h1></div>
+		<div style='width:12.5%;height:120px;background:#345;float:left;text-align: center;color:#fff' class='item'><h1>水平滚动</h1></div>
+		<div style='width:12.5%;height:120px;background:#cac;float:left;text-align: center;color:#fff'' class='item'><h1>水平滚动</h1></div>
+		<div style='width:12.5%;height:120px;background:#2cd;float:left;text-align: center;color:#fff'' class='item'><h1>水平滚动</h1></div>
+		<div style='width:12.5%;height:120px;background:#cac;float:left;text-align: center;color:#fff'' class='item'><h1>水平滚动</h1></div>
+		<div style='width:12.5%;height:120px;background:#ecb;float:left;text-align: center;color:#fff'' class='item'><h1>水平滚动</h1></div>
+		<div style='width:12.5%;height:120px;background:#357;float:left;text-align: center;color:#fff'' class='item'><h1>水平滚动</h1></div>
+		<div style='width:12.5%;height:120px;background:#244;float:left;text-align: center;color:#fff'' class='item'><h1>水平滚动</h1></div>
+		<!-- <div style='width:16.6666%;height:120px;background:pink;float:left' class='item'></div> -->
+	</div>
+	<div class='bar'>
+		<div class='active'></div>
+		<div></div>
+		<div></div>
+		<div></div>
+		<div></div>
+		<div></div>
+		<div></div>
+		<div></div>
+	</div>	
+</div>
+<h4>垂直运动加入动画</h4>
+<div style='overflow:hidden;height:150px;margin-top: 10px;' id='dt' >
+	<div id='d2' style='width:100%;overflow: hidden;height:1250px'>
+		<!-- <div style='width:16.6666%;height:120px;background:#2cd;float:left' calss='item'></div> -->
+		<div style='width:100%;height:150px;background:pink;text-align: center;color:#fff;' class='item'><h1>垂直滚动</h1></div>
+		<div style='width:100%;height:150px;background:#345;text-align: center;color:#fff;' class='item'><h1>垂直滚动</h1></div>
+		<div style='width:100%;height:150px;background:#cac;text-align: center;color:#fff;' class='item'><h1>垂直滚动</h1></div>
+		<div style='width:100%;height:150px;background:#2cd;text-align: center;color:#fff;' class='item'><h1>垂直滚动</h1></div>
+		<div style='width:100%;height:150px;background:#cac;text-align: center;color:#fff;' class='item'><h1>垂直滚动</h1></div>
+		<div style='width:100%;height:150px;background:#ecb;text-align: center;color:#fff;' class='item'><h1>垂直滚动</h1></div>
+		<div style='width:100%;height:150px;background:#357;text-align: center;color:#fff;' class='item'><h1>垂直滚动</h1></div>
+		<div style='width:100%;height:150px;background:#244;text-align: center;color:#fff;' class='item'><h1>垂直滚动</h1></div>
+		<!-- <div style='width:16.6666%;height:120px;background:pink;float:left' class='item'></div> -->
+	</div>	
+</div>
+
+<pre>
+
+Touch({
+	el:,<i>//存放滚动对象容器</i>
+	target:,<i>//滚动对象</i>
+	callback:function(s,t,status){
+		<i>//滚动触发函数  三个参数</i>
+		<i>//s：滚动位置 t:触发时间 status:滚动的位置</i>
+	},
+	driection:<i>//滚动方向</i>
+})	
+这个轮播是基于自己手触摸事件编写
+所以没有添加无限滚动;陆续会继续完善其功能
+
+</pre>
+</body>
+<script src='js/touch.js'></script>
+<script>
+	var li = document.querySelector('.bar').querySelectorAll('div');
+	var h1 = document.querySelector('#d2').querySelectorAll('h1');
+	Touch({
+			el:document.querySelector('#dd'),
+			target:document.querySelector('#d1'),
+			callback:function(s,t,status){var n = Math.abs(status);
+				document.querySelector('#d1').style.transform='translate3d('+s+'px,0,0)';
+				for(var i=0;i<li.length;i++){
+					li[i].className='';
+				}
+				li[n].className='active';
+			}
+
+		})
+	Touch({
+			el:document.querySelector('#dt'),
+			target:document.querySelector('#d2'),
+			callback:function(s,t,status){
+				document.querySelector('#d2').style.transform='translate3d(0,'+s+'px,0)';
+				console.log(status)
+				if(Math.abs(status)==1){
+					h1[Math.abs(status)].className='animated bounce'
+				}
+				if(Math.abs(status)==2){
+					h1[Math.abs(status)].className='animated flash'
+				}
+				if(Math.abs(status)==3){
+					h1[Math.abs(status)].className='animated pulse'
+				}
+				if(Math.abs(status)==4){
+					h1[Math.abs(status)].className='animated shake'
+				}
+				if(Math.abs(status)==5){
+					h1[Math.abs(status)].className='animated swing'
+				}
+				if(Math.abs(status)==6){
+					h1[Math.abs(status)].className='animated wobble'
+				}
+				if(Math.abs(status)==7){
+					h1[Math.abs(status)].className='animated fadeInDown'
+				}
+			},
+			direction:'height'
+		})
+</script>
+</html>
