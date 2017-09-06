@@ -51,7 +51,7 @@
 				var s = _this.direction=='height'?endy-starty:endx-startx;
 				var t = endt1-startt1;
 				var dir = s>0?1:-1;
-				if(Math.abs(s)<5){return}
+				if(Math.abs(s)<1){return}
 				if(t<200||Math.abs(s)>wid/7){
 					status=status+dir;
 					if(dir<0&&status*dir>=num){
