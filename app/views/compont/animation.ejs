@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>动画框架--开发(口袋理财前端技术团队)</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<script src='animate/animate.js'></script>
+	<style>
+		pre{
+			background:rgba(0,0,0,0.9);
+			overflow: hidden;
+			overflow-x:scroll;
+			color:#efefef;
+		}
+		pre i{
+			color:#EDF06D;
+		}
+	</style>
+</head>
+<body>
+<h3>动画框架</h3>
+	<a href="http://www.scopeman.cn">口袋理财前端技术团队</a>
+	<h4>点击下来,查看动画效果</h4>
+	<div style='height:50px;width:50px;background: pink;margin-top: 10px;color:#fff;line-height: 50px;text-align: center;overflow: hidden;cursor:pointer' class='d1'>linear</div>
+	<div style='height:50px;width:50px;background: #34d;margin-top: 10px;color:#fff;line-height: 50px;text-align: center;overflow: hidden;cursor:pointer' class='d2'>easeIn</div>
+	<div style='height:50px;width:50px;background: #e3a;margin-top: 10px;color:#fff;line-height: 50px;text-align: center;overflow: hidden;cursor:pointer' class='d3'>back</div>
+	<div style='height:50px;width:50px;background: #56d;margin-top: 10px;color:#fff;line-height: 50px;text-align: center;overflow: hidden;cursor:pointer' class='d4'>easeInOut</div>
+	<div style='height:50px;width:50px;background: #2fa;margin-top: 10px;color:#fff;line-height: 50px;text-align: center;overflow: hidden;cursor:pointer' class='d5'>bounce(回弹)</div>
+	<pre>
+animate({
+	start:,<i>// 开始的状态值</i>
+	end:,<i>// 结束状态值</i>
+	time:,<i>// 时间</i>
+}).linear(function(s){
+	<i>//动画执行</i>
+},function(){
+	<i>//动画执行完成后的回调</i>
+})
+<i>// 动画的运动状态</i>
+<i>//1.linear 匀速
+2.Quad 二次方缓动效果
+3.Cubic 三次方缓动效果
+4.Quart 四次方缓动效果
+5.Quint 五次方缓动效果
+6.Sine  正弦缓动效果
+7.Expo  指数缓动效果
+8.Circ  圆形缓动函数
+9.Elastic 指数衰减正弦曲线缓动函数
+10.Back  超过范围的三次方的缓动函数
+11.Bounce 指数衰减的反弹曲线缓动函数</i>
+	</pre>
+</body>
+<script>
+	
+document.querySelector('.d1').addEventListener('click',function(){
+	animate({
+		start:50,
+		end:300,
+		time:50,
+		animate:'Tween.linear'
+	}).linear(function(s){
+			document.querySelector('.d1').style.width = s+'px';
+	})
+	
+});
+document.querySelector('.d2').addEventListener('click',function(){
+	animate({
+		start:50,
+		end:300,
+		time:50,
+	}).easeIn(function(s){
+			document.querySelector('.d2').style.width = s+'px';
+	})
+	animate({
+		start:50,
+		end:120,
+		time:150,
+	}).easeOut(function(s){
+			document.querySelector('.d2').style.height = s+'px';
+	})
+	
+});
+document.querySelector('.d3').addEventListener('click',function(){
+	animate({
+		start:50,
+		end:300,
+		time:50,
+	}).easeOut(function(s){
+			document.querySelector('.d3').style.width = s+'px';
+	},function(){
+	animate({
+			start:1,
+			end:0.5,
+			time:80,
+		}).easeOut(function(s){
+				document.querySelector('.d3').style.opacity = s;
+		})
+	})
+	
+});
+document.querySelector('.d4').addEventListener('click',function(){
+	animate({
+		start:50,
+		end:300,
+		time:50,
+	}).easeInOut(function(s){
+			document.querySelector('.d4').style.width = s+'px';
+	})
+	
+});
+document.querySelector('.d5').addEventListener('click',function(){
+	animate({
+		start:50,
+		end:300,
+		time:50,
+	}).bounce(function(s){
+			document.querySelector('.d5').style.width = s+'px';
+	},function(){
+		animate({
+			start:50,
+			end:250,
+			time:50,
+		}).bounce(function(s){
+			document.querySelector('.d5').style.height = s+'px';
+		})
+	})
+});
+</script>
+</html>

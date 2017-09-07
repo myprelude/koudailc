@@ -144,6 +144,9 @@ router.get('/dialog.html', function (req, res, next) {
 router.get('/touch.html', function (req, res, next) {
     res.render('compont/touch');
 });
+router.get('/animate.html', function (req, res, next) {
+    res.render('compont/animation');
+});
 /**
  * [description] 口袋活动
  */
