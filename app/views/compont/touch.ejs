@@ -107,7 +107,7 @@ Touch({
 			el:document.querySelector('#dd'),
 			target:document.querySelector('#d1'),
 			callback:function(s,t,status){var n = Math.abs(status);
-				document.querySelector('#d1').style.transform='translate3d('+s+'px,0,0)';
+				document.querySelector('#d1').style.WebkitTransform='translate3d('+s+'px,0,0)';
 				for(var i=0;i<li.length;i++){
 					li[i].className='';
 				}
@@ -119,7 +119,7 @@ Touch({
 			el:document.querySelector('#dt'),
 			target:document.querySelector('#d2'),
 			callback:function(s,t,status){
-				document.querySelector('#d2').style.transform='translate3d(0,'+s+'px,0)';
+				document.querySelector('#d2').style.WebkitTransform='translate3d(0,'+s+'px,0)';
 				for(var i=0;i<h1.length;i++){
 						h1[i].className='';
 					}
