@@ -33,6 +33,9 @@
 pre i{
 	color:#EDF06D;
 }
+pre p{
+	color:#EA2000;
+}
 .item h1{
 	margin:0;
 	padding:20px 0;
@@ -88,15 +91,19 @@ Touch({
 	el:,<i>//存放滚动对象容器</i>
 	target:,<i>//滚动对象</i>
 	time:,<i>//滚动时间</i>
-	callback:function(s,t,status){
-		<i>//滚动触发函数  三个参数</i>
-		<i>//s：滚动位置 t:触发时间 status:滚动的位置</i>
-	},
 	driection:<i>//滚动方向</i>
+	loop:,<i>//是否循环</i>
+	callback:function(s,status){
+		<i>//滚动触发函数  三个参数</i>
+		<i>//s：滚动位置  status:下标</i>
+	},
+	
 })	
 这个轮播是基于自己手触摸事件编写
 所以没有添加无限滚动;陆续会继续完善其功能
-
+修改时间：2017-9-8
+<p>1.添加循环滚动
+2.减少回调函数的参数</p>
 </pre>
 </body>
 <script src='js/touch.js'></script>
@@ -106,43 +113,46 @@ Touch({
 	Touch({
 			el:document.querySelector('#dd'),
 			target:document.querySelector('#d1'),
-			callback:function(s,t,status){var n = Math.abs(status);
+			loop:true,
+			callback:function(s,status){
+				if(status==8){status=0};
+				 if(status==-1){status=7}
 				document.querySelector('#d1').style.WebkitTransform='translate3d('+s+'px,0,0)';
 				for(var i=0;i<li.length;i++){
 					li[i].className='';
 				}
-				li[n].className='active';
+				li[status].className='active';
 			}
 
 		})
 	Touch({
 			el:document.querySelector('#dt'),
 			target:document.querySelector('#d2'),
-			callback:function(s,t,status){
+			callback:function(s,status){
 				document.querySelector('#d2').style.WebkitTransform='translate3d(0,'+s+'px,0)';
 				for(var i=0;i<h1.length;i++){
 						h1[i].className='';
 					}
-				if(Math.abs(status)==1){
-					h1[Math.abs(status)].className='animated bounce'
+				if(status+1==1){
+					h1[status+1].className='animated bounce'
 				}
-				if(Math.abs(status)==2){
-					h1[Math.abs(status)].className='animated flash'
+				if(status+1==2){
+					h1[status+1].className='animated flash'
 				}
-				if(Math.abs(status)==3){
-					h1[Math.abs(status)].className='animated pulse'
+				if(status+1==3){
+					h1[status+1].className='animated pulse'
 				}
-				if(Math.abs(status)==4){
-					h1[Math.abs(status)].className='animated shake'
+				if(status+1==4){
+					h1[status+1].className='animated shake'
 				}
-				if(Math.abs(status)==5){
-					h1[Math.abs(status)].className='animated swing'
+				if(status+1==5){
+					h1[status+1].className='animated swing'
 				}
-				if(Math.abs(status)==6){
-					h1[Math.abs(status)].className='animated wobble'
+				if(status+1==6){
+					h1[status+1].className='animated wobble'
 				}
-				if(Math.abs(status)==7){
-					h1[Math.abs(status)].className='animated fadeInDown'
+				if(status+1==7){
+					h1[status+1].className='animated fadeInDown'
 				}
 			},
 			direction:'height'
