@@ -69,6 +69,9 @@ router.get('/page.html', function (req, res, next) {
 router.get('/about.html', function (req, res, next) {
     res.render('about');
 });
+router.get('/demo.html', function (req, res, next) {
+    res.render('compont/demo');
+});
 /**
  * 插件
  */
