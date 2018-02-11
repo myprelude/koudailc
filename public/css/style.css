@@ -3,7 +3,7 @@
 *{marigin:0px; padding:0px;}
 body{font-size:14px;font-family:"微软雅黑";background:#E3E3E5 url(../images/bg.jpg)  50% top scroll no-repeat;color:#5d5d5d;}
 a{text-decoration:none;}
-.left{float:left;position:relative}
+.left{position:relative;margin:0 auto;}
 .right{float:right;}
 .clear{clear:both;}
 li{list-style:none;}
