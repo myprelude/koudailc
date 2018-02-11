@@ -31,7 +31,7 @@ img{display:block;border:0px;}
 .teamInfo ul{margin:10px 0;}
 /*header end*/
 #content{max-width:1000px;margin:5px auto;}
-#c_left{width:730px; background:#fff;border-radius:1px;}
+#c_left{width:730px; background:#fff;border-radius:1px;margin:0 auto;}
 #c_left .s_tuijian{width:710px;height:68px;margin-left:10px;background:url("../images/r_line.jpg") bottom left repeat-x;}
 .s_tuijian h2{width:650px;height:37px;background:url("../images/tj.png") no-repeat;padding:20px 0px 5px 60px;
 color:#D242DF;font-size:18px;margin-left:5px;}
