@@ -6,7 +6,24 @@ var express = require('express'),
 //   User = mongoose.model('User'),
 //   Riji = mongoose.model('Riji');
 var moment = require('moment');
+var multer = require('multer');
+var fs = require('fs');
 
+var storage = multer.diskStorage({
+  // destination # 设置文件上传路径,本地必须存在的物理路径
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/')
+  },
+  // filename # 重命名文件
+  filename: function (req, file, cb) {
+    // 重命名为现在的时间，加上自己的名字
+    cb(null, Date.now() + file.originalname)
+  }
+})
+
+var upload = multer({
+  storage: storage
+})
 module.exports = function (app) {
   app.use('/', router);
 };
@@ -31,9 +48,21 @@ router.get('/', function (req, res, next) {
 //           });  
 //     })
 });
-router.post('/upload/img', function (req, res, next) {
-    console.log(req.body);
-    res.json('message');
+router.post('/upload/img',upload.single('avatar'), function (req, res, next) {
+	var base = req.body.base,name = req.body.name;
+	//过滤data:URL
+	var base64Data = base.replace(/^data:image\/\w+;base64,/, "");
+	var dataBuffer = new Buffer(base64Data, 'base64');
+	var temp = Date.now();
+	var url = 'public/upload/';
+	fs.writeFile(url + temp + name, dataBuffer, function(err) {
+		if(err){
+			console.log(err)
+			res.json(err);
+		}else{
+			res.json({path:'![img](upload/'+temp+name+')',message:'成功'});
+		}
+	});
 })
 // /**
 //  * [description] index

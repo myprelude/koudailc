@@ -26,7 +26,6 @@ acen_edit.setTheme('ace/theme/chrome');
 acen_edit.getSession().setMode('ace/mode/markdown');
 acen_edit.renderer.setShowPrintMargin(false);
 $("#mdeditor").keyup(function() {
-    console.log(acen_edit.getValue());
     $("#preview").html(marked(acen_edit.getValue()));
 });
 // 头部点击

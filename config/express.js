@@ -9,6 +9,7 @@ var compress = require('compression');
 var methodOverride = require('method-override');
 var session = require('express-session');
 
+
 module.exports = function(app, config) {
   var env = process.env.NODE_ENV || 'development';
   app.locals.ENV = env;
@@ -19,10 +20,8 @@ module.exports = function(app, config) {
 
   // app.use(favicon(config.root + '/public/img/favicon.ico'));
   app.use(logger('dev'));
-  app.use(bodyParser.json());
-  app.use(bodyParser.urlencoded({
-    extended: true
-  }));
+  app.use(bodyParser.json({limit: '50mb'}));
+  app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
   app.use(cookieParser());
   app.use(compress());
   app.use(express.static(config.root + '/public'));

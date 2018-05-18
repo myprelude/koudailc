@@ -87,3 +87,40 @@ body {
     text-align:center;
     padding-top:60px;
 }
+.showImgInfo{
+    background:#fff;
+    box-sizing: border-box;
+    position: fixed;
+    top:50px;
+    right:0;
+    width:500px;
+    padding:10px;
+    border:2px solid #444444;
+    border-radius:5px;
+    display: none;
+}
+.showImgInfo .item{
+    margin-bottom:10px;
+}
+.img-list-item{
+    display: flex;
+    padding:5px;
+}
+.showImgInfo img{
+    width:15px;
+}
+.showImgInfo .progress{
+    width:240px;
+    margin-left:10px;
+    height:15px;
+    border-radius:2px;
+    overflow: hidden;
+    background: #efefef;
+}
+.showImgInfo .progress span{
+    display: block;
+    height:15px;
+    width:0%;
+    background:#999;
+    
+}
