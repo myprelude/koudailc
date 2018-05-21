@@ -1,5 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
 
-  <%- message %>
-  <%- error.status %>
-  <%- error.stack %>
-  
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="一个错误的页面">
+    <title>404</title>
+    <link rel="shortcut icon" type="image/png" href="assets/img/favicon.png" />
+    <style>
+        html,body{
+            padding:0;
+            margin:0;
+            height:100%;
+            width:100%;
+            display: flex;
+            align-items:center;
+            justify-content:center;
+            flex-direction: column ;
+            overflow: hidden;
+        }
+        #blackHole{
+            border-radius:50%;
+            width:0px;
+            height:0px;
+            transition: all 2s ease-in;
+        }
+        #tip{
+            opacity:0;
+            transition: all 2s ease-in;
+            color:#fff;
+        }
+        
+    </style>
+</head>
+
+<body>
+    <h1 id='tip'>404 </h1>
+    <img data-src="http://bdaladdin.duapp.com/blackhole/img/blackhole.png" alt="" id='blackHole'>
+    
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+</body>
+<script>
+    // 黑洞动画
+    var img = new Image(),width = $(window).width(),height = $(window).height(),len = width>height?height:width;
+    img.src = $('#blackHole').attr('data-src');
+    img.onload = function(){
+        $('body').css({'background':'black',overflow:'hidden'})
+        $('#blackHole').attr('src',$('#blackHole').attr('data-src'));
+        $('#blackHole').css({width:len+'px',height:len+'px',transform:'rotate(360deg)',transformOrigin:'50% 50%'});
+        setTimeout(function(){
+            $('#blackHole').css({height:len/10+'px'});
+            $('#tip').css({opacity:1})
+        },2500)
+    }
+</script>
+</html>

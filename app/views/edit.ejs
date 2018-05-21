@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Responsive sidebar template with sliding effect and dropdown menu based on bootstrap 3">
+    <title>Sidebar template</title>
+    <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcss.com/github-markdown-css/2.10.0/github-markdown.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/jquery.mCustomScrollbar.min.css" />
+    <link rel="stylesheet" href="assets/css/custom.css">
+    <link rel="stylesheet" href="assets/css/custom-themes.css">
+    <link rel="shortcut icon" type="image/png" href="assets/img/favicon.png" />
+</head>
+
+<body>
+    <div class="page-wrapper chiller-theme toggled">
+        <nav id="sidebar" class="sidebar-wrapper">
+            <div class="sidebar-content">
+                <div id="toggle-sidebar">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+                <div class="sidebar-brand">
+                    <a href="#">scopeman.cn</a>
+                </div>
+                <div class="sidebar-header">
+                    <div class="user-pic">
+                        <img class="img-responsive img-rounded" src="assets/img/user.jpg" alt="User picture">
+                    </div>
+                    <div class="user-info">
+                        <span class="user-name">myPrelude
+                            <strong>HE</strong>
+                        </span>
+                        <span class="user-role">@Ctrip-IBU</span>
+                        <span class="user-status">
+                            <i class="fa fa-circle"></i>
+                            <span>Always Online</span>
+                        </span>
+                    </div>
+                </div>
+                <!-- sidebar-header  -->
+                <div class="sidebar-search">
+                    <div>
+                        <div class="input-group">
+                            <input type="text" class="form-control search-menu" placeholder="Search...">
+                            <span class="input-group-addon">
+                                <i class="fa fa-search"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <!-- sidebar-search  -->
+                <div class="sidebar-menu">
+                    <ul>
+                        <li class="header-menu">
+                            <span>General</span>
+                        </li>
+                        <li class="sidebar-dropdown">
+                            <a href="javascript:;">
+                                <i class="fa fa-folder"></i>
+                                <span>归档</span>
+                            </a>
+                            <div class="sidebar-submenu">
+                                <ul>
+                                    <li>
+                                        <a href="/doc/record">Products
+                                            <span class="badge">2</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/doc">Orders</a>
+                                    </li>
+                                    <li>
+                                        <a href="/doc">Credit cart</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <!-- <li class="sidebar-dropdown">
+                            <a href="#">
+                                <i class="fa fa-dashboard"></i>
+                                <span>Dashboard</span>
+                                <span class="label label-danger">New</span>
+                            </a>
+                            <div class="sidebar-submenu">
+                                <ul>
+                                    <li>
+                                        <a href="#" data-theme="chiller-theme" class="theme chiller-theme selected"></a>  
+                                    </li>
+                                    <li>
+                                        <a href="#" data-theme="purple-theme" class="theme purple-theme"></a>
+                                    </li>
+                                    <li>
+                                        <a href="#" data-theme="spicy-theme" class="theme spicy-theme"></a>
+                                    </li>
+                                    <li>
+                                            <a href="#" data-theme="ice-theme" class="theme ice-theme selected"></a>
+                                    </li>
+                                    <li>
+                                            <a href="#" data-theme="cool-theme" class="theme cool-theme"></a>
+                                    </li>
+                                    <li>
+                                         <a href="#" data-theme="light-theme" class="theme light-theme"></a>
+                                    </li>
+                                    <li>
+                                        <a href="#" data-theme="green-theme" class="theme green-theme"></a>
+                                    </li>
+                                        
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="sidebar-dropdown">
+                            <a href="#">
+                                <i class="fa fa-shopping-cart"></i>
+                                <span>E-commerce</span>
+                                <span class="badge">3</span>
+                            </a>
+                            <div class="sidebar-submenu">
+                                <ul>
+                                    <li>
+                                        <a href="#">Products
+                                            <span class="badge">2</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Orders</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Credit cart</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="sidebar-dropdown">
+                            <a href="#">
+                                <i class="fa fa-diamond"></i>
+                                <span>Components</span>
+                            </a>
+                            <div class="sidebar-submenu">
+                                <ul>
+                                    <li>
+                                        <a href="#">General</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Panels</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Tables</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Icons</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Forms</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="sidebar-dropdown">
+                            <a href="#">
+                                <i class="fa fa-bar-chart-o"></i>
+                                <span>Charts</span>
+                            </a>
+                            <div class="sidebar-submenu">
+                                <ul>
+                                    <li>
+                                        <a href="#">Pie chart</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Line chart</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Bar chart</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Histogram</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="sidebar-dropdown">
+                            <a href="#">
+                                <i class="fa fa-globe"></i>
+                                <span>Maps</span>
+                            </a>
+                            <div class="sidebar-submenu">
+                                <ul>
+                                    <li>
+                                        <a href="#">Google maps</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Open street map</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>-->
+                        <li class="header-menu">
+                            <span>Extra</span>
+                        </li> 
+                        <!-- <li>
+                            <a href="#">
+                                <i class="fa fa-calendar"></i>
+                                <span>Calendar</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-folder"></i>
+                                <span>Examples</span>
+                            </a>
+                        </li> -->
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-book"></i>
+                                <span>新观察</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/edit">
+                                <i class="fa fa-edit"></i>
+                                <span>编辑文档</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- sidebar-menu  -->
+            </div>
+            <!-- sidebar-content  -->
+            <div class="sidebar-footer">
+                <a href="#">
+                    <i class="fa fa-bell"></i>
+                    <span class="label label-warning notification">3</span>
+                </a>
+                <!-- <a href="#">
+                    <i class="fa fa-envelope"></i>
+                    <span class="label label-success notification">7</span>
+                </a>
+                <a href="#">
+                    <i class="fa fa-gear"></i>
+                    <span class="badge-sonar"></span>
+                </a> -->
+                <a href="#">
+                    <i class="fa fa-power-off"></i>
+                </a>
+            </div>
+        </nav>
+        <!-- sidebar-wrapper  -->
+        <main class="page-content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div id="toolbar"><i>Blog  </i>编辑器 <span>发表</span></div>
+                    <div id="container" class='edit-contain'>
+                        
+                        <div id="editor-column" class="pull-left">
+                            <div id="panel-editor">
+                                
+                                <div class="editor-content" id="mdeditor" ></div>
+                            </div>
+                        </div>
+                        <div id="preview-column" class="pull-right">
+                            <div id="panel-preview">
+                                
+                                <div id="preview" class="markdown-body"></div>
+                            </div>
+                        </div>
+                        
+                        
+                    </div>
+                </div>
+            </div>
+        </main>
+        <!-- page-content" -->
+    </div>
+    <!-- page-wrapper -->
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="assets/js//jquery.mCustomScrollbar.concat.min.js"></script>
+    <script src="https://cdn.bootcss.com/marked/0.3.19/marked.min.js"></script>
+    <script src="https://cdn.bootcss.com/ace/1.3.3/ace.js"></script>
+    <script src="assets/js/custom.js"></script>
+    <script>
+        // 编辑器 
+        var acen_edit = ace.edit('mdeditor'); 
+        acen_edit.setTheme('ace/theme/chrome');
+        acen_edit.getSession().setMode('ace/mode/markdown');
+        acen_edit.setFontSize('14px');
+        acen_edit.renderer.setShowPrintMargin(false);
+        $("#mdeditor").keyup(function() {
+            $("#preview").html(marked(acen_edit.getValue()));
+        });
+    </script>
+</body>
+
+</html>
