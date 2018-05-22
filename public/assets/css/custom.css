@@ -116,7 +116,16 @@
 }
 @media screen and (max-width: 768px){
     #toolbar{
-        margin-top:20px;
+        display: flex;
+    }
+    #toolbar p:nth-child(2){
+        flex:1;
+    }
+    #preview-column{
+        display:none;
+    }
+    #container #editor-column{
+        width:100%;
     }
 }
 .page-wrapper.toggled #toggle-sidebar {
@@ -438,13 +447,17 @@
     color:#e6e6e6;
     font-size:20px;
     text-align: center;
+    display: flex;
     /* margin-top:20px; */
 }
-#toolbar span{
-    float:right;
+#toolbar p{
+    flex:1;
     font-size:16px;
-    margin-right:20px;
     cursor: pointer;
+    margin:0;
+}
+#toolbar p:nth-child(2){
+    flex:3;
 }
 .edit-contain{
     background:#e6e6e6;
