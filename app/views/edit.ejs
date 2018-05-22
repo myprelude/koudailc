@@ -227,6 +227,36 @@
                             </a>
                         </li>
                     </ul>
+                    <style>
+                        #upload .p1{
+                            padding:20px;
+                            font-size: 50px;
+                            text-align:center;
+                        }
+                        #upload .p2{
+                            height:4px;
+                            border-radius:2px;
+                            overflow: hidden;
+                            background:#333;
+                        }
+                        #upload .p2 span{
+                            display:block;
+                            height:100%;
+                            width:0%;
+                            background:#1D1D1D;
+                        }
+                        #upload .t{
+                            color:#444;
+                            text-align: center;
+                            font-size:12px;
+                            display: none;
+                        }
+                    </style>
+                    <div id='upload'>
+                        <p class='p1'><i class="fa fa-cloud-upload"></i></p>
+                        <p class='t'>图片上传成功,看控制台</p>
+                        <p class='p2'><span></span></p>
+                    </div>
                 </div>
                 <!-- sidebar-menu  -->
             </div>
@@ -283,6 +313,7 @@
     <script src="https://cdn.bootcss.com/marked/0.3.19/marked.min.js"></script>
     <script src="https://cdn.bootcss.com/ace/1.3.3/ace.js"></script>
     <script src="assets/js/custom.js"></script>
+    <script src='js/upload.js'></script>
     <script>
         // 编辑器 
         var acen_edit = ace.edit('mdeditor'); 
@@ -293,6 +324,16 @@
         $("#mdeditor").keyup(function() {
             $("#preview").html(marked(acen_edit.getValue()));
         });
+        upload('#upload',function(data){
+            $('#upload .p2 span').css({width:data})
+        },function(data){
+            $('#upload .t').show();
+            setTimeout(function(){
+                $('#upload .t').hide();
+                $('#upload .p2 span').css({width:0})
+            },1000)
+            console.log(data);
+        })
     </script>
 </body>
 
