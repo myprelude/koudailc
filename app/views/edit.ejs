@@ -15,7 +15,30 @@
     <link rel="stylesheet" href="assets/css/custom-themes.css">
     <link rel="shortcut icon" type="image/png" href="assets/img/favicon.png" />
 </head>
-
+<style>
+    #editTip{
+        height:50px;
+        line-height:50px;
+    }
+    #editTip span:last-child{
+        display: inline-block;
+        font-size: 24px;
+        padding-left:5px;
+        animation:done 1s infinite;
+        -moz-animation:done 1s infinite;
+    }
+    @keyframes done{
+        from {opacity:1}
+        to {opacity:0}
+    }
+    @-webkit-keyframes done{
+        from {opacity:1}
+        to {opacity:0}
+    }
+    #editTip span{
+        font-size: 12px;
+    }
+</style>
 <body>
     <div class="page-wrapper chiller-theme toggled">
         <nav id="sidebar" class="sidebar-wrapper">
@@ -283,7 +306,7 @@
         <main class="page-content">
             <div class="container-fluid">
                 <div class="row">
-                    <div id="toolbar"><i>Blog  </i>编辑器 <span>发表</span></div>
+                    <div id="toolbar"><p id='editTip' style='float:left;padding-left:20px;font-size:12px;margin:0;'></p><i>Blog  </i>编辑器 <span id='send'>发表</span></div>
                     <div id="container" class='edit-contain'>
                         
                         <div id="editor-column" class="pull-left">
@@ -321,8 +344,41 @@
         acen_edit.getSession().setMode('ace/mode/markdown');
         acen_edit.setFontSize('14px');
         acen_edit.renderer.setShowPrintMargin(false);
+        var oldInfo = localStorage.getItem('ACE_TEXT_INFO');
+        var isSave = false;
+        if(oldInfo){
+            acen_edit.setValue(oldInfo);
+            $("#preview").html(marked(oldInfo));
+        }
+        acen_edit.on('focus',function(){
+            // console.log(12121)
+            $('#editTip').text('文档编辑中.....')
+        })
+        acen_edit.on('blur',function(){
+            // console.log(2222)
+            if(!isSave){
+                $('#editTip').text('请 Ctrl+S 保存文档')
+            }
+            
+        })
+        acen_edit.commands.addCommand({
+            name: 'myCommand',
+            bindKey: {win: 'Ctrl-S',  mac: 'Command-S'},
+            exec: function(editor) {
+                isSave = true;
+                localStorage.setItem('ACE_TEXT_INFO',editor.getValue());
+                $('#editTip').text('文档已经保存')
+            },
+            readOnly: true // 如果不需要使用只读模式，这里设置false
+        });
         $("#mdeditor").keyup(function() {
+            moveFont('#editTip','您在编辑请及时保存')
             $("#preview").html(marked(acen_edit.getValue()));
+        });
+        $('#send').on('click',function(){
+            acen_edit.setValue('');
+            $("#preview").html(marked(''));
+            localStorage.setItem('ACE_TEXT_INFO','');
         });
         upload('#upload',function(data){
             $('#upload .p2 span').css({width:data})
@@ -334,6 +390,42 @@
             },1000)
             console.log(data);
         })
+
+        // 监听浏览器关闭事件
+        window.addEventListener('beforeunload',function(event){
+            localStorage.setItem('ACE_TEXT_INFO',acen_edit.getValue());
+            var message = "请确定文档已经保存？";
+            event.returnValue = message;
+            return message;
+        })
+        
+        // 打字效果
+        function moveFont(dom,str){
+            var html = '',str = str+'|',timer=null;
+            var strArr = str.split(''),len=strArr.length,i=1;
+            $.each(strArr,function(i,el){
+                if(i==len-1){
+                    htmlNode = '<span style="margin:0;float:none">'+el+'</span>'
+                }else{
+                    htmlNode = '<span style="margin:0;display:none;float:none">'+el+'</span>'
+                }
+                html+=htmlNode; 
+            })
+            $(dom).html(html);
+           
+            timer = setInterval(function(){
+                i++;
+                if(i==len-1){
+                    // clearInterval(timer);
+                    return;
+                }
+                $(dom).find('span:nth-child('+i+')').show();
+                
+            },600)
+            
+            
+            
+        }
     </script>
 </body>
 

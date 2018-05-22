@@ -8,7 +8,7 @@ var config = {
     app: {
       name: 'bolg'
     },
-    port: process.env.PORT || 80,
+    port: process.env.PORT || 8099,
     db: 'mongodb://localhost/nodebolg'
   },
 
