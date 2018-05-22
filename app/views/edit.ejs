@@ -19,289 +19,13 @@
     #editTip{
         height:50px;
         line-height:50px;
+        width:200px;
     }
-    #editTip span:last-child{
-        display: inline-block;
-        font-size: 24px;
-        padding-left:5px;
-        animation:done 1s infinite;
-        -moz-animation:done 1s infinite;
-    }
-    @keyframes done{
-        from {opacity:1}
-        to {opacity:0}
-    }
-    @-webkit-keyframes done{
-        from {opacity:1}
-        to {opacity:0}
-    }
-    #editTip span{
-        font-size: 12px;
-    }
+    
 </style>
 <body>
     <div class="page-wrapper chiller-theme toggled">
-        <nav id="sidebar" class="sidebar-wrapper">
-            <div class="sidebar-content">
-                <div id="toggle-sidebar">
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                </div>
-                <div class="sidebar-brand">
-                    <a href="#">scopeman.cn</a>
-                </div>
-                <div class="sidebar-header">
-                    <div class="user-pic">
-                        <img class="img-responsive img-rounded" src="assets/img/user.jpg" alt="User picture">
-                    </div>
-                    <div class="user-info">
-                        <span class="user-name">myPrelude
-                            <strong>HE</strong>
-                        </span>
-                        <span class="user-role">@Ctrip-IBU</span>
-                        <span class="user-status">
-                            <i class="fa fa-circle"></i>
-                            <span>Always Online</span>
-                        </span>
-                    </div>
-                </div>
-                <!-- sidebar-header  -->
-                <div class="sidebar-search">
-                    <div>
-                        <div class="input-group">
-                            <input type="text" class="form-control search-menu" placeholder="Search...">
-                            <span class="input-group-addon">
-                                <i class="fa fa-search"></i>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                <!-- sidebar-search  -->
-                <div class="sidebar-menu">
-                    <ul>
-                        <li class="header-menu">
-                            <span>General</span>
-                        </li>
-                        <li class="sidebar-dropdown">
-                            <a href="javascript:;">
-                                <i class="fa fa-folder"></i>
-                                <span>归档</span>
-                            </a>
-                            <div class="sidebar-submenu">
-                                <ul>
-                                    <li>
-                                        <a href="/doc/record">Products
-                                            <span class="badge">2</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="/doc/order">Orders</a>
-                                    </li>
-                                    <li>
-                                        <a href="/doc/credit">Credit cart</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <!-- <li class="sidebar-dropdown">
-                            <a href="#">
-                                <i class="fa fa-dashboard"></i>
-                                <span>Dashboard</span>
-                                <span class="label label-danger">New</span>
-                            </a>
-                            <div class="sidebar-submenu">
-                                <ul>
-                                    <li>
-                                        <a href="#" data-theme="chiller-theme" class="theme chiller-theme selected"></a>  
-                                    </li>
-                                    <li>
-                                        <a href="#" data-theme="purple-theme" class="theme purple-theme"></a>
-                                    </li>
-                                    <li>
-                                        <a href="#" data-theme="spicy-theme" class="theme spicy-theme"></a>
-                                    </li>
-                                    <li>
-                                            <a href="#" data-theme="ice-theme" class="theme ice-theme selected"></a>
-                                    </li>
-                                    <li>
-                                            <a href="#" data-theme="cool-theme" class="theme cool-theme"></a>
-                                    </li>
-                                    <li>
-                                         <a href="#" data-theme="light-theme" class="theme light-theme"></a>
-                                    </li>
-                                    <li>
-                                        <a href="#" data-theme="green-theme" class="theme green-theme"></a>
-                                    </li>
-                                        
-                                </ul>
-                            </div>
-                        </li>
-                        <li class="sidebar-dropdown">
-                            <a href="#">
-                                <i class="fa fa-shopping-cart"></i>
-                                <span>E-commerce</span>
-                                <span class="badge">3</span>
-                            </a>
-                            <div class="sidebar-submenu">
-                                <ul>
-                                    <li>
-                                        <a href="#">Products
-                                            <span class="badge">2</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Orders</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Credit cart</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li class="sidebar-dropdown">
-                            <a href="#">
-                                <i class="fa fa-diamond"></i>
-                                <span>Components</span>
-                            </a>
-                            <div class="sidebar-submenu">
-                                <ul>
-                                    <li>
-                                        <a href="#">General</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Panels</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Tables</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Icons</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Forms</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li class="sidebar-dropdown">
-                            <a href="#">
-                                <i class="fa fa-bar-chart-o"></i>
-                                <span>Charts</span>
-                            </a>
-                            <div class="sidebar-submenu">
-                                <ul>
-                                    <li>
-                                        <a href="#">Pie chart</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Line chart</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Bar chart</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Histogram</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li class="sidebar-dropdown">
-                            <a href="#">
-                                <i class="fa fa-globe"></i>
-                                <span>Maps</span>
-                            </a>
-                            <div class="sidebar-submenu">
-                                <ul>
-                                    <li>
-                                        <a href="#">Google maps</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Open street map</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>-->
-                        <li class="header-menu">
-                            <span>Extra</span>
-                        </li> 
-                        <!-- <li>
-                            <a href="#">
-                                <i class="fa fa-calendar"></i>
-                                <span>Calendar</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i class="fa fa-folder"></i>
-                                <span>Examples</span>
-                            </a>
-                        </li> -->
-                        <li>
-                            <a href="/find">
-                                <i class="fa fa-book"></i>
-                                <span>新观察</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/edit">
-                                <i class="fa fa-edit"></i>
-                                <span>编辑文档</span>
-                            </a>
-                        </li>
-                    </ul>
-                    <style>
-                        #upload .p1{
-                            padding:20px;
-                            font-size: 50px;
-                            text-align:center;
-                        }
-                        #upload .p2{
-                            height:4px;
-                            border-radius:2px;
-                            overflow: hidden;
-                            background:#333;
-                        }
-                        #upload .p2 span{
-                            display:block;
-                            height:100%;
-                            width:0%;
-                            background:#1D1D1D;
-                        }
-                        #upload .t{
-                            color:#444;
-                            text-align: center;
-                            font-size:12px;
-                            display: none;
-                        }
-                    </style>
-                    <div id='upload'>
-                        <p class='p1'><i class="fa fa-cloud-upload"></i></p>
-                        <p class='t'>图片上传成功,看控制台</p>
-                        <p class='p2'><span></span></p>
-                    </div>
-                </div>
-                <!-- sidebar-menu  -->
-            </div>
-            <!-- sidebar-content  -->
-            <div class="sidebar-footer">
-                <a href="#">
-                    <i class="fa fa-bell"></i>
-                    <span class="label label-warning notification">3</span>
-                </a>
-                <!-- <a href="#">
-                    <i class="fa fa-envelope"></i>
-                    <span class="label label-success notification">7</span>
-                </a>
-                <a href="#">
-                    <i class="fa fa-gear"></i>
-                    <span class="badge-sonar"></span>
-                </a> -->
-                <a href="#">
-                    <i class="fa fa-power-off"></i>
-                </a>
-            </div>
-        </nav>
+        <% include nav %>
         <!-- sidebar-wrapper  -->
         <main class="page-content">
             <div class="container-fluid">
@@ -328,6 +52,53 @@
             </div>
         </main>
         <!-- page-content" -->
+        <!-- modal start -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  <h4 class="modal-title" id="exampleModalLabel">发表文章</h4>
+                </div>
+                <div class="modal-body">
+                  <form>
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">title:</label>
+                        <input type="text" class="form-control" id="recipient-name">
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">keyword:</label>
+                        <input type="text" class="form-control" id="recipient-name" placeholder="关键词可以多个用逗号隔开">
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="control-label">topic:</label>
+                        <textarea class="form-control" id="message-text"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="control-label">category:</label>
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox">技术文章
+                            </label>
+                            <label>
+                                <input type="checkbox">记录
+                            </label>
+                            <label>
+                                <input type="checkbox">新尝试
+                            </label>
+                        </div>
+                    </div>
+                    
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                  <button type="button" class="btn btn-inverse">确认发表</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- modal end -->
     </div>
     <!-- page-wrapper -->
     <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
@@ -351,15 +122,20 @@
             $("#preview").html(marked(oldInfo));
         }
         acen_edit.on('focus',function(){
-            // console.log(12121)
+            
             $('#editTip').text('文档编辑中.....')
         })
+
         acen_edit.on('blur',function(){
-            // console.log(2222)
+            
             if(!isSave){
                 $('#editTip').text('请 Ctrl+S 保存文档')
             }
             
+        })
+        acen_edit.on('change',function(){
+            
+            isSave = false;
         })
         acen_edit.commands.addCommand({
             name: 'myCommand',
@@ -372,10 +148,10 @@
             readOnly: true // 如果不需要使用只读模式，这里设置false
         });
         $("#mdeditor").keyup(function() {
-            moveFont('#editTip','您在编辑请及时保存')
             $("#preview").html(marked(acen_edit.getValue()));
         });
         $('#send').on('click',function(){
+            $('#myModal').modal('show')
             acen_edit.setValue('');
             $("#preview").html(marked(''));
             localStorage.setItem('ACE_TEXT_INFO','');
@@ -400,32 +176,32 @@
         })
         
         // 打字效果
-        function moveFont(dom,str){
-            var html = '',str = str+'|',timer=null;
-            var strArr = str.split(''),len=strArr.length,i=1;
-            $.each(strArr,function(i,el){
-                if(i==len-1){
-                    htmlNode = '<span style="margin:0;float:none">'+el+'</span>'
-                }else{
-                    htmlNode = '<span style="margin:0;display:none;float:none">'+el+'</span>'
-                }
-                html+=htmlNode; 
-            })
-            $(dom).html(html);
+        // function moveFont(dom,str){
+        //     var html = '',str = str+'|',timer=null;
+        //     var strArr = str.split(''),len=strArr.length,i=1;
+        //     $.each(strArr,function(i,el){
+        //         if(i==len-1){
+        //             htmlNode = '<span style="margin:0;float:none">'+el+'</span>'
+        //         }else{
+        //             htmlNode = '<span style="margin:0;display:none;float:none">'+el+'</span>'
+        //         }
+        //         html+=htmlNode; 
+        //     })
+        //     $(dom).html(html);
            
-            timer = setInterval(function(){
-                i++;
-                if(i==len-1){
-                    // clearInterval(timer);
-                    return;
-                }
-                $(dom).find('span:nth-child('+i+')').show();
+        //     timer = setInterval(function(){
+        //         i++;
+        //         if(i==len-1){
+        //             // clearInterval(timer);
+        //             return;
+        //         }
+        //         $(dom).find('span:nth-child('+i+')').show();
                 
-            },600)
+        //     },600)
             
             
             
-        }
+        // }
     </script>
 </body>
 

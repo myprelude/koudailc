@@ -29,12 +29,12 @@ module.exports = function (app) {
 };
 
 router.get('/', function (req, res, next) {
-  res.render('index');
+  res.render('index',{show:false});
 
 });
 
 router.get('/edit', function (req, res, next) {
-    res.render('edit');
+    res.render('edit',{show:true});
 //   var count = 0,show;
 //     var page = req.query.page?req.query.page:1;
 //      if(req.cookies.userInfo!==undefined&&req.cookies.userInfo.sign){
