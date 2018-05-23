@@ -447,7 +447,7 @@
     flex:3;
 }
 .edit-contain{
-    background:#e6e6e6;
+    background:#fff;
     overflow: hidden;
     
 }
@@ -502,6 +502,9 @@
     }
     #container #editor-column{
         width:100%;
+    }
+    .edit-contain{
+        background:#e6e6e6;
     }
     
 }
