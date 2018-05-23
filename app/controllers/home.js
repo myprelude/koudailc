@@ -34,7 +34,14 @@ router.get('/', function (req, res, next) {
 });
 
 router.get('/edit', function (req, res, next) {
-    res.render('edit',{show:true});
+    res.render('edit',{
+      show:true,
+      changeInfo:true,
+      title:'',
+      topic:'',
+      keyword:'',
+      cate:''
+    });
 //   var count = 0,show;
 //     var page = req.query.page?req.query.page:1;
 //      if(req.cookies.userInfo!==undefined&&req.cookies.userInfo.sign){
@@ -70,7 +77,6 @@ router.post('/upload/img',upload.single('avatar'), function (req, res, next) {
 	var url = 'public/upload/';
 	fs.writeFile(url + temp + name, dataBuffer, function(err) {
 		if(err){
-			console.log(err)
 			res.json(err);
 		}else{
 			res.json({path:'![img](upload/'+temp+name+')',message:'成功'});

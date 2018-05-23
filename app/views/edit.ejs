@@ -47,6 +47,16 @@
             </div>
         </main>
         <!-- page-content" -->
+        <!-- see start  -->
+        <button type="button" class="btn btn-default phoneTip phoneshow" aria-label="Left Align">
+            <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>
+            预览
+        </button>
+        <button type="button" class="btn btn-default phoneTip phonehide" aria-label="Left Align">
+            <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>
+            编辑
+        </button>
+        <!-- see end -->
         <!-- modal start -->
         <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
             <div class="modal-dialog" role="document">
@@ -112,6 +122,9 @@
         acen_edit.renderer.setShowPrintMargin(false);
         var oldInfo = localStorage.getItem('ACE_TEXT_INFO');
         var isSave = false;
+        if('<%=changeInfo%>'){
+            console.log(1212)
+        }
         if(oldInfo){
             acen_edit.setValue(oldInfo);
             $("#preview").html(marked(oldInfo));
@@ -162,6 +175,27 @@
             console.log(data);
         })
 
+        // 手机端点击预览
+        $('.phoneshow').on('click',function(){
+            $('#editor-column').addClass('rightMove');
+            setTimeout(function(){
+                $('#editor-column').hide().removeClass('rightMove');
+                $('#preview-column').fadeIn(500);
+                $('.phoneshow').hide();
+                $('.phonehide').fadeIn(500);
+            },1000)
+        })
+        
+        // 手机端点击编辑
+        $('.phonehide').on('click',function(){
+            $('#preview-column').addClass('leftMove');
+            setTimeout(function(){
+                $('#preview-column').hide().removeClass('leftMove');
+                $('#editor-column').fadeIn(500);
+                $('.phonehide').hide();
+                $('.phoneshow').fadeIn(500);
+            },1000)
+        })
         // 监听浏览器关闭事件
         window.addEventListener('beforeunload',function(event){
             localStorage.setItem('ACE_TEXT_INFO',acen_edit.getValue());
