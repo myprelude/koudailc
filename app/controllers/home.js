@@ -1,8 +1,8 @@
 var express = require('express'),
   router = express.Router(),
-//   mongoose = require('mongoose'),
-  formidable = require('formidable');
-//   Article = mongoose.model('Article'),
+  mongoose = require('mongoose'),
+  formidable = require('formidable'),
+  Article = mongoose.model('Article');
 //   User = mongoose.model('User'),
 //   Riji = mongoose.model('Riji');
 var moment = require('moment');
@@ -61,13 +61,46 @@ router.get('/edit', function (req, res, next) {
 //     })
 });
 router.get('/doc', function (req, res, next) {
-    res.render('document');
+  console.log(req.query.id);
+    res.render('document',{show:false});
 
 });
 router.get('/doc/record', function (req, res, next) {
-    res.render('record');
+  Article.find({_id:req.query.id},function(e,art){
+    console.log(art[0]);
+    if(e){
+      res.render('error')
+    }else{
+      res.render('record',{
+        doc:art,
+        title:art[0].title
+      })
+    }
+  })
+  // if(req.query.id)
+    // res.render('record');
 
 });
+router.post('/upload/doc',function(req, res, next){
+  console.log(req.body);
+    if(req.body.auth == 123456){
+      var art = new Article({
+        title:req.body.title,
+        text:req.body.text,
+        topic:req.body.topic,
+        keyword:req.body.keyword,
+        cate:req.body.cate})
+        art.save(function(error){
+        if(error){
+          
+        }else{
+          console.log('saved OK!');
+          res.json({message:'成功',code:200,id:art.id})
+        }
+      });
+    }
+});
+
 router.post('/upload/img',upload.single('avatar'), function (req, res, next) {
 	var base = req.body.base,name = req.body.name;
 	//过滤data:URL
