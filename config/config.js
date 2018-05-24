@@ -8,7 +8,7 @@ var config = {
     app: {
       name: 'bolg'
     },
-    port: process.env.PORT || 8099,
+    port: process.env.PORT || 80,
     db: 'mongodb://localhost/prelude'
   },
 
