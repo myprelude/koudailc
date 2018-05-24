@@ -25,7 +25,23 @@
         <main class="page-content">
             <div class="container-fluid">
                 <div class="row">
-                    <div id="toolbar"><p id='editTip' style='font-size:12px;'></p><p style='font-size:18px;'><i>Blog  </i>编辑器</p> <p id='send'>发表</p></div>
+                    <style>
+                        #editTip i,#editTip span{
+                            font-size: 18px;
+                        }
+                        #toolbar i{
+                            margin:0 10px;
+                            line-height: 50px;
+                        }
+                    </style>
+                    <div id="toolbar">
+                        <p id='editTip' style='font-size:12px;'><i>SB</i><span>编辑器</span></p>
+                        <p style='font-size:18px;display:flex;justify-content :center;'>
+                            <i class="glyphicon glyphicon-question-sign"></i>
+                            <i class="glyphicon glyphicon-picture"></i>
+                        </p> 
+                        <p id='send'>发表</p>
+                    </div>
                     <div id="container" class='edit-contain'>
                         
                         <div id="editor-column" class="pull-left">
@@ -136,14 +152,13 @@
             }
         }
         acen_edit.on('focus',function(){
-            $('#editTip').text('文档编辑中.....');
-            console.log(acen_edit.getValue())
+            $('#editTip').html('文档编辑中.....<i class="glyphicon glyphicon-pencil"></i>');
         })
 
         acen_edit.on('blur',function(){
             
             if(!isSave){
-                $('#editTip').text('请 Ctrl+S 保存文档')
+                $('#editTip').html('请 Ctrl+S 保存文档<i class="glyphicon glyphicon-duplicate"></i>')
             }
             
         })
@@ -167,9 +182,6 @@
         $('#send').on('click',function(){
 
             $('#myModal').modal('show');
-            // acen_edit.setValue('');
-            // $("#preview").html(marked(''));
-            // localStorage.setItem('ACE_TEXT_INFO','');
         });
         $('.sendbtn').on('click',function(){
             var title = $('#title').val();
@@ -209,6 +221,8 @@
                 $('#upload .t').hide();
                 $('#upload .p2 span').css({width:0})
             },1000)
+            var p = '<p>'+data+'</p>';
+            $('#imgUrl').prepend(p);
             console.log(data);
         })
 
