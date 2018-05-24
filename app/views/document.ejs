@@ -38,6 +38,7 @@
         </style>
         <!-- sidebar-wrapper  -->
         <main class="page-content">
+            <div id="toolbar" style='margin-bottom:30px;display:block'>文章列表</div>
             <div class="container-fluid">
                 <div class="row text-box" >
                     <!-- <h1>Sidebar template</h1>
@@ -59,28 +60,36 @@
                         </div>
                     </div> -->
                     
+                    <% for(var i=0; i<cate.length; i++) {%>                         
                     <div class="col-sm-6 col-md-4 col-lg-3 ">
                         <div class="thumbnail">
                             <style>
                                 .imglistbox{
-                                    width:100%;padding-top:100%;overflow:hidden;box-sizing:border-box;
+                                    width:100%;padding-top:50%;overflow:hidden;box-sizing:border-box;
                                     background:url('https://www.zybuluo.com/static/img/logo.png');
                                     background-size:100% 100%;
                                 }
+                                .text{
+                                    overflow : hidden;
+                                    text-overflow: ellipsis;
+                                    display: -webkit-box;
+                                    -webkit-line-clamp: 1;
+                                    -webkit-box-orient: vertical;
+                                }
                             </style>
-                            <div style="" class='imglistbox'>
+                            <div  class='imglistbox'>
                                 <!-- <img src="" alt="..."> -->
                             </div>
                         <div class="caption">
-                            <a href="/doc/record">
-                                <h4>Markdown 在线编辑器</h4>
-                                <p><button type="button" class="btn btn-default btn-xs">js</button><button type="button" class="btn btn-default btn-xs">标记</button></p>
+                            <a href="/doc/record?id=<%=cate[i]._id%>">
+                                <h4><%=cate[i].title%></h4>
+                                <p><button type="button" class="btn btn-default btn-xs"><%=cate[i].keyword%></button></p>
                             </a>
-                            <p>markdown 编辑器 脱离html 不受css样式约束，只需要简单的几个语法就可以开始工作</p>
+                            <p class='text'><%=cate[i].topic%></p>
                         </div>
                         </div>
                     </div>
-                    
+                    <%}%>
                 </div>
             </div>
         </main>

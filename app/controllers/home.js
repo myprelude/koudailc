@@ -60,14 +60,57 @@ router.get('/edit', function (req, res, next) {
 //           });  
 //     })
 });
+router.get('/editor', function (req, res, next) {
+	if(req.query.id){
+		Article.findOne({_id:req.query.id},function(e,art){console.log(art)
+			res.render('editdoc',{
+				data:art,
+				id:req.query.id
+			})
+		})
+	}else{
+		res.render('error')
+	}
+    
+});
+
+router.post('/update/doc',function(req, res, next){
+    if(req.body.auth == 123456){
+        Article.update(
+			{_id:req.body.id},
+			{title:req.body.title,
+			text:req.body.text,
+			topic:req.body.topic,
+			keyword:req.body.keyword,
+			cate:req.body.cate},function(error){
+        if(error){
+			
+        }else{
+          console.log('saved OK!');
+          res.json({message:'成功',code:200,id:req.body.id})
+        }
+      });
+    }else{
+		res.json({message:'失败',code:400})
+	}
+});
+
 router.get('/doc', function (req, res, next) {
   console.log(req.query.id);
-    res.render('document',{show:false});
-
+  Article.find({cate:req.query.id},function(e,artCate){
+    if(e){
+      res.render('error')
+    }else{
+      res.render('document',{
+		  	show:false,
+			cate:artCate
+		});
+    }
+  })
+    
 });
 router.get('/doc/record', function (req, res, next) {
   Article.find({_id:req.query.id},function(e,art){
-    console.log(art[0]);
     if(e){
       res.render('error')
     }else{
@@ -77,12 +120,9 @@ router.get('/doc/record', function (req, res, next) {
       })
     }
   })
-  // if(req.query.id)
-    // res.render('record');
 
 });
 router.post('/upload/doc',function(req, res, next){
-  console.log(req.body);
     if(req.body.auth == 123456){
       var art = new Article({
         title:req.body.title,
@@ -98,7 +138,9 @@ router.post('/upload/doc',function(req, res, next){
           res.json({message:'成功',code:200,id:art.id})
         }
       });
-    }
+    }else{
+		res.json({message:'失败',code:400})
+	}
 });
 
 router.post('/upload/img',upload.single('avatar'), function (req, res, next) {
