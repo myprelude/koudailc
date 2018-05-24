@@ -39,6 +39,7 @@ var svg = selectSVG('svg');
 var text = document.getElementById('text');
 var offscreenText = document.getElementById('offscreen-text');
 var input = document.getElementById('input');
+input.value = '';
 var width = $('#svgbox').width();
 var height = $('#svgbox').height();
 var textSize = 0;
