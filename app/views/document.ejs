@@ -59,31 +59,42 @@
                             </div>
                         </div>
                     </div> -->
-                    
-                    <% for(var i=0; i<cate.length; i++) {%>                         
+                    <style>
+                        .imglistbox{
+                            width:100%;padding-top:50%;overflow:hidden;box-sizing:border-box;
+                            background-size:100% 100%;
+                            position: relative;
+                        }
+                        .text{
+                            overflow : hidden;
+                            text-overflow: ellipsis;
+                            display: -webkit-box;
+                            -webkit-line-clamp: 1;
+                            -webkit-box-orient: vertical;
+                        }
+                        .btn-time{
+                            position:absolute;
+                            right:0px;
+                            top:0px;
+                        }
+                    </style>
+                    <% for(var i=0; i<cate.length; i++) {%>                      
                     <div class="col-sm-6 col-md-4 col-lg-3 ">
                         <div class="thumbnail">
                             <style>
-                                .imglistbox{
-                                    width:100%;padding-top:50%;overflow:hidden;box-sizing:border-box;
-                                    background:url('https://www.zybuluo.com/static/img/logo.png');
-                                    background-size:100% 100%;
-                                }
-                                .text{
-                                    overflow : hidden;
-                                    text-overflow: ellipsis;
-                                    display: -webkit-box;
-                                    -webkit-line-clamp: 1;
-                                    -webkit-box-orient: vertical;
-                                }
+                                
                             </style>
-                            <div  class='imglistbox'>
+                            <div  class='imglistbox' style="background:rgba(6,6,6,.6) url('<%=cate[i].logo%>')">
+                                <button type="button" class="btn btn-info btn-time btn-xs" style='background:#444;border:none;'></button>
                                 <!-- <img src="" alt="..."> -->
                             </div>
                         <div class="caption">
                             <a href="/doc/record?id=<%=cate[i]._id%>">
                                 <h4><%=cate[i].title%></h4>
-                                <p><button type="button" class="btn btn-default btn-xs"><%=cate[i].keyword%></button></p>
+                                <p>
+                                    <button type="button" class="btn btn-default btn-xs"><%=cate[i].keyword%></button>
+                                    
+                                </p>
                             </a>
                             <p class='text'><%=cate[i].topic%></p>
                         </div>
@@ -100,6 +111,20 @@
     <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="assets/js//jquery.mCustomScrollbar.concat.min.js"></script>
     <script src="assets/js/custom.js"></script>
+    <script>
+        var time = '<%=cate[0].date%>';
+        var date = new Date(time);
+        function getyyyyMMdd(d,str){
+            var curr_date = d.getDate();
+            var curr_month = d.getMonth() + 1; 
+            var curr_year = d.getFullYear();
+            String(curr_month).length < 2 ? (curr_month = "0" + curr_month): curr_month;
+            String(curr_date).length < 2 ? (curr_date = "0" + curr_date): curr_date;
+            var yyyyMMdd = curr_year + str + curr_month +str+ curr_date;
+            return yyyyMMdd;
+        } 
+        $('.btn-time').text(getyyyyMMdd(date,'-'));
+    </script>
 </body>
 
 </html>

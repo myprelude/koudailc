@@ -6,10 +6,11 @@ var mongoose = require('mongoose'),
 var ArticleSchema = new Schema({
   	title: String,
   	topic: String,
-  	text: String,
+	text: String,
+	logo: String,
   	date: {type : Date, default: Date.now},
-	 cate: String,
-	 keyword : String,
+	cate: String,
+	keyword : String,
 });
 
 mongoose.model('Article', ArticleSchema);

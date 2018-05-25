@@ -247,6 +247,7 @@
             var keyword = $('#keyword').val();
             var cate = $('.checkbox').find('input:checked').val();
             var auth = localStorage.getItem('DOC_AUTH');
+            var logo = $('#panel-preview').find('#imglogo img').attr('src')?$('#panel-preview').find('#imglogo img').attr('src'):'https://www.zybuluo.com/static/img/logo.png';
             if(!title||!topic||!keyword){
                 return;
             }
@@ -259,6 +260,7 @@
                     topic:topic,
                     keyword:keyword,
                     cate:cate,
+                    imgLogo:logo,
                     auth:auth
                 }),
                 contentType:'application/json;charset=utf-8',

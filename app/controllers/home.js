@@ -74,14 +74,15 @@ router.get('/editor', function (req, res, next) {
     
 });
 
-router.post('/update/doc',function(req, res, next){
+router.post('/update/doc',function(req, res, next){console.log(req.body)
     if(req.body.auth == 123456){
         Article.update(
 			{_id:req.body.id},
 			{title:req.body.title,
 			text:req.body.text,
 			topic:req.body.topic,
-			keyword:req.body.keyword,
+      keyword:req.body.keyword,
+      logo:req.body.imgLogo,
 			cate:req.body.cate},function(error){
         if(error){
           res.json({message:'文章保存失败！',code:400})
@@ -129,6 +130,7 @@ router.post('/upload/doc',function(req, res, next){
         text:req.body.text,
         topic:req.body.topic,
         keyword:req.body.keyword,
+        logo:req.body.imgLogo,
         cate:req.body.cate})
         art.save(function(error){
         if(error){
