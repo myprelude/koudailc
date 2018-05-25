@@ -123,7 +123,7 @@
             </div>
           </div>
           <!-- modal end -->
-          <div id='markBox' style='display:none'><%-data.text%></div>
+          <div id='markBox' style='display:none'><%=data.text%></div>
           <!-- uplaod  -->
           <style>
                 #imgUpload{
@@ -194,14 +194,13 @@
 
         var oldInfo = localStorage.getItem('ACE_TEXT_UPDATE');
         var isSave = false;
-        var text = $('#markBox').html();
+        var text = $('#markBox').text();
         if(text){
             acen_edit.setValue(text);
             $("#preview").html(marked(text)); 
         }
         acen_edit.on('focus',function(){
             $('#editTip').html('文档编辑中.....<i class="glyphicon glyphicon-pencil"></i>');
-            console.log(acen_edit.getValue())
         })
 
         acen_edit.on('blur',function(){
