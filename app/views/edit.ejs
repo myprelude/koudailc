@@ -227,6 +227,13 @@
             },
             readOnly: true // 如果不需要使用只读模式，这里设置false
         });
+        $(window).resize(function(){
+            acen_edit.resize();
+            setTimeout(function(){
+                // $('textarea').css({'height':$('.ace_scroller').height(),'width':$('.ace_scroller').width()})
+            },1000)
+            
+        })
         $("#mdeditor").keyup(function() {
             $("#preview").html(marked(acen_edit.getValue()));
         });
@@ -259,6 +266,9 @@
                     if(data.code == 200){
                         $('#myModal').modal('hide');
                         window.location = '/doc/record?id='+data.id;
+                    }else if(data.code == 400){
+                        $('#myModal').modal('hide');
+                        alert(data.message);
                     }
                 }
             })

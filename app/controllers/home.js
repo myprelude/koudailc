@@ -84,14 +84,14 @@ router.post('/update/doc',function(req, res, next){
 			keyword:req.body.keyword,
 			cate:req.body.cate},function(error){
         if(error){
-			
+          res.json({message:'文章保存失败！',code:400})
         }else{
           console.log('saved OK!');
           res.json({message:'成功',code:200,id:req.body.id})
         }
       });
     }else{
-		res.json({message:'失败',code:400})
+		res.json({message:'您暂时没有提交权限！',code:400})
 	}
 });
 
@@ -139,7 +139,7 @@ router.post('/upload/doc',function(req, res, next){
         }
       });
     }else{
-		res.json({message:'失败',code:400})
+		res.json({message:'您暂时没有提交权限！',code:400})
 	}
 });
 
