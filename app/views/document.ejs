@@ -41,24 +41,7 @@
             <div id="toolbar" style='margin-bottom:30px;display:block'>文章列表</div>
             <div class="container-fluid">
                 <div class="row text-box" >
-                    <!-- <h1>Sidebar template</h1>
-                    <p>This is a responsive sidebar template with dropdown menu based on bootstrap 3 framework.</p>
-                    <hr>
-                    <h2>Themes</h2>
-                    <p>Here are more themes that you can use</p>
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div>
-                                <a href="#" data-theme="chiller-theme" class="theme chiller-theme selected"></a>
-                                <a href="#" data-theme="ice-theme" class="theme ice-theme selected"></a>
-                                <a href="#" data-theme="cool-theme" class="theme cool-theme"></a>
-                                <a href="#" data-theme="light-theme" class="theme light-theme"></a>
-                                <a href="#" data-theme="green-theme" class="theme green-theme"></a>
-                                <a href="#" data-theme="spicy-theme" class="theme spicy-theme"></a>
-                                <a href="#" data-theme="purple-theme" class="theme purple-theme"></a>
-                            </div>
-                        </div>
-                    </div> -->
+                    <%if(cate.length!=0){%>
                     <style>
                         .imglistbox{
                             width:100%;padding-top:50%;overflow:hidden;box-sizing:border-box;
@@ -76,6 +59,23 @@
                             right:0px;
                             top:0px;
                         }
+                        .editorbox{
+                            color:#efefef;
+                            background: rgba(0,0,0,.5);
+                            font-size:30px;
+                            position: absolute;
+                            top:5px;
+                            left:5px;
+                            width:40px;
+                            height:40px;
+                            text-align: center;
+                            border-radius:4px;
+                            line-height:45px;
+                        }
+                        .editorbox:hover{
+                            background:rgba(244,244,244,.5);
+                            color:#222;
+                        }
                     </style>
                     <% for(var i=0; i<cate.length; i++) {%>                      
                     <div class="col-sm-6 col-md-4 col-lg-3 ">
@@ -85,6 +85,7 @@
                             </style>
                             <div  class='imglistbox' style="background:rgba(6,6,6,.6) url('<%=cate[i].logo%>') no-repeat center;background-size:cover">
                                 <button type="button" class="btn btn-info btn-time btn-xs" style='background:#444;border:none;'></button>
+                                <a href="/editor?id=<%=cate[i]._id%>&backid=<%=id%>" class='editorbox'><span class="glyphicon glyphicon-edit" id='edit'></span></a>
                                 <!-- <img src="" alt="..."> -->
                             </div>
                         <div class="caption">
@@ -100,6 +101,7 @@
                         </div>
                     </div>
                     <%}%>
+                    <%}%>
                 </div>
             </div>
         </main>
@@ -111,6 +113,7 @@
     <script src="assets/js//jquery.mCustomScrollbar.concat.min.js"></script>
     <script src="assets/js/custom.js"></script>
     <script>
+        <%if(cate.length!=0){%>
         var time = '<%=cate[0].date%>';
         var date = new Date(time);
         function getyyyyMMdd(d,str){
@@ -123,6 +126,17 @@
             return yyyyMMdd;
         } 
         $('.btn-time').text(getyyyyMMdd(date,'-'));
+        <%}%>
+        // 获取路径参数
+        function getQueryString(name) {
+            var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) {
+                return unescape(r[2]);
+            }
+            return null;
+        }
+        
     </script>
 </body>
 

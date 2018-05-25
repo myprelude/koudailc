@@ -21,6 +21,7 @@
             padding-left: 0px;
         }
     }
+   
 </style>
 <body>
     <div class="page-wrapper chiller-theme toggled">
@@ -42,6 +43,8 @@
                         <p style='font-size:18px;display:flex;justify-content :center;'>
                             <i class="glyphicon glyphicon-question-sign question"></i>
                             <i class="glyphicon glyphicon-picture picture"></i>
+                            <i class="glyphicon glyphicon glyphicon-trash trash"></i>
+                            
                         </p> 
                         <p id='send'>发表</p>
                     </div>
@@ -117,41 +120,65 @@
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                  <button type="button" class="btn btn-inverse sendbtn">确认发表</button>
+                  <button type="button" class="btn btn-inverse sendbtn" style="background:#1D1D1D;color:#efefef">确认发表</button>
                 </div>
               </div>
             </div>
           </div>
           <!-- modal end -->
-          <div id='markBox' style='display:none'><%=data.text%></div>
-          <!-- uplaod  -->
+          <!-- delate modal -->
+          <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  <h4 class="modal-title" id="exampleModalLabel">删除文章</h4>
+                </div>
+                <div class="modal-body">
+                  <form>
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">Delete-Key:</label>
+                        <input type="text" class="form-control" id="deletekey" placeholder='删除文章key'>
+                    </div>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                  <button type="button" class="btn btn-inverse deletebtn" style="background:#1D1D1D;color:#efefef">确认删除</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- end -->
+          <!-- modal upload start -->
           <style>
                 #imgUpload{
-                    position: fixed;
-                    top:50px;
-                    left:50px;
-                    background:#1D1D1D;
-                    width:260px;
-                    z-index: 10000;
+                    background:#EFEFEF;
                     border-radius:5px;
-                    display:none;
                 }
                 #upload .p1{
                     padding:20px;
                     font-size: 50px;
                     text-align:center;
+                    color:#999;
                 }
-                #upload .p2{
+                #upload .p1:hover{
+                    color:#afafaf;
+                }
+                .p2{
                     height:4px;
                     border-radius:2px;
                     overflow: hidden;
-                    background:#333;
+                    background:#cfcfcf;
+                    margin:10px 0;
+                    transition: all 1s;
                 }
-                #upload .p2 span{
+                .p2 span{
                     display:block;
                     height:100%;
                     width:0%;
                     background:#1D1D1D;
+                    transition: all 1s;
                 }
                 #upload .t{
                     color:#444;
@@ -159,23 +186,45 @@
                     font-size:12px;
                     display: none;
                 }
-                #imgUrl{
-                    text-align: center;
-                    color:bisque;
-                    word-break:break-all;
+                .imgmsg{
+                    position:absolute;
+                    top:-6px;
+                    right:10px;;
+                    font-size: 12px;
+                    display:none;
+                }
+                #myModalupload{
+                    background:rgba(0,0,0,.6);
                 }
             </style>
-            <div id='imgUpload'>
-                <div id='upload'>
-                    <p class='p1'><i class="fa fa-cloud-upload"></i></p>
-                    <p style='text-align:center'>点击、拖拽上传图片</p>
-                    <p class='t'>图片上传成功</p>
-                    <p class='p2'><span></span></p>
+            <div class="modal fade colse-modal" id="myModalupload">
+                <div class="modal-dialog" >
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close colse-modal"><span class='colse-modal'>&times;</span></button>
+                            <h4 class="modal-title" id="exampleModalLabel">图片上传</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div id='imgUpload'>
+                                <div id='upload'>
+                                    <p class='p1'><i class="fa fa-cloud-upload"></i></p>
+                                    <p style='text-align:center'>点击、拖拽上传图片</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer" id='processimg'>
+                            
+                        </div>
+                    </div>
                 </div>
-                <div id='imgUrl'></div>
             </div>
+          <!-- end -->
+          <div id='markBox' style='display:none'><%=data.text%></div>
+          
+            
     </div>
     <!-- page-wrapper -->
+    <script src="https://cdn.bootcss.com/clipboard.js/1.5.1/clipboard.min.js"></script>
     <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="assets/js//jquery.mCustomScrollbar.concat.min.js"></script>
@@ -232,6 +281,7 @@
             $('#myModal').modal('show');
         });
         $('.sendbtn').on('click',function(){
+            $('.sendbtn').attr('disabled','disabled');
             var title = $('#title').val();
             var topic = $('#topic').val();
             var keyword = $('#keyword').val();
@@ -239,6 +289,7 @@
             var auth = localStorage.getItem('DOC_AUTH');
             var logo = $('#panel-preview').find('#imglogo img').attr('src')?$('#panel-preview').find('#imglogo img').attr('src'):'https://www.zybuluo.com/static/img/logo.png';
             if(!title||!topic||!keyword){
+                alert('请检查填写信息是否完整！');
                 return;
             }
             $.ajax({
@@ -256,6 +307,7 @@
                 }),
                 contentType:'application/json;charset=utf-8',
                 success:function(data){
+                    $('.sendbtn').removeAttr('disabled');
                     if(data.code == 200){
                         $('#myModal').modal('hide');
                         localStorage.setItem('ACE_TEXT_UPDATE','');
@@ -264,23 +316,68 @@
                         $('#myModal').modal('hide');
                         alert(data.message);
                     }
+                },
+                error:function(){
+                    $('.deletebtn').removbeAttr('disabled');
+                    alert('未知的错误，发生在这里！');
                 }
             })
-            
         })
-        upload('#upload',function(data){
-            $('#upload .p2 span').css({width:data})
-        },function(data){
-            $('#upload .t').show();
-            setTimeout(function(){
-                $('#upload .t').hide();
-                $('#upload .p2 span').css({width:0})
-            },1000)
-            console.log(data);
-            var p = '<p class="copy"  data-clipboard-text="'+data+'">'+data+'</p>';
-            $('#imgUrl').prepend(p);
-            
+        $('.deletebtn').on('click',function(){
+            var key = $('#deletekey').val();
+            var auth = localStorage.getItem('DOC_AUTH');
+            if(!key){
+                alert('输入删除口令');
+                return;
+            }
+            $('.deletebtn').attr('disabled','disabled');
+            $.ajax({
+                url:'/delete',
+                type:'POST',
+                data:{
+                    key:key,
+                    auth:auth,
+                    id:'<%=data._id%>'
+                },
+                success:function(data){
+                    $('.deletebtn').removeAttr('disabled');
+                    if(data.code==200){
+                        alert(data.message);
+                        window.location.href = '/doc?id='+(getQueryString('backid')?getQueryString('backid'):1);
+                    }
+                    if(data.code==400){
+                        alert(data.message);
+                    }
+                },
+                error:function(){
+                    $('.deletebtn').removbeAttr('disabled');
+                    alert('未知的错误，发生在这里！')
+                }
+            })
         })
+        upload('#upload',
+            function(data,id){
+                $('#'+id).find('.p2 span').css({width:data});
+            },
+            function(data,id){
+                $('#'+id).find('.imgurl').text(data); 
+                $('#'+id).find('.btn-inverse').attr('data-clipboard-text',data).attr('data-clipboard-action',"copy");
+                setTimeout(function() {
+                    $('#'+id).find('.p2').css({width:'80%'});
+                    $('#'+id).find('.imgmsg').html('<i class="glyphicon glyphicon-ok"></i>图片上传成功').fadeIn(1000);
+                }, 1000);
+                
+            },
+            function(data,id){
+                $('#'+id).find('.imgurl').text(data); 
+                setTimeout(function() {
+                    $('#'+id).find('.p2').css({width:'80%'});
+                    $('#'+id).find('.imgmsg').html('<i class="glyphicon glyphicon-remove"></i>图片上传失败').css({color:'red'}).fadeIn(1000);
+                    $('#'+id).find('.btn').attr('disabled','disabled');
+                }, 1000);
+                
+            }
+        )
 
         // 手机端点击预览
         $('.phoneshow').on('click',function(){
@@ -309,24 +406,49 @@
                 window.open('http://scopeman.cn/doc/record?id=5b06631c7ee2720b70aaa700','markdown入门手册', 'top=50,right=0,height=400,width=400');
             }
             if($(e.target).hasClass('picture')){
-                $('#imgUpload').slideToggle();
+                $('#myModalupload').show();
+                setTimeout(function(){
+                    $('#myModalupload').addClass('in');
+                })
+                
+            }
+            if($(e.target).hasClass('trash')){
+                $('#myModal1').modal('show');
             }
         })
+        $('.colse-modal').on('click',function(e){
+            if($(e.target).hasClass('colse-modal')){
+                $('#myModalupload').removeClass('in');
+                $('#myModalupload').one('transitionend',function(){
+                    $('#myModalupload').hide();
+                })
+            }
+            
+        })
         // 点击复制
-        // $('#imgUrl').on('click','.copy',function(el){console.log(el)
-            // var clipboard = new Clipboard(el.target);
-            // //复制成功执行的回调，可选
-            // clipboard.on('success', function(e) {
-            //     console.log(e);
-            // });
-
-            // //复制失败执行的回调，可选
-            // clipboard.on('error', function(e) {
-                
-            // });
-        // })
+        // clipboard js
+        var clipboard = new Clipboard('.btn');
+        clipboard.on('success',
+        function(e) { 
+            $(e.trigger.parentNode).find('.imgmsg').html('<i class="glyphicon glyphicon-ok"></i>复制成功');
+            setTimeout(function(){
+                $(e.trigger.parentNode).find('.imgmsg').html('<i class="glyphicon glyphicon-ok"></i>图片上传成功');
+            },1500)
+        });
+        clipboard.on('error',
+        function(e) {
+            $(e.trigger.parentNode).html('<i class="glyphicon glyphicon-remove"></i>复制失败').css({color:'red'});
+        });
         
-        
+        // 获取路径参数
+        function getQueryString(name) {
+            var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) {
+                return unescape(r[2]);
+            }
+            return null;
+        }
 
     </script>
 </body>

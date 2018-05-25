@@ -42,27 +42,11 @@ router.get('/edit', function (req, res, next) {
       keyword:'',
       cate:''
     });
-//   var count = 0,show;
-//     var page = req.query.page?req.query.page:1;
-//      if(req.cookies.userInfo!==undefined&&req.cookies.userInfo.sign){
-//     show=true;}else{ show=false;}
-//     Article.find().sort({_id:-1}).skip((page-1)*5).limit(5).exec(function(e,articles){
-//         if (e) return next(e);
-//         Article.find(function (err, r) {
-//             if (err) return next(err);
-//             count = r.length;
-//              res.render('index',{
-//                 art:articles,
-//                 count:Math.ceil(count/5),
-//                 page:page,
-//                 show:show
-//             });
-//           });  
-//     })
 });
+
 router.get('/editor', function (req, res, next) {
 	if(req.query.id){
-		Article.findOne({_id:req.query.id},function(e,art){console.log(art)
+		Article.findOne({_id:req.query.id},function(e,art){
 			res.render('editdoc',{
 				data:art,
 				id:req.query.id
@@ -74,15 +58,37 @@ router.get('/editor', function (req, res, next) {
     
 });
 
-router.post('/update/doc',function(req, res, next){console.log(req.body)
+router.post('/delete',function(req, res, next){
+  if(req.body.key==778899&&req.body.auth==123456){
+    Article.remove({_id:req.body.id},function(err){
+      if(err){
+        res.json({
+			message:'删除失败',
+			code:400
+		  })
+      }else{
+        res.json({
+			message:'删除成功',
+			code:200
+		})
+      }
+    }) 
+  }else{
+	res.json({
+		message:'删除失败',
+		code:400
+	  })
+  }
+})
+router.post('/update/doc',function(req, res, next){
     if(req.body.auth == 123456){
         Article.update(
 			{_id:req.body.id},
 			{title:req.body.title,
 			text:req.body.text,
 			topic:req.body.topic,
-      keyword:req.body.keyword,
-      logo:req.body.imgLogo,
+      		keyword:req.body.keyword,
+      		logo:req.body.imgLogo,
 			cate:req.body.cate},function(error){
         if(error){
           res.json({message:'文章保存失败！',code:400})
@@ -97,14 +103,14 @@ router.post('/update/doc',function(req, res, next){console.log(req.body)
 });
 
 router.get('/doc', function (req, res, next) {
-  console.log(req.query.id);
   Article.find({cate:req.query.id},function(e,artCate){
     if(e){
       res.render('error')
     }else{
       res.render('document',{
 		  	show:false,
-			cate:artCate
+			cate:artCate,
+			id:req.query.id
 		});
     }
   })
@@ -160,6 +166,9 @@ router.post('/upload/img',upload.single('avatar'), function (req, res, next) {
 		}
 	});
 });
+
+
+
 router.get('*', function(req, res){
 	res.render('error')
 })

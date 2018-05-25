@@ -1,5 +1,5 @@
 (function(root,$){
-    function upload(contain,progress,done,isClick){
+    function upload(contain,progress,done,error,isClick){
         //  添加一个隐藏的input[type=file]
         var click = isClick||true;
         var input = document.createElement("input");
@@ -26,13 +26,17 @@
     
                 // 创建img
                 var name = file.name;
+                var id = '__img__'+index;
+                //  创建进度条
+                var processDom = '<div id="'+id+'" ><p class="p2"><span></span></p><button type="button" class="btn btn-default imgurl" disabled="disabled" style="width:80%;text-align: center;color:#666;word-break:break-all;float:left;"></button><button type="button" class="btn btn-inverse" style="background:#1D1D1D;color:#efefef">复制</button></div>';
+                $('#processimg').prepend(processDom);
                 // 读取File对象中的内容
                 var reader = new FileReader();
                 reader.readAsDataURL(file);
                 reader.onload = (function(){
                     return function(e){
                         canvasDataURL(e.target.result,{quality:0.5},function(base){
-                            ajaxUpload({base:base,name:name})                      
+                            ajaxUpload({base:base,name:name,id:id})                      
                         })
                     }
                 })()
@@ -45,16 +49,21 @@
             $(input).on('change',function(e){
                 var files = input.files;
                 $.each(files,function(index,file){
-    
+                    
                     // 创建img
                     var name = file.name;
+                    var id = '__img__'+index;
+                    //  创建进度条
+                    var processDom = '<div id="'+id+'" style="position:relative;"><p class="p2"><span></span></p><span class="imgmsg"></span><button type="button" class="btn btn-default imgurl" disabled="disabled" style="width:80%;text-align: center;color:#666;word-break:break-all;float:left;overflow:hidden;"></button><button type="button" class="btn btn-inverse" style="background:#1D1D1D;color:#efefef">复制</button></div>';
+                    $('#processimg').prepend(processDom);
+                    
                     // 读取File对象中的内容
                     var reader = new FileReader();
                     reader.readAsDataURL(file);
                     reader.onload = (function(){
                         return function(e){
                             canvasDataURL(e.target.result,{quality:0.5},function(base){
-                                ajaxUpload({base:base,name:name})                      
+                                ajaxUpload({base:base,name:name,id:id})                      
                             })
                         }
                     })()
@@ -68,15 +77,15 @@
                 data:JSON.stringify(imgFile),
                 contentType:'application/json;charset=utf-8',
                 xhr:xhrOnProgress(function(e){
-                    progress&&progress((e.loaded / e.total * 100) + '%');
+                    progress&&progress((e.loaded / e.total * 100) + '%',imgFile.id);
                     // console.log((e.loaded / e.total * 100) + '%')
                 }),
                 success:function(data){;
-                    done&&done(data.path);
+                    done&&done(data.path,imgFile.id);
                     // console.log(data.path);
                 },
                 error:function(){
-        
+                    error&&error('no img url',imgFile.id)
                 }
             })
         }
