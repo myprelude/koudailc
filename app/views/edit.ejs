@@ -120,59 +120,78 @@
             </div>
           </div>
           <!-- modal end -->
-          <!-- upload img -->
-          <style>
-            #imgUpload{
-                position: fixed;
-                top:50px;
-                left:50px;
-                background:#1D1D1D;
-                width:260px;
-                z-index: 10000;
-                border-radius:5px;
-                display:none;
-            }
-            #upload .p1{
-                padding:20px;
-                font-size: 50px;
-                text-align:center;
-            }
-            #upload .p2{
-                height:4px;
-                border-radius:2px;
-                overflow: hidden;
-                background:#333;
-            }
-            #upload .p2 span{
-                display:block;
-                height:100%;
-                width:0%;
-                background:#1D1D1D;
-            }
-            #upload .t{
-                color:#444;
-                text-align: center;
-                font-size:12px;
-                display: none;
-            }
-            #imgUrl{
-                text-align: center;
-                color:bisque;
-                word-break:break-all;
-            }
-        </style>
-        <div id='imgUpload'>
-            <div id='upload'>
-                <p class='p1'><i class="fa fa-cloud-upload"></i></p>
-                <p style='text-align:center'>点击、拖拽上传图片</p>
-                <p class='t'>图片上传成功</p>
-                <p class='p2'><span></span></p>
+           <style>
+                #imgUpload{
+                    background:#EFEFEF;
+                    border-radius:5px;
+                }
+                #upload .p1{
+                    padding:20px;
+                    font-size: 50px;
+                    text-align:center;
+                    color:#999;
+                }
+                #upload .p1:hover{
+                    color:#afafaf;
+                }
+                .p2{
+                    height:4px;
+                    border-radius:2px;
+                    overflow: hidden;
+                    background:#cfcfcf;
+                    margin:10px 0;
+                    transition: all 1s;
+                }
+                .p2 span{
+                    display:block;
+                    height:100%;
+                    width:0%;
+                    background:#1D1D1D;
+                    transition: all 1s;
+                }
+                #upload .t{
+                    color:#444;
+                    text-align: center;
+                    font-size:12px;
+                    display: none;
+                }
+                .imgmsg{
+                    position:absolute;
+                    top:-6px;
+                    right:10px;;
+                    font-size: 12px;
+                    display:none;
+                }
+                #myModalupload{
+                    background:rgba(0,0,0,.6);
+                }
+            </style>
+            <div class="modal fade colse-modal" id="myModalupload">
+                <div class="modal-dialog" >
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close colse-modal"><span class='colse-modal'>&times;</span></button>
+                            <h4 class="modal-title" id="exampleModalLabel">图片上传</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div id='imgUpload'>
+                                <div id='upload'>
+                                    <p class='p1'><i class="fa fa-cloud-upload"></i></p>
+                                    <p style='text-align:center'>点击、拖拽上传图片</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer" id='processimg'>
+                            
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div id='imgUrl'></div>
-        </div>
+          <!-- end -->
         
     </div>
     <!-- page-wrapper -->
+    <script src="https://cdn.bootcss.com/clipboard.js/1.5.1/clipboard.min.js"></script>
     <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="assets/js//jquery.mCustomScrollbar.concat.min.js"></script>
@@ -242,6 +261,7 @@
             $('#myModal').modal('show');
         });
         $('.sendbtn').on('click',function(){
+            $('.sendbtn').attr('disabled','disabled');
             var title = $('#title').val();
             var topic = $('#topic').val();
             var keyword = $('#keyword').val();
@@ -249,10 +269,11 @@
             var auth = localStorage.getItem('DOC_AUTH');
             var logo = $('#panel-preview').find('#imglogo img').attr('src')?$('#panel-preview').find('#imglogo img').attr('src'):'https://www.zybuluo.com/static/img/logo.png';
             if(!title||!topic||!keyword){
+                alert('请检查填写信息是否完整！');
                 return;
             }
             $.ajax({
-                url:'/upload/doc',
+                url:'/update/doc',
                 type:'POST',
                 data:JSON.stringify({
                     text:acen_edit.getValue(),
@@ -260,35 +281,50 @@
                     topic:topic,
                     keyword:keyword,
                     cate:cate,
-                    imgLogo:logo,
-                    auth:auth
+                    auth:auth,
+                    imgLogo:logo
                 }),
                 contentType:'application/json;charset=utf-8',
-                success:function(data){console.log(data)
+                success:function(data){
+                    $('.sendbtn').removeAttr('disabled');
                     if(data.code == 200){
                         $('#myModal').modal('hide');
+                        localStorage.setItem('ACE_TEXT_UPDATE','');
                         window.location = '/doc/record?id='+data.id;
                     }else if(data.code == 400){
                         $('#myModal').modal('hide');
                         alert(data.message);
                     }
+                },
+                error:function(){
+                    $('.sendbtn').removbeAttr('disabled');
+                    alert('未知的错误，发生在这里！');
                 }
             })
-            
         })
-        upload('#upload',function(data){
-            $('#upload .p2 span').css({width:data})
-        },function(data){
-            $('#upload .t').show();
-            setTimeout(function(){
-                $('#upload .t').hide();
-                $('#upload .p2 span').css({width:0})
-            },1000)
-            var p = '<p>'+data+'</p>';
-            $('#imgUrl').prepend(p);
-            console.log(data);
-        })
-
+        upload('#upload',
+            function(data,id){
+                $('#'+id).find('.p2 span').css({width:data});
+            },
+            function(data,id){
+                $('#'+id).find('.imgurl').text(data); 
+                $('#'+id).find('.btn-inverse').attr('data-clipboard-text',data).attr('data-clipboard-action',"copy");
+                setTimeout(function() {
+                    $('#'+id).find('.p2').css({width:'80%'});
+                    $('#'+id).find('.imgmsg').html('<i class="glyphicon glyphicon-ok"></i>图片上传成功').fadeIn(1000);
+                }, 1000);
+                
+            },
+            function(data,id){
+                $('#'+id).find('.imgurl').text(data); 
+                setTimeout(function() {
+                    $('#'+id).find('.p2').css({width:'80%'});
+                    $('#'+id).find('.imgmsg').html('<i class="glyphicon glyphicon-remove"></i>图片上传失败').css({color:'red'}).fadeIn(1000);
+                    $('#'+id).find('.btn').attr('disabled','disabled');
+                }, 1000);
+                
+            }
+        )
         // 手机端点击预览
         $('.phoneshow').on('click',function(){
             $('#editor-column').addClass('rightMove');
@@ -319,9 +355,35 @@
                 window.open('http://scopeman.cn/doc/record?id=5b06631c7ee2720b70aaa700','markdown入门手册', 'top=50,right=0,height=400,width=400');
             }
             if($(e.target).hasClass('picture')){
-                $('#imgUpload').slideToggle();
+                $('#myModalupload').show();
+                setTimeout(function(){
+                    $('#myModalupload').addClass('in');
+                },300)   
             }
         })
+        $('.colse-modal').on('click',function(e){
+            if($(e.target).hasClass('colse-modal')){
+                $('#myModalupload').removeClass('in');
+                $('#myModalupload').one('transitionend',function(){
+                    $('#myModalupload').hide();
+                })
+            }
+        })
+        // 点击复制
+        // clipboard js
+        var clipboard = new Clipboard('.btn');
+        clipboard.on('success',
+        function(e) { 
+            $(e.trigger.parentNode).find('.imgmsg').html('<i class="glyphicon glyphicon-ok"></i>复制成功');
+            setTimeout(function(){
+                $(e.trigger.parentNode).find('.imgmsg').html('<i class="glyphicon glyphicon-ok"></i>图片上传成功');
+            },1500)
+        });
+        clipboard.on('error',
+        function(e) {
+            $(e.trigger.parentNode).html('<i class="glyphicon glyphicon-remove"></i>复制失败').css({color:'red'});
+        });
+        
         
     </script>
 </body>

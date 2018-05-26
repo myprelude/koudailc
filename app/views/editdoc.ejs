@@ -318,7 +318,7 @@
                     }
                 },
                 error:function(){
-                    $('.deletebtn').removbeAttr('disabled');
+                    $('.sendbtn').removbeAttr('disabled');
                     alert('未知的错误，发生在这里！');
                 }
             })
@@ -409,7 +409,7 @@
                 $('#myModalupload').show();
                 setTimeout(function(){
                     $('#myModalupload').addClass('in');
-                })
+                },300)
                 
             }
             if($(e.target).hasClass('trash')){
