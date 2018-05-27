@@ -60,6 +60,7 @@
                             top:0px;
                         }
                         .editorbox{
+                            display: none;
                             color:#efefef;
                             background: rgba(0,0,0,.5);
                             font-size:30px;
@@ -136,6 +137,9 @@
             }
             return null;
         }
+        $('.user-pic').on('click',function(){
+            $('.editorbox').show();
+        })
         
     </script>
 </body>

@@ -152,17 +152,19 @@ router.post('/upload/doc',function(req, res, next){
 });
 
 router.post('/upload/img',upload.single('avatar'), function (req, res, next) {
-	var base = req.body.base,name = req.body.name;
+	var base = req.body.base,name = req.body.name,imgurl = req.body.imgurl;
 	//过滤data:URL
 	var base64Data = base.replace(/^data:image\/\w+;base64,/, "");
 	var dataBuffer = new Buffer(base64Data, 'base64');
 	var temp = Date.now();
-	var url = 'public/upload/';
-	fs.writeFile(url + temp + name, dataBuffer, function(err) {
-		if(err){
+  var url = imgurl?imgurl:'upload';
+  var path = 'public/'+url+"/"+temp+name;
+  var pathimg = '![img]('+url+'/'+temp+name+')';
+	fs.writeFile(path, dataBuffer, function(err) {
+		if(err){console.log(12121)
 			res.json(err);
 		}else{
-			res.json({path:'![img](upload/'+temp+name+')',message:'成功'});
+			res.json({path:pathimg,message:'成功'});
 		}
 	});
 });
