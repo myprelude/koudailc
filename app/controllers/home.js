@@ -161,7 +161,7 @@ router.post('/upload/img',upload.single('avatar'), function (req, res, next) {
   var path = 'public/'+url+"/"+temp+name;
   var pathimg = '![img]('+url+'/'+temp+name+')';
 	fs.writeFile(path, dataBuffer, function(err) {
-		if(err){console.log(12121)
+		if(err){
 			res.json(err);
 		}else{
 			res.json({path:pathimg,message:'成功'});

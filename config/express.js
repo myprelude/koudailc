@@ -8,9 +8,20 @@ var bodyParser = require('body-parser');
 var compress = require('compression');
 var methodOverride = require('method-override');
 var session = require('express-session');
+// var expressWs = require('express-ws')(app);
 
 
 module.exports = function(app, config) {
+ 
+  var expressWs = require('express-ws')(app);
+  app.ws('/ws', function(ws, req) {  
+    // util.inspect(ws);  
+    ws.on('message', function(msg) {  
+      console.log('_message');  
+      console.log(msg);  
+      ws.send('echo:' + msg);  
+    });  
+  })  
   var env = process.env.NODE_ENV || 'development';
   app.locals.ENV = env;
   app.locals.ENV_DEVELOPMENT = env == 'development';
@@ -36,6 +47,11 @@ module.exports = function(app, config) {
   controllers.forEach(function (controller) {
     require(controller)(app);
   });
+
+  // var websockets =  glob.sync(config.root + '/app/websocket/*.js');
+  // websockets.forEach(function (websocket) {
+  //   require(websocket)(app);
+  // });
   //全局我们查看 session 判断是否登录
   // app.use(function(req,res,next){
   //   if(req.session.sign){

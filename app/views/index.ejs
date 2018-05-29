@@ -78,6 +78,31 @@
     <script src='js/EasePack.min.js'></script> 
     <script src='js/TweenLite.min.js'></script> 
     <script  src="js/index.js"></script>
+    <script>
+        var ws = new WebSocket('ws://localhost:80/ws');  
+            ws.onmessage=function(e){  
+                console.log('_message');  
+                console.log(e.data);  
+            };  
+            ws.onerror=function(err){  
+                console.log('_error');  
+                console.log(err);  
+            };  
+            ws.onopen=function(){  
+                console.log('_connect');
+                var i=0;
+                $(document).on('click',function(){
+                    ws.send(++i)
+                })
+                //   ws.send('data'); 
+                //   ws.send('123')
+            };  
+            ws.onclose=function(){  
+                console.log('_close');  
+            };  
+            
+             
+    </script>
 </body>
 
 </html>
