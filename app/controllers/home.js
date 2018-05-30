@@ -170,7 +170,6 @@ router.post('/upload/img',upload.single('avatar'), function (req, res, next) {
 });
 
 
-
 router.get('*', function(req, res){
 	res.render('error')
 })

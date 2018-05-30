@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Responsive sidebar template with sliding effect and dropdown menu based on bootstrap 3">
+    <title>迪拜捡垃圾</title>
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="shortcut icon" type="image/png" href="assets/img/favicon.png" />
+</head>
+
+<body style='padding:0;margin:0'>
+    <div>
+        <ul class="list-group">
+            <li class="list-group-item list-group-item-success">Dapibus ac facilisis in</li>
+            <li class="list-group-item list-group-item-info">Cras sit amet nibh libero</li>
+            <!-- <li class="list-group-item list-group-item-warning">Porta ac consectetur ac</li>
+            <li class="list-group-item list-group-item-danger">Vestibulum at eros</li> -->
+        </ul>
+    </div>
+    <textarea class="form-control" rows="3"></textarea>
+    <!-- page-wrapper -->
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script>
+        var ws = new WebSocket('ws://localhost:80/ws');  
+            ws.onmessage=function(e){  
+                $('.list-group').append('<li class="list-group-item list-group-item-info">'+e.data+'</li>') 
+            };  
+            ws.onerror=function(err){  
+                console.log('_error');  
+                console.log(err);  
+            };  
+            ws.onopen=function(){  
+                console.log('_connect');
+                sendMessage();
+            };  
+            ws.onclose=function(){  
+                console.log('_close');  
+            };  
+            
+        function sendMessage(){
+            $(document).keyup(function(event){
+                if(event.keyCode ==13){
+                    if($('.form-control').val()){
+                        ws.send($('.form-control').val());
+                        $('.form-control').val('');
+                    }
+                }
+            });
+        }  
+    </script>
+</body>
+
+</html>
