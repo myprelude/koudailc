@@ -188,7 +188,7 @@
     <script src="../assets/js/jquery.mCustomScrollbar.concat.min.js"></script>
     <script src='upload.js'></script>
     <script>
-        var socket = io.connect('ws://localhost'),userid;
+        var socket = io.connect('ws://scopeman.cn'),userid;
         socket.on('connect',function(){
             userid = socket.id;
             setTimeout(function(){
