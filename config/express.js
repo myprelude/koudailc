@@ -9,20 +9,10 @@ var compress = require('compression');
 var methodOverride = require('method-override');
 var session = require('express-session');
 var util = require('util'); 
-// var expressWs = require('express-ws')(app);
 
 
 module.exports = function(app, config) {
- 
-  var expressWs = require('express-ws')(app);
-  app.ws('/ws', function(ws, req) {  
-    util.inspect(ws);  
-    ws.on('message', function(msg) {  
-      console.log('_message');  
-      console.log(msg);  
-      ws.send(msg);  
-    });  
-  })  
+
   var env = process.env.NODE_ENV || 'development';
   app.locals.ENV = env;
   app.locals.ENV_DEVELOPMENT = env == 'development';

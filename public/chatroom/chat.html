@@ -7,50 +7,377 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Responsive sidebar template with sliding effect and dropdown menu based on bootstrap 3">
     <title>迪拜捡垃圾</title>
-    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/jquery.mCustomScrollbar.min.css" />
+    <link href="../css/chat.css" rel="stylesheet">
     <link rel="shortcut icon" type="image/png" href="assets/img/favicon.png" />
 </head>
-
+<style>
+    .mCSB_inside>.mCSB_container{
+        margin-right: 0px;
+    }
+</style>
 <body style='padding:0;margin:0'>
-    <div>
-        <ul class="list-group">
-            <li class="list-group-item list-group-item-success">Dapibus ac facilisis in</li>
-            <li class="list-group-item list-group-item-info">Cras sit amet nibh libero</li>
-            <!-- <li class="list-group-item list-group-item-warning">Porta ac consectetur ac</li>
-            <li class="list-group-item list-group-item-danger">Vestibulum at eros</li> -->
-        </ul>
+    <!-- 加载条 -->
+    <style>
+        #loading{
+            position: fixed;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            z-index:10000;
+            background: #ffffff;
+        }
+        .spinner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            top:40%;
+            left:50%;
+            margin-left:-30px;
+            background-color: #5F5A4B;
+            margin: 100px auto;
+            -webkit-animation: rotateplane 1.2s infinite ease-in-out;
+            animation: rotateplane 1.2s infinite ease-in-out;
+        }
+        
+        @-webkit-keyframes rotateplane {
+            0% { -webkit-transform: perspective(120px) }
+            50% { -webkit-transform: perspective(120px) rotateY(180deg) }
+            100% { -webkit-transform: perspective(120px) rotateY(180deg)  rotateX(180deg) }
+        }
+        
+        @keyframes rotateplane {
+            0% {
+                transform: perspective(120px) rotateX(0deg) rotateY(0deg);
+                -webkit-transform: perspective(120px) rotateX(0deg) rotateY(0deg)
+            } 50% {
+                transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg);
+                -webkit-transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg)
+            } 100% {
+                transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
+                -webkit-transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
+            }
+        }
+    </style>
+    <div id='loading'>
+            <div class="spinner"></div>
     </div>
-    <textarea class="form-control" rows="3"></textarea>
-    <!-- page-wrapper -->
-    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script>
-        var ws = new WebSocket('ws://localhost:80/ws');  
-            ws.onmessage=function(e){  
-                $('.list-group').append('<li class="list-group-item list-group-item-info">'+e.data+'</li>') 
-            };  
-            ws.onerror=function(err){  
-                console.log('_error');  
-                console.log(err);  
-            };  
-            ws.onopen=function(){  
-                console.log('_connect');
-                sendMessage();
-            };  
-            ws.onclose=function(){  
-                console.log('_close');  
-            };  
+    <!-- 弹层 -->
+    <div class='modal-show'>
+        <div class='login-box'>
+            <div class='userInfo'>
+                <h3>欢迎到聊天室</h3>
+                <div>
+                    <h5 style='margin-top:60px;margin-bottom:25px;'>请选择聊天图像</h5>
+                    <div class='user-img'>
+                        <div><img src="../user/1.jpg" alt=""><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></div>
+                        <div><img src="../user/2.jpg" alt=""><span  aria-hidden="true"></span></div>
+                        <div><img src="../user/3.jpg" alt=""><span  aria-hidden="true"></span></div>
+                        <div><img src="../user/4.jpg" alt=""><span  aria-hidden="true"></span></div>
+                        <div><img src="../user/5.png" alt=""><span  aria-hidden="true"></span></div>
+                        <div><img src="../user/6.jpg" alt=""><span  aria-hidden="true"></span></div>
+                        <div><img src="../user/7.jpg" alt=""><span  aria-hidden="true"></span></div>
+                        <div><img src="../user/8.jpg" alt=""><span  aria-hidden="true"></span></div>
+                        <div><img src="../user/9.jpg" alt=""><span  aria-hidden="true"></span></div>
+                        <div><img src="../user/10.jpg" alt=""><span  aria-hidden="true"></span></div>
+                    </div>
+                    <div class="input-group username">
+                        <span class="glyphicon glyphicon-user" ></span>
+                        <div class='input'>
+                            <input type="text" class="form-control" placeholder="请填写你的聊天名" id='usernameval' >
+                        </div>
+                    </div>
+                    <div class='btn-go'>进入聊天室</div>
+                </div>
+            </div>
             
-        function sendMessage(){
-            $(document).keyup(function(event){
-                if(event.keyCode ==13){
-                    if($('.form-control').val()){
-                        ws.send($('.form-control').val());
-                        $('.form-control').val('');
-                    }
-                }
-            });
-        }  
+        </div>
+    </div>
+    <!-- 聊天界面 -->
+    <div class='chat-interface'>
+        <div class='contact-bar'>
+            <div class='header header-bar'>
+                <div class='bar-1'>聊天吹牛逼</div>
+                <div class='bar-2'><span class="glyphicon glyphicon-search" aria-hidden="true"></span></div>
+                <div class='bar-3'><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></div>
+            </div>
+            <div class='content-bar '>
+                <ul class='scrollbar'>
+                    <li class='active'>
+                        <div class='line'></div>
+                        <img src="../user/s.jpg" alt="">
+                        <b>Qz--群聊</b>
+                        <span></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class='contact-info'>
+            <div class='header header-info'>
+                <div class='info-1'><img src="../user/user.jpg" alt="" id='title-img'></div>
+                <div class='info-2'>
+                    <div><b id='title-name'>myPrelude</b></div>
+                    <small>欢迎来到聊天室，希望您能有一个愉快的聊天之旅！</small>
+                </div>
+                <div class='info-3'><span class="glyphicon glyphicon-th-large" aria-hidden="true"></span></div>
+            </div>
+            <div class='content-info'>
+                <div class='conetent-text-box scrollbar' id='scrollbar1'>
+                    <!-- 聊天信息 -->
+                    <!-- <div class='chat-item'>
+                        <div class='chat-list chat-other'>
+                            <img src="../user/user.jpg" alt="">
+                            <div class='chat-text'>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Suscipit quae et accusamus cupiditate iusto fuga cum, assumenda eius odit, necessitatibus laudantium minima quidem itaque maiores obcaecati vel possimus quos debitis.</div>
+                        </div>
+                    </div>
+                    <div class='chat-item'>
+                        <div class='chat-list chat-our'>
+                            <div class='chat-text'>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Suscipit quae et accusamus cupiditate iusto fuga cum, assumenda eius odit, necessitatibus laudantium minima quidem itaque maiores obcaecati vel possimus quos debitis.</div>
+                            <img src="../user/user.jpg" alt="">
+                        </div>
+                    </div>
+                    <div class='chat-item'>
+                        <div class='chat-list chat-other'>
+                            <img src="../user/user.jpg" alt="">
+                            <div class='chat-text'> </div>
+                        </div>
+                    </div>
+                    <div class='chat-item'><div class='time-item'>2018/6/2 9:20</div></div>
+                    <div class='chat-item chat-tip-on'><div class='chat-tips'><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span><span>该成员你不认识 涉及到金钱的你们还请注意！</span></div></div> -->
+                    <div class='chat-item'>
+                        <div class='chat-list chat-our'>
+                            <div class='chat-text'>
+                                <img src="../user/timg.jpg" alt="" class='text-img'>
+                                Lorem ipsum dolor sit, amet consectetur adipisicing elit. 
+                            </div>
+                            <img src="../user/user.jpg" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class='write-info'>
+                <!-- loading -->
+                
+                <!-- loading end -->
+                <div class='write-bar'>
+                    <div class='send-option'>
+                        <span class="glyphicon glyphicon-picture" aria-hidden="true" id='upimg'></span>
+                        <span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span> 
+                        <span class="glyphicon glyphicon-option-horizontal" aria-hidden="true"></span>
+                        <div class="spinner-">
+                            <div class="rect1"></div>
+                            <div class="rect2"></div>
+                            <div class="rect3"></div>
+                        </div>
+                    </div>
+                    <div class="send-btn">发送</div>
+                </div>
+                <textarea class="form-control" placeholder="writing something ..." id='show-text'></textarea>
+            </div>
+        </div>
+    </div>
+
+    <!-- img -->
+    <div class="imgBox"><img src="../user/timg.jpg" class="autoimg"></div>
+    <!-- page-wrapper -->
+    <script src="http://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="http://cdn.bootcss.com/socket.io/2.1.1/socket.io.js"></script>
+    <script src="../assets/js/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script src='upload.js'></script>
+    <script>
+        var socket = io.connect('ws://localhost'),userid;
+        socket.on('connect',function(){
+            userid = socket.id;
+            setTimeout(function(){
+                $('#loading').fadeOut();
+            },500);
+        })
+        socket.on("message", function(obj) {
+            getMsg(obj);
+        });
+        socket.on('logining',function(obj){
+            if(obj.id==userid){
+                $('#title-name').text(obj.name);
+                $('#title-img').attr('src',obj.img);
+            }
+            $('#mCSB_1_container').append(peopletmp(obj));
+            $('#mCSB_2_container').append(tiptmp({tips:"--"+obj.name+'--加入聊天室'}));
+            $('#mCSB_2_container').append(tiptmp());
+            $(".scrollbar").mCustomScrollbar('update');
+            $(".scrollbar").mCustomScrollbar("scrollTo","bottom");
+
+        });
+        socket.on("loginout", function(obj) {
+            if(obj.status==1){
+                $('#'+obj.id).addClass('out');
+            }else if(obj.status==0){
+                $('#'+obj.id).parent().remove();
+                $('#mCSB_2_container').append(tiptmp({tips:"--"+obj.name+'--离开聊天室'}));
+            }else if(obj.status==2){
+                $('#'+obj.id).removeClass('out');
+            }
+            
+        });
+        //接收消息方法
+        function getMsg(obj){
+            if(obj.id==userid){
+                $('#mCSB_2_container').append(sendmsgtmp(obj));
+            }else{
+                $('#mCSB_2_container').append(getmsgtmp(obj));
+            }
+            
+            $(".scrollbar").mCustomScrollbar('update');
+            $(".scrollbar").mCustomScrollbar("scrollTo","bottom");
+            $('#show-text').val('');
+        }
+        // 人物模板
+        function peopletmp(obj){
+            var text = "<li>\
+                            <div class='line'></div>\
+                            <img src='"+obj.img+"' alt=''>\
+                            <b>"+obj.name+"</b>\
+                            <span id="+obj.id+"></span>\
+                        </li>";
+            return text;
+        }
+        // 发送消息模板
+        function sendmsgtmp(obj){
+            var imgstr = '';
+            if(obj.uploadimg){
+                imgstr = "<img src='../"+obj.uploadimg+"' class='text-img' style='height:"+150/obj.scale+"px'>";
+            }
+            var text = "<div class='chat-item'>\
+                            <div class='chat-list chat-our'>\
+                                <div class='chat-text'>"+imgstr+obj.text+"</div>\
+                                <img src='"+obj.img+"' alt='"+obj.name+"' >\
+                            </div>\
+                        </div>";
+            return text;
+        }
+        // 接收消息模板
+        function getmsgtmp(obj){
+            var imgstr = '';
+            if(obj.uploadimg){
+                imgstr = "<img src='../"+obj.uploadimg+"' class='text-img'>";
+            }
+            var text = "<div class='chat-item'>\
+                            <div class='chat-list chat-other'>\
+                                <img src='"+obj.img+"' alt='"+obj.name+"'>\
+                                <div class='chat-text'>"+imgstr+obj.text+"</div>\
+                            </div>\
+                        </div>";
+            return text;
+        } 
+        // 时间模板
+        function timetmp(obj){
+            var text = "<div class='chat-item'><div class='time-item'>"+obj.time+"</div></div>";
+            return text;
+        }
+        // 提示模板
+        function tiptmp(obj){
+            var obj = obj?obj:{tips:'该成员你不认识 涉及到金钱的你们还请注意!'};
+            var text = "<div class='chat-item chat-tip-on'><div class='chat-tips'><span class='glyphicon glyphicon-exclamation-sign' aria-hidden='true'></span><span>"+obj.tips+"</span></div></div>";
+            return text;
+        }
+        // 空白 模板
+        function blanktmp(){
+            var text = "<div class='blank-show'> </div>";
+            return text;
+        }
+        // 滚动
+        $(".scrollbar").mCustomScrollbar({
+            theme: "minimal-dark",
+            autoHideScrollbar:true,
+            scrollInertia:500,
+            mouseWheel:true,
+            scrollButtons:{
+                enable:true
+            },
+            advanced:{
+                updateOnContentResize: true,
+                updateOnImageLoad: false
+            },
+            callbacks: {
+        　　　　whileScrolling: function(){ 
+        　　　　}
+        　　}   
+        });
+        //  事件 
+        $('.user-img div').on('click',function(){
+            $(this).siblings().find('span').removeClass('glyphicon glyphicon-ok');
+            $(this).find('span').addClass('glyphicon glyphicon-ok');
+        })
+        $('.btn-go').on('click',function(){
+            var img = $('.user-img div').find('.glyphicon-ok').prev().attr('src');
+            var username = $('#usernameval').val();
+            if(!username){
+                $('.username').css({color:'#D8231D'});
+                $('#usernameval').css({borderColor:'#D8231D'});
+                return;
+            }
+            socket.emit('login',{name:username,id:userid,img:img});
+            $('.modal-show').fadeOut(800);
+        })
+        $('.content-bar').on('click','li',function(){
+            $(this).addClass('active').siblings().removeClass('active');
+        })
+         // 发送消息
+         $('.send-btn').on('click',function(){
+            var text = $('#show-text').val();
+            if(text.length!=0){
+                socket.emit('message',{text:text,id:userid,img:$('#title-img').attr('src'),name:$('#title-name').text()});
+            }else{
+
+            }
+        })
+
+
+        // 回车触发发送消息
+        $(document).keyup(function(event){
+            if(event.keyCode ==13){
+                $('.send-btn').trigger('click');
+            }
+        });
+        ///////浏览器 关闭事件 用户离开  status 是用户状态 0  表示退出  1   表示离开状态  2  表示在线状态
+        window.onbeforeunload = function(){
+            socket.emit('loginout',{id:userid,status:0})
+        }
+        document.addEventListener('visibilitychange',function(){
+            if(document.visibilityState=='hidden') {   
+                socket.emit('loginout',{id:userid,status:1})
+            }else{
+                socket.emit('loginout',{id:userid,status:2})
+            }
+        });
+        $('.content-info').on('click','.text-img',function(){
+            var src = $(this).attr('src');
+            $('.imgBox').fadeIn(800);
+            $('.autoimg').attr('src',src);
+        })
+        $('.imgBox').on('click',function(e){
+            if(e.target.nodeName == 'IMG')return;
+            $('.imgBox').fadeOut(500);
+        })
+        //  图片上传
+        upload('#upimg',
+            function(){
+                $('.spinner-').show();
+            },
+            function(data,id){
+                
+            },
+            function(data,id,scale){
+                socket.emit('message',{text:'',id:userid,img:$('#title-img').attr('src'),name:$('#title-name').text(),uploadimg:data.url,scale:scale});
+                $('.spinner-').hide();
+            },
+            function(data,id){
+                
+                
+            },'chatroom/chatimg'
+        )
     </script>
 </body>
 

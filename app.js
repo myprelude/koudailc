@@ -1,9 +1,11 @@
-var express = require('express'),
-  config = require('./config/config');
-  glob = require('glob'),
-  mongoose = require('mongoose');
-
-mongoose.connect(config.db,{useMongoClient:true});
+var express = require('express');
+var app = express(),
+	// server = require("http").createServer(app),
+	config = require('./config/config');
+	glob = require('glob'),
+	mongoose = require('mongoose'),
+	sio = require("socket.io"); 
+	mongoose.connect(config.db,{useMongoClient:true});
 
 
 var db = mongoose.connection;
@@ -16,11 +18,33 @@ var models = glob.sync(config.root + '/app/models/*.js');
 models.forEach(function (model) {
   require(model);
 });
-var app = express();
-
+ 
 module.exports = require('./config/express')(app, config);
 
-app.listen(config.port, function () {
+var server = app.listen(config.port, function () {
   console.log('Express server listening on port ' + config.port);
 });
+console.log(server);
 
+var io = sio.listen(server);
+
+io.on('connection', function(socket){
+    console.log('a user connected');
+
+    socket.on("disconnect", function() {
+        console.log("a user go out");
+    });
+
+    socket.on("message", function(obj) {
+        //延迟3s返回信息给客户端
+        console.log(obj);
+        io.emit("message", obj);
+    });
+    socket.on('login',function(obj){
+		io.emit("logining", obj);
+        console.log(obj);
+	})
+	socket.on('loginout',function(obj){
+		io.emit("loginout", obj);
+    })
+});

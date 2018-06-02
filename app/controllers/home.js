@@ -158,13 +158,13 @@ router.post('/upload/img',upload.single('avatar'), function (req, res, next) {
 	var dataBuffer = new Buffer(base64Data, 'base64');
 	var temp = Date.now();
   var url = imgurl?imgurl:'upload';
-  var path = 'public/'+url+"/"+temp+name;
+  var path = 'public/'+url+"/"+temp+name;console.log(path);
   var pathimg = '![img]('+url+'/'+temp+name+')';
 	fs.writeFile(path, dataBuffer, function(err) {
 		if(err){
 			res.json(err);
 		}else{
-			res.json({path:pathimg,message:'成功'});
+			res.json({path:pathimg,message:'成功',url:url+"/"+temp+name});
 		}
 	});
 });
