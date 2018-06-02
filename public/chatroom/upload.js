@@ -1,7 +1,6 @@
 (function(root,$){
     function upload(contain,startFun,progress,done,error,url,isClick){
         //  添加一个隐藏的input[type=file]
-        startFun&&startFun();
         var click = isClick||true;
         var input = document.createElement("input");
         input.type = 'file';
@@ -18,6 +17,7 @@
             e.preventDefault();
         })
         $(contain).on("drop",function(e){
+            startFun&&startFun();
             e.stopPropagation();
             e.preventDefault();
             // 获取上传文件的内容
@@ -29,6 +29,7 @@
         })
         if(click){
             $(contain).on('click',function(){
+                startFun&&startFun();
                 $(input).trigger('click');
             })
             $(input).on('change',function(e){
