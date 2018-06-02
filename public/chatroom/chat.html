@@ -211,13 +211,13 @@
             if(obj.id==userid){
                 $('#title-name').text(obj.name);
                 $('#title-img').attr('src',obj.img);
+            }else{
+                $('#mCSB_1_container').append(peopletmp(obj));
+                $('#mCSB_2_container').append(tiptmp());
             }
-            $('#mCSB_1_container').append(peopletmp(obj));
             $('#mCSB_2_container').append(tiptmp({tips:"--"+obj.name+'--加入聊天室'}));
-            $('#mCSB_2_container').append(tiptmp());
             $(".scrollbar").mCustomScrollbar('update');
             $(".scrollbar").mCustomScrollbar("scrollTo","bottom");
-
         });
         socket.on("loginout", function(obj) {
             if(obj.status==1){
