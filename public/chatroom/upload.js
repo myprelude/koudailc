@@ -17,7 +17,6 @@
             e.preventDefault();
         })
         $(contain).on("drop",function(e){
-            startFun&&startFun();
             e.stopPropagation();
             e.preventDefault();
             // 获取上传文件的内容
@@ -29,7 +28,6 @@
         })
         if(click){
             $(contain).on('click',function(){
-                startFun&&startFun();
                 $(input).trigger('click');
             })
             $(input).on('change',function(e){
@@ -53,6 +51,7 @@
              reader.onload = (function(){
                  return function(e){
                      canvasDataURL(e.target.result,{quality:0.5},function(base,scale){
+                        startFun&&startFun();
                          ajaxUpload({base:base,name:name,id:id,imgurl:url,scale:scale})                      
                      })
                  }
