@@ -230,7 +230,7 @@
         //接收消息方法
         function getMsg(obj){
             
-            if(obj.time-timeid>20000){
+            if(obj.time-timeid>60000){
                 $('#mCSB_2_container').append(timetmp({time:formatDate(obj.time)}));
             }
             timeid = obj.time;
