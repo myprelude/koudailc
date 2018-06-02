@@ -29,8 +29,14 @@ var io = sio.listen(server);
 
 io.on('connection', function(socket){
 	console.log('a user connected');
-	var time = new Date().getTime();
-	io.emit("start",{time:time});
+
+	socket.on("start", function(obj) {
+		var time = new Date().getTime();
+		obj.time = time;
+
+        io.emit("start",obj);
+    });
+	
     socket.on("disconnect", function() {
         console.log("a user go out");
     });

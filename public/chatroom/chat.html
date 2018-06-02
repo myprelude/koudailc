@@ -194,12 +194,15 @@
             setTimeout(function(){
                 $('#loading').fadeOut();
             },500);
+            socket.emit('start',{id:userid});
         });
-        socket.on("start", function(obj) {
+        socket.on("start", function(obj) {console.log(1111)
             timeid = obj.time;
-            $('#mCSB_2_container').append(timetmp({time:formatDate(obj.time)}));
-            $(".scrollbar").mCustomScrollbar('update');
-            $(".scrollbar").mCustomScrollbar("scrollTo","bottom");
+            if(userid==obj.id){
+                $('#mCSB_2_container').append(timetmp({time:formatDate(obj.time)}));
+                $(".scrollbar").mCustomScrollbar('update');
+                $(".scrollbar").mCustomScrollbar("scrollTo","bottom");
+            }
         });
         socket.on("message", function(obj) {
             getMsg(obj);
@@ -231,7 +234,7 @@
         function getMsg(obj){
             
             if(obj.time-timeid>60000){
-                $('#mCSB_2_container').append(timetmp({time:formatDate(obj.time)}));
+                $('#mCSB_2_container').append(timetmp({time:formatDate(obj.time)}));console.log(222)
             }
             timeid = obj.time;
             if(obj.id==userid){
