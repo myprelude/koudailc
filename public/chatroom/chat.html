@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Responsive sidebar template with sliding effect and dropdown menu based on bootstrap 3">
     <title>迪拜捡垃圾</title>
-    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/jquery.mCustomScrollbar.min.css" />
     <link href="../css/chat.css" rel="stylesheet">
     <link rel="shortcut icon" type="image/png" href="assets/img/favicon.png" />
@@ -182,19 +182,25 @@
     <!-- img -->
     <div class="imgBox"><img src="../user/timg.jpg" class="autoimg"></div>
     <!-- page-wrapper -->
-    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="https://cdn.bootcss.com/socket.io/2.1.1/socket.io.js"></script>
+    <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="//cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdn.bootcss.com/socket.io/2.1.1/socket.io.js"></script>
     <script src="../assets/js/jquery.mCustomScrollbar.concat.min.js"></script>
     <script src='upload.js'></script>
     <script>
-        var socket = io.connect('ws://scopeman.cn'),userid;
+        var socket = io.connect('ws://scopeman.cn'),userid,timeid;
         socket.on('connect',function(){
             userid = socket.id;
             setTimeout(function(){
                 $('#loading').fadeOut();
             },500);
-        })
+        });
+        socket.on("start", function(obj) {
+            timeid = obj.time;
+            $('#mCSB_2_container').append(timetmp({time:formatDate(obj.time)}));
+            $(".scrollbar").mCustomScrollbar('update');
+            $(".scrollbar").mCustomScrollbar("scrollTo","bottom");
+        });
         socket.on("message", function(obj) {
             getMsg(obj);
         });
@@ -223,12 +229,17 @@
         });
         //接收消息方法
         function getMsg(obj){
+            
+            if(obj.time-timeid>20000){
+                $('#mCSB_2_container').append(timetmp({time:formatDate(obj.time)}));
+            }
+            timeid = obj.time;
             if(obj.id==userid){
                 $('#mCSB_2_container').append(sendmsgtmp(obj));
             }else{
                 $('#mCSB_2_container').append(getmsgtmp(obj));
             }
-            
+
             $(".scrollbar").mCustomScrollbar('update');
             $(".scrollbar").mCustomScrollbar("scrollTo","bottom");
             $('#show-text').val('');
@@ -286,6 +297,22 @@
         function blanktmp(){
             var text = "<div class='blank-show'> </div>";
             return text;
+        }
+        // unit 工具时间戳格式化
+        function formatDate(t){
+            var date = new Date(t);  
+            var y = date.getFullYear();    
+            var m = date.getMonth() + 1;    
+            m = m < 10 ? ('0' + m) : m;    
+            var d = date.getDate();    
+            d = d < 10 ? ('0' + d) : d;    
+            var h = date.getHours();  
+            h = h < 10 ? ('0' + h) : h;  
+            var minute = date.getMinutes();  
+            var second = date.getSeconds();  
+            minute = minute < 10 ? ('0' + minute) : minute;  
+            second = second < 10 ? ('0' + second) : second; 
+            return y + '-' + m + '-' + d+' '+h+':'+minute+':'+second;   
         }
         // 滚动
         $(".scrollbar").mCustomScrollbar({

@@ -24,20 +24,22 @@ module.exports = require('./config/express')(app, config);
 var server = app.listen(config.port, function () {
   console.log('Express server listening on port ' + config.port);
 });
-console.log(server);
 
 var io = sio.listen(server);
 
 io.on('connection', function(socket){
-    console.log('a user connected');
-
+	console.log('a user connected');
+	var time = new Date().getTime();
+	io.emit("start",{time:time});
     socket.on("disconnect", function() {
         console.log("a user go out");
     });
 
     socket.on("message", function(obj) {
         //延迟3s返回信息给客户端
-        console.log(obj);
+		console.log(obj);
+		var time = new Date().getTime();
+		obj.time = time;
         io.emit("message", obj);
     });
     socket.on('login',function(obj){
