@@ -196,7 +196,7 @@
             },500);
             socket.emit('start',{id:userid});
         });
-        socket.on("start", function(obj) {console.log(1111)
+        socket.on("start", function(obj) {
             timeid = obj.time;
             if(userid==obj.id){
                 $('#mCSB_2_container').append(timetmp({time:formatDate(obj.time)}));
@@ -208,6 +208,7 @@
             getMsg(obj);
         });
         socket.on('logining',function(obj){
+            $('#mCSB_2_container').append(tiptmp({tips:"--"+obj.name+'--加入聊天室'}));
             if(obj.id==userid){
                 $('#title-name').text(obj.name);
                 $('#title-img').attr('src',obj.img);
@@ -215,7 +216,6 @@
                 $('#mCSB_1_container').append(peopletmp(obj));
                 $('#mCSB_2_container').append(tiptmp());
             }
-            $('#mCSB_2_container').append(tiptmp({tips:"--"+obj.name+'--加入聊天室'}));
             $(".scrollbar").mCustomScrollbar('update');
             $(".scrollbar").mCustomScrollbar("scrollTo","bottom");
         });
@@ -234,7 +234,7 @@
         function getMsg(obj){
             
             if(obj.time-timeid>60000){
-                $('#mCSB_2_container').append(timetmp({time:formatDate(obj.time)}));console.log(222)
+                $('#mCSB_2_container').append(timetmp({time:formatDate(obj.time)}));
             }
             timeid = obj.time;
             if(obj.id==userid){
