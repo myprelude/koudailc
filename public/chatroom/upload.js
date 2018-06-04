@@ -79,6 +79,7 @@
     }
     
     function canvasDataURL(path, obj, callback){
+        var type = path.replace(/data:image\/([^;]+).*/i,'$1');
         var quality = 0.7; // 默认的图片压缩质量
         var img = new Image();
         img.src = path;
@@ -100,7 +101,11 @@
                 quality = obj.quality;
             }
             // quality值越小，所绘制出的图像越模糊
-            var base64 = canvas.toDataURL('image/jpeg', quality);
+            if(type=='png'){
+                var base64 = canvas.toDataURL('image/png', quality);
+            }else{
+                var base64 = canvas.toDataURL('image/jpeg', quality);
+            }
             // 回调函数返回base64的值
             callback&&callback(base64,scale);
         }

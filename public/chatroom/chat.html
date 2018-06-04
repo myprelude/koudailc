@@ -109,7 +109,8 @@
                         <div class='line'></div>
                         <img src="../user/s.jpg" alt="">
                         <b>Qz--群聊</b>
-                        <span></span>
+                        <span id="ALL"></span>
+                        <!-- <i class='breath'>1</i> -->
                     </li>
                 </ul>
             </div>
@@ -188,6 +189,18 @@
     <script src="../assets/js/jquery.mCustomScrollbar.concat.min.js"></script>
     <script src='upload.js'></script>
     <script>
+        //  userid 用户自己的id  timeid  服务端时间  getid  接收者id    getname  接收者姓名
+        var receiveInfo = {
+            name:'ALL',
+            id:'ALL',
+            img:'ALL'
+        };
+        var senderInfo = {
+            name:'',
+            id:'',
+            img:''
+        };
+        var contactid = '';
         var socket = io.connect('ws://scopeman.cn'),userid,timeid;
         socket.on('connect',function(){
             userid = socket.id;
@@ -230,22 +243,102 @@
             }
             
         });
+        //  收到的消息格式是 {
+            //     id  time  img imgurl getid  getname
+        // }
         //接收消息方法
         function getMsg(obj){
             
             if(obj.time-timeid>60000){
                 $('#mCSB_2_container').append(timetmp({time:formatDate(obj.time)}));
             }
-            timeid = obj.time;
-            if(obj.id==userid){
+            timeid = obj.sender.time;
+            //  判断是群聊还是私聊
+            if(obj.contactid){
+                //  私聊
+                privateChat(obj)
+            }else{
+                //  群聊
+                groupChat(obj)
+            }
+        }
+        //  群聊方法
+        function groupChat(obj){
+            if(obj.sender.id == userid){
+                // 发送者
                 $('#mCSB_2_container').append(sendmsgtmp(obj));
             }else{
+                // 接收者
                 $('#mCSB_2_container').append(getmsgtmp(obj));
+                //  收信息提醒
+                var id = $('.content-bar li.active').find('span').attr('id');
+                if(id != 'ALL'){
+                    var dom = $('.content-bar li:first-child');
+                    if(dom.find('i').length==0){
+                        dom.append("<i class='breath'>1</i>");
+                    }else{
+                        var num = parseInt(dom.find('i').text())+1;
+                        dom.find('i').text(num) 
+                    }
+                    
+                }
             }
-
             $(".scrollbar").mCustomScrollbar('update');
             $(".scrollbar").mCustomScrollbar("scrollTo","bottom");
             $('#show-text').val('');
+        }
+        // 私聊方法
+        function privateChat(obj){
+            if(obj.sender.id == userid){
+                // 发送者
+                $('#id_'+obj.contactid).append(sendmsgtmp(obj));
+                $('#show-text').val('');
+            }
+            if(obj.receive.id == userid){
+                // 接收者
+                if($("#"+obj.sender.id).length==0){
+                    $('#mCSB_1_container').append(peopletmp1(obj)); 
+                }else{
+                    $("#"+obj.sender.id).attr('ids',obj.contactid);
+                }
+                if($('#id_'+obj.contactid).length==0){
+                    $('.content-info').append(createchatroom(obj.contactid,"display:none"));
+                }
+                $('#id_'+obj.contactid).append(getmsgtmp(obj));
+                //  收信息提示
+                var id = $('.content-bar li.active').find('span').attr('id');
+                if(id!=obj.sender.id){
+                    var dom = $('#'+obj.sender.id).parent();
+                    if(dom.find('i').length==0){
+                        $('#'+obj.sender.id).parent().append("<i class='breath'>1</i>");
+                    }else{
+                        var num = parseInt(dom.find('i').text())+1;
+                        dom.find('i').text(num) 
+                    }
+                    
+                }
+                $(".scrollbar").mCustomScrollbar('update');
+                $(".scrollbar").mCustomScrollbar("scrollTo","bottom");
+            }
+        }
+        //  消息提醒
+        function messageTips(obj){
+            var id = $('.content-bar li.active').find('span').attr('id');
+                if(id == 'ALL'){
+                    var dom = $('.content-bar li:first-child');
+                    
+                }else{
+                    if(id!=obj.sender.id){
+                        var dom = $('#'+obj.sender.id).parent();
+                    }
+                }
+            
+                if(dom.find('i').length==0){
+                    $('#'+obj.sender.id).parent().append("<i class='breath'>1</i>");
+                }else{
+                    var num = parseInt(dom.find('i').text())+1;
+                    dom.find('i').text(num) 
+                }
         }
         // 人物模板
         function peopletmp(obj){
@@ -257,6 +350,15 @@
                         </li>";
             return text;
         }
+        function peopletmp1(obj){
+            var text = "<li>\
+                            <div class='line'></div>\
+                            <img src='"+obj.sender.img+"' alt=''>\
+                            <b>"+obj.sender.name+"</b>\
+                            <span ids="+obj.contactid+" id='"+obj.sender.id+"'></span>\
+                        </li>";
+            return text;
+        }
         // 发送消息模板
         function sendmsgtmp(obj){
             var imgstr = '';
@@ -264,9 +366,10 @@
                 imgstr = "<img src='../"+obj.uploadimg+"' class='text-img' style='height:"+150/obj.scale+"px'>";
             }
             var text = "<div class='chat-item'>\
+                            <div class='msgname msgname-send'>"+obj.sender.name+"</div>\
                             <div class='chat-list chat-our'>\
                                 <div class='chat-text'>"+imgstr+obj.text+"</div>\
-                                <img src='"+obj.img+"' alt='"+obj.name+"' >\
+                                <img src='"+obj.sender.img+"' alt='"+obj.sender.name+"' >\
                             </div>\
                         </div>";
             return text;
@@ -278,8 +381,9 @@
                 imgstr = "<img src='../"+obj.uploadimg+"' class='text-img'>";
             }
             var text = "<div class='chat-item'>\
+                            <div class='msgname msgname-get'>"+obj.sender.name+"</div>\
                             <div class='chat-list chat-other'>\
-                                <img src='"+obj.img+"' alt='"+obj.name+"'>\
+                                <img src='"+obj.sender.img+"' alt='"+obj.sender.name+"'>\
                                 <div class='chat-text'>"+imgstr+obj.text+"</div>\
                             </div>\
                         </div>";
@@ -299,6 +403,12 @@
         // 空白 模板
         function blanktmp(){
             var text = "<div class='blank-show'> </div>";
+            return text;
+        }
+        // 创建聊天新容器
+        function createchatroom(id,style){
+            var text = "<div class='conetent-text-box scrollbar' id='id_"+id+"' style='"+style+"'>\
+                        </div>";
             return text;
         }
         // unit 工具时间戳格式化
@@ -348,19 +458,70 @@
                 $('#usernameval').css({borderColor:'#D8231D'});
                 return;
             }
-            socket.emit('login',{name:username,id:userid,img:img});
+
+            //  设置链接用户信息
+            senderInfo.id = socket.id;
+            senderInfo.name = username;
+            senderInfo.img = img;
+
+            socket.emit('login',senderInfo);
             $('.modal-show').fadeOut(800);
         })
+        // 获取接收者的id
         $('.content-bar').on('click','li',function(){
+
             $(this).addClass('active').siblings().removeClass('active');
+            $(this).find('.breath').remove();
+
+            var name = $(this).find('b').text(),
+                id = $(this).find('span').attr('id'),
+                ids =$(this).find('span').attr('ids')?$(this).find('span').attr('ids'):id,
+                img = $(this).find('img').attr('src');
+
+            //  设置接收者信息
+            if(id != 'ALL'){
+                //  指定聊天对象
+                receiveInfo.name = name;
+                receiveInfo.id = id;
+                receiveInfo.img = img;
+                
+                if($('#id_'+ids).length!=0){
+                    //  已经存在
+                    $('#id_'+ids).show().siblings().hide();
+                }else{
+                    //  动态生成
+                    //  没有聊天窗口创建聊天窗口
+                    $('.content-info').append(createchatroom(ids));
+                    $('#id_'+ids).siblings().hide();
+                }
+                // 添加 ids 属性
+                if(!$(this).find('span').attr('ids')){
+                    $(this).find('span').attr('ids',ids);
+                }
+                contactid = ids;
+                
+            }else{
+                //  群聊
+                receiveInfo.name = '';
+                receiveInfo.id = '';
+                receiveInfo.img = '';
+                contactid = '';
+                $('#scrollbar1').show().siblings().hide();
+
+            }
+            
         })
+        
          // 发送消息
          $('.send-btn').on('click',function(){
             var text = $('#show-text').val();
             if(text.length!=0){
-                socket.emit('message',{text:text,id:userid,img:$('#title-img').attr('src'),name:$('#title-name').text()});
-            }else{
-
+                socket.emit('message',{
+                    text:text,
+                    sender:senderInfo,
+                    receive:receiveInfo,
+                    contactid:contactid
+                });
             }
         })
 
@@ -400,7 +561,16 @@
                 
             },
             function(data,id,scale){
-                socket.emit('message',{text:'',id:userid,img:$('#title-img').attr('src'),name:$('#title-name').text(),uploadimg:data.url,scale:scale});
+
+                socket.emit('message',{
+                        text:'',
+                        sender:senderInfo,
+                        receive:receiveInfo,
+                        contactid:contactid,
+                        uploadimg:data.url,
+                        scale:scale
+                });
+
                 $('.spinner-').hide();
             },
             function(data,id){
