@@ -170,9 +170,34 @@
     display: flex;
 }
 .write-bar .send-option{
+    position: relative;
     flex:1;
     font-size: 16px;
 }
+.icon-style{
+    position: absolute;
+    top:-200px;
+    left:0px;
+    font-size:22px;
+    height:200px;
+    overflow: auto;
+    display: none;
+    cursor: pointer;
+    moz-user-select: -moz-none;
+    -moz-user-select: none;
+    -o-user-select:none;
+    -khtml-user-select:none;
+    -webkit-user-select:none;
+    -ms-user-select:none;
+    user-select:none;
+    background: #efefef;
+    padding:5px 12px;
+    border-radius:4px;
+    text-align: center;
+}
+.icon-style::-webkit-scrollbar {
+    display: none;
+ } 
 .send-option span{
     margin: 0  5px;
 }

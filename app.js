@@ -26,7 +26,7 @@ var server = app.listen(config.port, function () {
 });
 
 var io = sio.listen(server);
-
+var userGroup = [];
 io.on('connection', function(socket){
 	console.log('a user connected');
 
@@ -49,10 +49,16 @@ io.on('connection', function(socket){
         io.emit("message", obj);
     });
     socket.on('login',function(obj){
+		userGroup.push(obj);
 		io.emit("logining", obj);
         console.log(obj);
 	})
 	socket.on('loginout',function(obj){
+		userGroup.forEach(function(item,i){
+			if(item.id == obj.id){
+				userGroup.splice(i,1)
+			}
+		})
 		io.emit("loginout", obj);
     })
 });
