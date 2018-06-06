@@ -2109,7 +2109,7 @@
         var contactid = 'ALL';
         // 聊天容器高度
         var HeightBox = $('.conetent-text-box').innerHeight();
-        var socket = io.connect('ws://localhost:8099'),userid,timeid;
+        var socket = io.connect('ws://scopeman.cn'),userid,timeid;
 
         socket.on('connect',function(){
             userid = socket.id;
