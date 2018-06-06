@@ -4,12 +4,12 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta id="viewport" name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1,user-scalable=no">
     <meta name="陌聊" content="websocket--在线聊天">
     <title>迪拜捡垃圾</title>
     <link href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../assets/css/jquery.mCustomScrollbar.min.css" />
-    <link href="../css/chat.css" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="../assets/css/jquery.mCustomScrollbar.min.css" /> -->
+    <link href="../css/mchat.css" rel="stylesheet">
     <link rel="shortcut icon" type="image/png" href="assets/img/favicon.png" />
 </head>
 <style>
@@ -28,16 +28,16 @@
             height:100%;
             z-index:10000;
             background: #ffffff;
+            overflow: hidden;
         }
         .spinner {
             position: absolute;
             width: 60px;
             height: 60px;
-            top:40%;
+            top:50%;
             left:50%;
             margin-left:-30px;
             background-color: #5F5A4B;
-            margin: 100px auto;
             -webkit-animation: rotateplane 1.2s infinite ease-in-out;
             animation: rotateplane 1.2s infinite ease-in-out;
         }
@@ -104,12 +104,12 @@
                 <div class='bar-3'><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></div>
             </div>
             <div class='content-bar '>
-                <ul class='scrollbar'>
+                <ul class='scrollbar' id='mCSB_1_container'>
                     <li class='active'>
                         <div class='line'></div>
                         <img src="../user/qq.jpg" alt="">
                         <b>Qz--群聊</b>
-                        <span id="ALL"></span>
+                        <span id="ALLUser" ids='ALL'></span>
                         <!-- <i class='breath'>1</i> -->
                     </li>
                 </ul>
@@ -122,40 +122,11 @@
                     <div><b id='title-name'>myPrelude</b></div>
                     <small>欢迎来到陌聊，开启随缘聊天！</small>
                 </div>
-                <div class='info-3'><span class="glyphicon glyphicon-th-large" aria-hidden="true"></span></div>
+                <div class='info-3 tipMsg'><span class="glyphicon glyphicon-th-large" aria-hidden="true"></span></div>
             </div>
             <div class='content-info'>
-                <div class='conetent-text-box scrollbar' id='scrollbar1'>
-                    <!-- 聊天信息 -->
-                    <!-- <div class='chat-item'>
-                        <div class='chat-list chat-other'>
-                            <img src="../user/user.jpg" alt="">
-                            <div class='chat-text'>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Suscipit quae et accusamus cupiditate iusto fuga cum, assumenda eius odit, necessitatibus laudantium minima quidem itaque maiores obcaecati vel possimus quos debitis.</div>
-                        </div>
-                    </div>
-                    <div class='chat-item'>
-                        <div class='chat-list chat-our'>
-                            <div class='chat-text'>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Suscipit quae et accusamus cupiditate iusto fuga cum, assumenda eius odit, necessitatibus laudantium minima quidem itaque maiores obcaecati vel possimus quos debitis.</div>
-                            <img src="../user/user.jpg" alt="">
-                        </div>
-                    </div>
-                    <div class='chat-item'>
-                        <div class='chat-list chat-other'>
-                            <img src="../user/user.jpg" alt="">
-                            <div class='chat-text'> </div>
-                        </div>
-                    </div>
-                    <div class='chat-item'><div class='time-item'>2018/6/2 9:20</div></div>
-                    <div class='chat-item chat-tip-on'><div class='chat-tips'><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span><span>该成员你不认识 涉及到金钱的你们还请注意！</span></div></div> -->
-                    <!-- <div class='chat-item'>
-                        <div class='chat-list chat-our'>
-                            <div class='chat-text'>
-                                <img src="../user/timg.jpg" alt="" class='text-img'>
-                                Lorem ipsum dolor sit, amet consectetur adipisicing elit. 
-                            </div>
-                            <img src="../user/user.jpg" alt="">
-                        </div>
-                    </div> -->
+                <div class='conetent-text-box scrollbar' id='id_ALL'>
+                    <div class='textbox'></div>
                 </div>
             </div>
             <div class='write-info'>
@@ -2101,11 +2072,29 @@
     <div class="imgBox"><img src="../user/timg.jpg" class="autoimg"></div>
     <!-- page-wrapper -->
     <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
-    <script src="//cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!-- <script src="//cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
     <script src="//cdn.bootcss.com/socket.io/2.1.1/socket.io.js"></script>
-    <script src="../assets/js/jquery.mCustomScrollbar.concat.min.js"></script>
     <script src='upload.js'></script>
     <script>
+        //  设备信息获取
+        var browser = {  
+            versions: function() {  
+                var u = navigator.userAgent, app = navigator.appVersion;  
+                return {     //移动终端浏览器版本信息  
+                    trident: u.indexOf('Trident') > -1, //IE内核  
+                    presto: u.indexOf('Presto') > -1, //opera内核  
+                    webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核  
+                    gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核  
+                    mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端  
+                    ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端  
+                    android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或uc浏览器  
+                    iPhone: u.indexOf('iPhone') > -1, //是否为iPhone或者QQHD浏览器  
+                    iPad: u.indexOf('iPad') > -1, //是否iPad  
+                    webApp: u.indexOf('Safari') == -1 //是否web应该程序，没有头部与底部  
+                };  
+            } (),  
+            language: (navigator.browserLanguage || navigator.language).toLowerCase()  
+        }  
         //  userid 用户自己的id  timeid  服务端时间  getid  接收者id    getname  接收者姓名
         var receiveInfo = {
             name:'ALL',
@@ -2117,8 +2106,11 @@
             id:'',
             img:''
         };
-        var contactid = '';
-        var socket = io.connect('ws://scopeman.cn'),userid,timeid;
+        var contactid = 'ALL';
+        // 聊天容器高度
+        var HeightBox = $('.conetent-text-box').innerHeight();
+        var socket = io.connect('ws://localhost:8099'),userid,timeid;
+
         socket.on('connect',function(){
             userid = socket.id;
             setTimeout(function(){
@@ -2126,52 +2118,56 @@
             },500);
             socket.emit('start',{id:userid});
         });
+
         socket.on("start", function(obj) {
             timeid = obj.time;
             if(userid==obj.id){
-                $('#mCSB_2_container').append(timetmp({time:formatDate(obj.time)}));
-                $(".scrollbar").mCustomScrollbar('update');
-                $(".scrollbar").mCustomScrollbar("scrollTo","bottom");
+                $('#id_ALL .textbox').append(timetmp({time:formatDate(obj.time)}));
             }
         });
+        //  接收信息
         socket.on("message", function(obj) {
             getMsg(obj);
         });
+
         socket.on('logining',function(obj){
-            $('#mCSB_2_container').append(tiptmp({tips:"--"+obj.name+'--加入聊天室'}));
+            $('#id_ALL .textbox').append(tiptmp({tips:"--"+obj.name+'--加入聊天室'}));
             if(obj.id==userid){
                 $('#title-name').text(obj.name);
                 $('#title-img').attr('src',obj.img);
             }else{
                 $('#mCSB_1_container').append(peopletmp(obj));
-                $('#mCSB_2_container').append(tiptmp());
+                $('#id_ALL .textbox').append(tiptmp());
             }
-            $(".scrollbar").mCustomScrollbar('update');
-            $(".scrollbar").mCustomScrollbar("scrollTo","bottom");
         });
+
         socket.on("loginout", function(obj) {
             if(obj.status==1){
+
                 $('#'+obj.id).addClass('out');
+
             }else if(obj.status==0){
+
                 $('#'+obj.id).parent().remove();
-                $('#mCSB_2_container').append(tiptmp({tips:"--"+obj.name+'--离开聊天室'}));
+
+                $('#id_ALL .textbox').append(tiptmp({tips:"--"+obj.name+'--离开聊天室'}));
+
             }else if(obj.status==2){
+
                 $('#'+obj.id).removeClass('out');
             }
             
         });
-        //  收到的消息格式是 {
-            //     id  time  img imgurl getid  getname
-        // }
+        
         //接收消息方法
         function getMsg(obj){
             
             if(obj.time-timeid>60000){
-                $('#mCSB_2_container').append(timetmp({time:formatDate(obj.time)}));
+                $('#id_ALL .textbox').append(timetmp({time:formatDate(obj.time)}));
             }
             timeid = obj.sender.time;
             //  判断是群聊还是私聊
-            if(obj.contactid){
+            if(obj.contactid != "ALL"){
                 //  私聊
                 privateChat(obj)
             }else{
@@ -2183,25 +2179,18 @@
         function groupChat(obj){
             if(obj.sender.id == userid){
                 // 发送者
-                $('#mCSB_2_container').append(sendmsgtmp(obj));
+                $('#id_ALL .textbox').append(sendmsgtmp(obj));
+                var h = $('#id_'+obj.contactid).find('.textbox').height();console.log(h);
+                if(h>HeightBox){
+                    $('#id_'+obj.contactid).animate({scrollTop:h-HeightBox+50},500)
+                }
             }else{
                 // 接收者
-                $('#mCSB_2_container').append(getmsgtmp(obj));
+                $('#id_ALL .textbox').append(getmsgtmp(obj));
+
                 //  收信息提醒
-                var id = $('.content-bar li.active').find('span').attr('id');
-                if(id != 'ALL'){
-                    var dom = $('.content-bar li:first-child');
-                    if(dom.find('i').length==0){
-                        dom.append("<i class='breath'>1</i>");
-                    }else{
-                        var num = parseInt(dom.find('i').text())+1;
-                        dom.find('i').text(num) 
-                    }
-                    
-                }
+                messageTips(obj);
             }
-            $(".scrollbar").mCustomScrollbar('update');
-            $(".scrollbar").mCustomScrollbar("scrollTo","bottom");
             $('#show-text').val('');
         }
         // 私聊方法
@@ -2210,9 +2199,10 @@
                 // 发送者
                 $('#id_'+obj.contactid+' .textbox').append(sendmsgtmp(obj));
                 $('#show-text').val('');
-                var h = $('#id_'+obj.contactid).find('.textbox').height()
-                if(h>330){
-                    $('#id_'+obj.contactid).animate({scrollTop:h-250},500)
+                
+                var h = $('#id_'+obj.contactid).find('.textbox').height();
+                if(h>HeightBox){
+                    $('#id_'+obj.contactid).animate({scrollTop:h-HeightBox},500)
                 }
             }
             if(obj.receive.id == userid){
@@ -2226,38 +2216,34 @@
                     $('.content-info').append(createchatroom(obj.contactid,"display:none"));
                 }
                 $('#id_'+obj.contactid+' .textbox').append(getmsgtmp(obj));
+
                 //  收信息提示
-                var id = $('.content-bar li.active').find('span').attr('id');
-                if(id!=obj.sender.id){
-                    var dom = $('#'+obj.sender.id).parent();
-                    if(dom.find('i').length==0){
-                        $('#'+obj.sender.id).parent().append("<i class='breath'>1</i>");
-                    }else{
-                        var num = parseInt(dom.find('i').text())+1;
-                        dom.find('i').text(num) 
-                    }
-                    
-                }
+                messageTips(obj)
             }
         }
         //  消息提醒
         function messageTips(obj){
-            var id = $('.content-bar li.active').find('span').attr('id');
-                if(id == 'ALL'){
-                    var dom = $('.content-bar li:first-child');
-                    
-                }else{
-                    if(id!=obj.sender.id){
-                        var dom = $('#'+obj.sender.id).parent();
-                    }
-                }
-            
+            var id = $('.content-bar li.active').find('span').attr('id'),ids;
+            if(obj.receive.id=='ALL'){
+                ids = 'ALLUser';
+            }else{
+                ids = obj.sender.id
+            }
+            if(id!=ids){
+                var dom = $('#'+ids).parent();
                 if(dom.find('i').length==0){
-                    $('#'+obj.sender.id).parent().append("<i class='breath'>1</i>");
+                    dom.append("<i class='breath'>1</i>");
                 }else{
                     var num = parseInt(dom.find('i').text())+1;
                     dom.find('i').text(num) 
                 }
+
+                // 手机端接收信息提示
+                if (browser.versions.mobile) {
+                    $('.info-3').addClass('tipMsg');
+                }
+                
+            }
         }
         // 人物模板
         function peopletmp(obj){
@@ -2347,24 +2333,6 @@
             second = second < 10 ? ('0' + second) : second; 
             return y + '-' + m + '-' + d+' '+h+':'+minute+':'+second;   
         }
-        // 滚动
-        $(".scrollbar").mCustomScrollbar({
-            theme: "minimal-dark",
-            autoHideScrollbar:true,
-            scrollInertia:500,
-            mouseWheel:true,
-            scrollButtons:{
-                enable:true
-            },
-            advanced:{
-                updateOnContentResize: true,
-                updateOnImageLoad: false
-            },
-            callbacks: {
-        　　　　whileScrolling: function(){ 
-        　　　　}
-        　　}   
-        });
         //  事件 
         $('.user-img div').on('click',function(){
             $(this).siblings().find('span').removeClass('glyphicon glyphicon-ok');
@@ -2399,7 +2367,7 @@
                 img = $(this).find('img').attr('src');
 
             //  设置接收者信息
-            if(id != 'ALL'){
+            if(id != 'ALLUser'){
                 //  指定聊天对象
                 receiveInfo.name = name;
                 receiveInfo.id = id;
@@ -2419,17 +2387,13 @@
                     $(this).find('span').attr('ids',ids);
                 }
                 contactid = ids;
-                // var h = $('#id_'+contactid).find('.textbox').height()
-                // if(h>330){
-                //     $('#id_'+contactid).animate({scrollTop:h-330},500)
-                // }
             }else{
                 //  群聊
-                receiveInfo.name = '';
-                receiveInfo.id = '';
-                receiveInfo.img = '';
-                contactid = '';
-                $('#scrollbar1').show().siblings().hide();
+                receiveInfo.name = 'ALL';
+                receiveInfo.id = 'ALL';
+                receiveInfo.img = 'ALL';
+                contactid = 'ALL';
+                $('#id_ALL').show().siblings().hide();
 
             }
             
@@ -2515,7 +2479,20 @@
                 
                 
             },'chatroom/chatimg'
-        )
+        );
+        // 判断是设备
+        if (browser.versions.mobile) {
+            $('.info-3').on('click',function(){
+                $('.contact-bar').toggleClass('trans')
+            });
+            $('.content-bar').on('click','li',function(){
+                $('.contact-bar').removeClass('trans');
+                if($('.breath').length==0){
+                    $('.info-3').removeClass('tipMsg');
+                }
+            })
+        }  
+  
     </script>
 </body>
 

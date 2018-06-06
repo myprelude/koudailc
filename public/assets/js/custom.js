@@ -23,6 +23,7 @@ jQuery(function ($) {
     });
 
     if (!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+       
         $(".sidebar-content").mCustomScrollbar({
             axis: "y",
             autoHideScrollbar: true,
@@ -30,6 +31,8 @@ jQuery(function ($) {
         });
         $(".sidebar-content").addClass("desktop");
 
+    }else{
+         $("#toggle-sidebar").trigger('click')
     }
 
 });
