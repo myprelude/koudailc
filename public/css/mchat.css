@@ -1,3 +1,6 @@
+html,body{
+    height:100%;
+}
 /* 弹层 */
 .modal-show{
     position: fixed;
@@ -547,17 +550,18 @@
     .chat-interface{
         display: block;
         width:100%;
-        height:100vh;
+        height:100%;
         margin:0;
         box-shadow: none;
         position: relative;
     }
     .contact-info{
         /* display: none; */
+        height:100%;
         
     }
     .content-info{
-        height:calc( 100vh - 70px );
+        height:calc( 100% - 120px );
     }
     .contact-bar{
         position: absolute;
@@ -582,5 +586,9 @@
     }
     .write-info textarea{
         height:40px;
+        border:1px solid #efefef;
+    }
+    .write-info{
+        height:auto;
     }
   }
