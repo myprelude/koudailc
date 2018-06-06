@@ -2053,6 +2053,7 @@
                         <span class="glyphicon glyphicon-picture" aria-hidden="true" id='upimg'></span>
                         <span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span> 
                         <span class="glyphicon icon-tip">☺</span>
+                        <span class="glyphicon doudon"><img src="../user/d.jpg" alt="" style='width:20px;vertical-align:middle;'></span>
                         <span class="glyphicon glyphicon-option-horizontal" aria-hidden="true"></span>
                         <div class="spinner-">
                             <div class="rect1"></div>
@@ -2076,6 +2077,9 @@
     <script src="//cdn.bootcss.com/socket.io/2.1.1/socket.io.js"></script>
     <script src='upload.js'></script>
     <script>
+        var testREg =[
+            {text:'666'}
+        ]
         //  设备信息获取
         var browser = {  
             versions: function() {  
@@ -2179,7 +2183,12 @@
         function groupChat(obj){
             if(obj.sender.id == userid){
                 // 发送者
-                $('#id_ALL .textbox').append(sendmsgtmp(obj));
+                if(obj.shake){
+                    obj.text = '群抖动暂时开放--保护聊天环境请少用。';
+                    shakeFun(obj);
+                }else{
+                   $('#id_ALL .textbox').append(sendmsgtmp(obj));
+                }
                 setTimeout(function(){
                     var h = $('#id_'+obj.contactid).find('.textbox').height();
                     setTimeout(function(){
@@ -2193,7 +2202,6 @@
             }else{
                 // 接收者
                 $('#id_ALL .textbox').append(getmsgtmp(obj));
-
                 //  收信息提醒
                 messageTips(obj);
             }
@@ -2203,8 +2211,13 @@
         function privateChat(obj){
             if(obj.sender.id == userid){
                 // 发送者
-                $('#id_'+obj.contactid+' .textbox').append(sendmsgtmp(obj));
-                $('#show-text').val('');
+                if(obj.shake){
+                    obj.text = '你给对方发动了一个抖动';
+                    shakeFun(obj);
+                }else{
+                   $('#id_'+obj.contactid+' .textbox').append(sendmsgtmp(obj));
+                   $('#show-text').val('');
+                }
                 
                 var h = $('#id_'+obj.contactid).find('.textbox').height();
                 setTimeout(function(){
@@ -2224,11 +2237,24 @@
                 if($('#id_'+obj.contactid).length==0){
                     $('.content-info').append(createchatroom(obj.contactid,"display:none"));
                 }
-                $('#id_'+obj.contactid+' .textbox').append(getmsgtmp(obj));
-
+                // 抖动消息
+                if(obj.shake){
+                    obj.text = '对方给你发动了一个抖动';
+                    shakeFun(obj)
+                }else{
+                    $('#id_'+obj.contactid+' .textbox').append(getmsgtmp(obj));
+                }
+                
                 //  收信息提示
                 messageTips(obj)
             }
+        }
+        function shakeFun(obj){
+            $('#id_'+obj.contactid+' .textbox').append(shaketmp(obj));
+            $('.chat-interface').addClass('shake-animate');
+            timer = setTimeout(function(){
+                $('.chat-interface').removeClass('shake-animate');
+            },2000)
         }
         //  消息提醒
         function messageTips(obj){
@@ -2303,6 +2329,13 @@
                         </div>";
             return text;
         } 
+        // 抖动消息模板
+        function shaketmp(obj){
+            var text = "<div class='chat-item' style='text-align:center;'>\
+                    <div class='shake'>"+obj.text+"</div>\
+                </div>";
+            return text;
+        }
         // 时间模板
         function timetmp(obj){
             var text = "<div class='chat-item'><div class='time-item'>"+obj.time+"</div></div>";
@@ -2420,7 +2453,19 @@
                 });
             }
         })
-
+        // xiu
+        $('.doudon').on('click',function(){
+            if($('.chat-interface').hasClass('shake-animate')){
+                return;
+            }
+            socket.emit('message',{
+                text:'对方给你发送了一个抖动',
+                sender:senderInfo,
+                receive:receiveInfo,
+                contactid:contactid,
+                shake:true
+            });
+        })
         //  emji 图像
         $('.icon-tip').on('click',function(e){
             e.stopPropagation();
