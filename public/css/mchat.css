@@ -1,5 +1,6 @@
 html,body{
     height:100%;
+    padding:1px;
 }
 /* 弹层 */
 .modal-show{
@@ -162,6 +163,18 @@ html,body{
     height:7px;
     border-radius: 50%;
     background: #EA1C64;
+    animation: big 100ms infinite;
+}
+@keyframes big{
+    0%{
+        transform:scale(1.0);
+    }
+    50%{
+        transform:scale(1.3);
+    }
+    100%{
+        transform:scale(1.0);
+    }
 }
 .info-1 img{
     width:40px;
@@ -197,6 +210,7 @@ html,body{
     left:0px;
     font-size:22px;
     height:200px;
+    width:190px;
     overflow: auto;
     display: none;
     cursor: pointer;
@@ -208,7 +222,7 @@ html,body{
     -ms-user-select:none;
     user-select:none;
     background: #efefef;
-    padding:5px 12px;
+    padding:5px;
     border-radius:4px;
     text-align: center;
 }
@@ -398,9 +412,15 @@ html,body{
     height:40px;
     border-radius:50%;
 }
-.chat-text .text-img{
-    max-width:150px;
-    display:block;
+.chat-text .img-content-show{
+    /* background: #B4B4B4 url(../user/pre.jpg) no-repeat center center; */
+    position: relative;
+}
+.text-img{
+    width:100%;
+    position: absolute;
+    top:0;
+    left:0;
 }
 .chat-text{
     flex:1;
@@ -489,7 +509,13 @@ html,body{
     top:50%;
     left:50%;
     transform: translate(-50%,-50%);
-    max-width:80%;
+    width:80%;
+    max-width:100%;
+    overflow: auto;
+    text-align: center;
+}
+.autoimg img{
+    max-width:100%;
 }
 /* laoding animation */
 .spinner- {
@@ -561,7 +587,7 @@ html,body{
         
     }
     .content-info{
-        height:calc( 100% - 120px );
+        height:calc( 100% - 125px );
     }
     .contact-bar{
         position: absolute;
@@ -578,7 +604,7 @@ html,body{
         transform: translate(0,0);
     }
     .content-bar {
-        height: calc( 100vh - 50px );
+        height: calc( 100% - 50px );
         
     }
     .content-bar ul{
@@ -586,10 +612,16 @@ html,body{
     }
     .write-info textarea{
         height:40px;
+        margin-top:5px;
         border:1px solid #efefef;
+        padding:2px;
     }
     .write-info{
         height:auto;
+        padding:0;
+    }
+    .autoimg img{
+        width:100%;
     }
   }
   .shake{

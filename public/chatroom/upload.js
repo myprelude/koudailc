@@ -1,10 +1,10 @@
 (function(root,$){
-    function upload(contain,startFun,progress,done,error,url,isClick){
+    function upload(contain,startFun,progress,done,error,url){
         //  添加一个隐藏的input[type=file]
-        var click = isClick||true;
         var input = document.createElement("input");
         input.type = 'file';
-        input.style = 'display:none;'
+        input.style = 'display:none;opacity:0;'
+        input.multiple = 'multiple';
         $('body').append(input);
         
         // 拖拽添加图片功能
@@ -26,17 +26,18 @@
                 checkImg(file,index)
             })  
         })
-        if(click){
-            $(contain).on('click',function(){
+        $(contain).on('click',function(e){
+            if($(e.currentTarget).attr('isclick')){
                 $(input).trigger('click');
-            })
-            $(input).on('change',function(e){
-                var files = input.files;
-                $.each(files,function(index,file){
-                    checkImg(file,index)
-                })  
-            })
-        }
+            }
+            
+        })
+        $(input).on('change',function(e){
+            var files = input.files;
+            $.each(files,function(index,file){
+                checkImg(file,index)
+            })  
+        })
         function checkImg(file,index){
              // 创建img
              var name = file.name;
@@ -50,9 +51,9 @@
              reader.readAsDataURL(file);
              reader.onload = (function(){
                  return function(e){
-                     canvasDataURL(e.target.result,{quality:0.5},function(base,scale){
+                     canvasDataURL(e.target.result,{quality:0.5},function(base,scale,w){
                         startFun&&startFun();
-                         ajaxUpload({base:base,name:name,id:id,imgurl:url,scale:scale})                      
+                         ajaxUpload({base:base,name:name,id:id,imgurl:url,scale:scale,w:w})                      
                      })
                  }
              })()
@@ -68,8 +69,8 @@
                     // console.log((e.loaded / e.total * 100) + '%')
                 }),
                 success:function(data){;
-                    done&&done(data,imgFile.id,imgFile.scale);
-                    console.log(data);
+                    done&&done(data,imgFile.id,imgFile.scale,imgFile.w);
+                    $(input).val('');
                 },
                 error:function(){
                     error&&error('no img url',imgFile.id)
@@ -107,7 +108,7 @@
                 var base64 = canvas.toDataURL('image/jpeg', quality);
             }
             // 回调函数返回base64的值
-            callback&&callback(base64,scale);
+            callback&&callback(base64,scale,imgW);
         }
     }
     
