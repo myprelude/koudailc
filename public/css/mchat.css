@@ -557,7 +557,7 @@
         
     }
     .content-info{
-        height:calc( 100vh - 230px );
+        height:calc( 100vh - 70px );
     }
     .contact-bar{
         position: absolute;
@@ -581,6 +581,6 @@
         margin-bottom:0;
     }
     .write-info textarea{
-        height:150px;
+        height:40px;
     }
   }

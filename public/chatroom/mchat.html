@@ -2180,10 +2180,16 @@
             if(obj.sender.id == userid){
                 // 发送者
                 $('#id_ALL .textbox').append(sendmsgtmp(obj));
-                var h = $('#id_'+obj.contactid).find('.textbox').height();console.log(h);
-                if(h>HeightBox){
-                    $('#id_'+obj.contactid).animate({scrollTop:h-HeightBox+50},500)
-                }
+                setTimeout(function(){
+                    var h = $('#id_'+obj.contactid).find('.textbox').height();
+                    setTimeout(function(){
+                        var h = $('#id_'+obj.contactid).find('.textbox').height();
+                        if(h>HeightBox){
+                            $('#id_'+obj.contactid).animate({scrollTop:h-HeightBox+50},500)
+                        }
+                    },0)
+                })
+                
             }else{
                 // 接收者
                 $('#id_ALL .textbox').append(getmsgtmp(obj));
@@ -2201,9 +2207,12 @@
                 $('#show-text').val('');
                 
                 var h = $('#id_'+obj.contactid).find('.textbox').height();
-                if(h>HeightBox){
-                    $('#id_'+obj.contactid).animate({scrollTop:h-HeightBox},500)
-                }
+                setTimeout(function(){
+                    var h = $('#id_'+obj.contactid).find('.textbox').height();
+                    if(h>HeightBox){
+                        $('#id_'+obj.contactid).animate({scrollTop:h-HeightBox+50},500)
+                    }
+                },0)
             }
             if(obj.receive.id == userid){
                 // 接收者
