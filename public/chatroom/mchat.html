@@ -689,7 +689,7 @@
             }
         });
         $('.content-info').on('click','.text-img',function(){
-            var src = $(this).attr('src'),show = $(this).attr('src');
+            var src = $(this).attr('src'),show = $(this).attr('data-show');
             if(show=='show'){
                 $('.imgBox').fadeIn(800);
                 $('.autoimg img').attr('src',src);

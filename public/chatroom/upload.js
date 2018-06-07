@@ -42,7 +42,8 @@
             if(isImage){
                 var imglocalurl = window.URL.createObjectURL(file)
                 reader.readAsDataURL(file);
-                reader.onload = function(e){
+                reader.onload = (function(){
+                    return function(e){
                         canvasDataURL(e.target.result,{quality:0.5},function(base,scale,w){
                             startFun&&startFun();
                             ajaxUpload({base:base,
@@ -54,9 +55,11 @@
                                         w:w})                      
                         })
                     }
+                })()
             }else{
                 reader.readAsText(file);
-                reader.onload =  function(e){
+                reader.onload =  (function(){
+                    return function(e){
                         startFun&&startFun();
                         ajaxUpload({
                             base:e.target.result,
@@ -65,7 +68,8 @@
                             type:suffix=='zip'?'zip':'file',
                             imgurl:url
                         }) 
-                    };
+                    }
+                })()
             }
              // 读取File对象中的内容
              
