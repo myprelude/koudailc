@@ -413,7 +413,7 @@ html,body{
     border-radius:50%;
 }
 .chat-text .img-content-show{
-    /* background: #B4B4B4 url(../user/pre.jpg) no-repeat center center; */
+    background: #efefef url(../user/pre.gif) no-repeat center center;
     position: relative;
 }
 .text-img{
@@ -421,6 +421,8 @@ html,body{
     position: absolute;
     top:0;
     left:0;
+    opacity:0;
+    transition: opacity 500ms ease-out;
 }
 .chat-text{
     flex:1;

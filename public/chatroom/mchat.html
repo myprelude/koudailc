@@ -482,10 +482,12 @@
         function sendmsgtmp(obj){
             var imgstr = '',w = 150;
             if(obj.uploadimg){
-                if(obj.width<100){
-                    w = obj.width;
+                if(obj.fileobj.type == 'img'){
+                    if(obj.fileobj.width<100){ w = obj.fileobj.width;}
+                    imgstr = "<div class='img-content-show' style='padding-top:"+100/obj.fileobj.scale+"%;width:"+w+"px'><img src='../"+obj.uploadimg+"' class='text-img' data-show='show' onload='loadimg(this)'></div>";
+                }else{
+                    imgstr = "<div class='img-content-show' style='width:100px;height:100px;'><a href='../"+obj.uploadimg+"' download='"+obj.fileobj.name+"'><img src='../user/"+obj.fileobj.type+".png' class='text-img'  onload='loadimg(this)'></a></div>";
                 }
-                imgstr = "<div class='img-content-show' style='padding-top:"+100/obj.scale+"%;width:"+w+"px'><img src='../"+obj.uploadimg+"' class='text-img'></div>";
             }
             var text = "<div class='chat-item'>\
                             <div class='msgname msgname-send'>"+obj.sender.name+"</div>\
@@ -500,10 +502,12 @@
         function getmsgtmp(obj){
             var imgstr = '',w = 150;
             if(obj.uploadimg){
-                if(obj.width<150){
-                    w = obj.width;
+                if(obj.type == 'img'){
+                    if(obj.fileobj.width<100){ w = obj.fileobj.width;}
+                    imgstr = "<div class='img-content-show' style='padding-top:"+100/obj.fileobj.scale+"%;width:"+w+"px'><img src='../"+obj.uploadimg+"' class='text-img' data-show='show' onload='loadimg(this)'></div>";
+                }else{
+                    imgstr = "<div class='img-content-show' style='width:150px;height:150px;'><a href='../"+obj.uploadimg+"' download='"+obj.fileobj.name+"'><img src='../user/"+obj.fileobj.type+".png' class='text-img' onload='loadimg(this)'></a></div>";
                 }
-                imgstr = "<div class='img-content-show' style='padding-top:"+100/obj.scale+"%;width:"+w+"px'><img src='../"+obj.uploadimg+"' class='text-img'></div>";
             }
             var text = "<div class='chat-item'>\
                             <div class='msgname msgname-get'>"+obj.sender.name+"</div>\
@@ -685,9 +689,12 @@
             }
         });
         $('.content-info').on('click','.text-img',function(){
-            var src = $(this).attr('src');
-            $('.imgBox').fadeIn(800);
-            $('.autoimg img').attr('src',src);
+            var src = $(this).attr('src'),show = $(this).attr('src');
+            if(show=='show'){
+                $('.imgBox').fadeIn(800);
+                $('.autoimg img').attr('src',src);
+            }
+            
         })
         $('.imgBox').on('click',function(e){
             if(e.target.nodeName == 'IMG')return;
@@ -701,7 +708,7 @@
             function(data,id){
                 
             },
-            function(data,id,scale,w){
+            function(data,obj){
 
                 socket.emit('message',{
                         text:'',
@@ -709,8 +716,7 @@
                         receive:receiveInfo,
                         contactid:contactid,
                         uploadimg:data.url,
-                        scale:scale,
-                        width:w
+                        fileobj:obj
                 });
 
                 $('.spinner-').hide();
@@ -720,6 +726,10 @@
                 
             },'chatroom/chatimg'
         );
+        //  图片预加载
+        function loadimg(img){
+            $(img).css({opacity:1}).parent().css({background:'none'});
+        }
         // 判断是设备
         if (browser.versions.mobile) {
             $('.info-3').on('click',function(){

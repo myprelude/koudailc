@@ -1,79 +1,99 @@
 (function(root,$){
     function upload(contain,startFun,progress,done,error,url){
-        //  添加一个隐藏的input[type=file]
-        var input = document.createElement("input");
-        input.type = 'file';
-        input.style = 'display:none;opacity:0;'
-        input.multiple = 'multiple';
-        $('body').append(input);
+        var fileUpload = "<form enctype='multipart/form-data' style='display:none;opacity:0;'  id='file_upload'>\
+                        <input type='file' multiple='multiple' >\
+                        </form>";
+        $('body').append(fileUpload);
         
         // 拖拽添加图片功能
-        $(contain).on("dragenter",function(e){
-            e.stopPropagation();
-            e.preventDefault();
-        })
-        $(contain).on("dragover",function(e){
-            e.stopPropagation();
-            e.preventDefault();
-        })
+        $(contain).on("dragenter",function(e){e.stopPropagation();e.preventDefault();})
+        $(contain).on("dragover",function(e){e.stopPropagation();e.preventDefault();})
         $(contain).on("drop",function(e){
             e.stopPropagation();
             e.preventDefault();
             // 获取上传文件的内容
             var files = e.originalEvent.dataTransfer.files;
-    
             $.each(files,function(index,file){
                 checkImg(file,index)
             })  
         })
         $(contain).on('click',function(e){
             if($(e.currentTarget).attr('isclick')){
-                $(input).trigger('click');
+                $('#file_upload').find('input').trigger('click');
             }
             
         })
-        $(input).on('change',function(e){
-            var files = input.files;
+        $('#file_upload').find('input').on('change',function(e){
+            var files = $(this)[0].files;
             $.each(files,function(index,file){
                 checkImg(file,index)
             })  
         })
         function checkImg(file,index){
+            
              // 创建img
-             var name = file.name;
-             var id = '__img__'+index;
-             //  创建进度条
-             var processDom = '<div id="'+id+'" style="position:relative;"><p class="p2"><span></span></p><span class="imgmsg"></span><button type="button" class="btn btn-default imgurl" disabled="disabled" style="width:80%;text-align: center;color:#666;word-break:break-all;float:left;overflow:hidden;"></button><button type="button" class="btn btn-inverse" style="background:#1D1D1D;color:#efefef">复制</button></div>';
-             $('#processimg').prepend(processDom);
-             
-             // 读取File对象中的内容
-             var reader = new FileReader();
-             reader.readAsDataURL(file);
-             reader.onload = (function(){
-                 return function(e){
-                     canvasDataURL(e.target.result,{quality:0.5},function(base,scale,w){
+             var name = file.name,
+                id = '__file__'+index
+                imgArr = ['png','jpeg','jpg','gif'];
+             var i = name.lastIndexOf('.'),
+                suffix = name.substr(i+1),
+                isImage = imgArr.indexOf(suffix)==-1?false:true;
+            var reader = new FileReader();
+            if(isImage){
+                var imglocalurl = window.URL.createObjectURL(file)
+                reader.readAsDataURL(file);
+                reader.onload = function(e){
+                        canvasDataURL(e.target.result,{quality:0.5},function(base,scale,w){
+                            startFun&&startFun();
+                            ajaxUpload({base:base,
+                                        name:name,
+                                        id:id,
+                                        imgurl:url,
+                                        scale:scale,
+                                        type:'img',
+                                        w:w})                      
+                        })
+                    }
+            }else{
+                reader.readAsText(file);
+                reader.onload =  function(e){
                         startFun&&startFun();
-                         ajaxUpload({base:base,name:name,id:id,imgurl:url,scale:scale,w:w})                      
-                     })
-                 }
-             })()
+                        ajaxUpload({
+                            base:e.target.result,
+                            name:name,
+                            id:id,
+                            type:suffix=='zip'?'zip':'file',
+                            imgurl:url
+                        }) 
+                    };
+            }
+             // 读取File对象中的内容
+             
         }
         function ajaxUpload(imgFile){
+            var formData = new FormData();
+            formData.append('base',imgFile.base);
+            formData.append('name',imgFile.name);
+            formData.append('id',imgFile.id);
+            formData.append('imgurl',imgFile.imgurl);
+            formData.append('type',imgFile.type);
             $.ajax({
                 url:'../upload/img',
                 type:'POST',
-                data:JSON.stringify(imgFile),
-                contentType:'application/json;charset=utf-8',
+                data:formData,
+                cache: false,
+                contentType:false, 
+                processData: false,
                 xhr:xhrOnProgress(function(e){
-                    progress&&progress((e.loaded / e.total * 100) + '%',imgFile.id);
-                    // console.log((e.loaded / e.total * 100) + '%')
+                    progress&&progress((e.loaded / e.total * 100) + '%',imgFile);
                 }),
                 success:function(data){;
-                    done&&done(data,imgFile.id,imgFile.scale,imgFile.w);
-                    $(input).val('');
+                    delete imgFile.base;
+                    done&&done(data,imgFile);
+                    $('#file_upload').find('input').val('');
                 },
                 error:function(){
-                    error&&error('no img url',imgFile.id)
+                    error&&error('no img url',imgFile)
                 }
             })
         }
@@ -103,7 +123,9 @@
             }
             // quality值越小，所绘制出的图像越模糊
             if(type=='png'){
-                var base64 = canvas.toDataURL('image/png', quality);
+                var base64 = canvas.toDataURL('image/png');
+            }else if(type=='gif'){
+                var base64 = path;
             }else{
                 var base64 = canvas.toDataURL('image/jpeg', quality);
             }
