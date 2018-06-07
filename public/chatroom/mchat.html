@@ -502,7 +502,7 @@
         function getmsgtmp(obj){
             var imgstr = '',w = 150;
             if(obj.uploadimg){
-                if(obj.type == 'img'){
+                if(obj.fileobj.type == 'img'){
                     if(obj.fileobj.width<100){ w = obj.fileobj.width;}
                     imgstr = "<div class='img-content-show' style='padding-top:"+100/obj.fileobj.scale+"%;width:"+w+"px'><img src='../"+obj.uploadimg+"' class='text-img' data-show='show' onload='loadimg(this)'></div>";
                 }else{
