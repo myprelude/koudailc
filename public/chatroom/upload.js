@@ -72,7 +72,6 @@
                 })()
             }
              // 读取File对象中的内容
-             
         }
         function ajaxUpload(imgFile){
             var formData = new FormData();

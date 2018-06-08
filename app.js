@@ -26,39 +26,44 @@ var server = app.listen(config.port, function () {
 });
 
 var io = sio.listen(server);
-var userGroup = [];
+var userGroup = [],timeTip=null;
 io.on('connection', function(socket){
-	console.log('a user connected');
-
-	socket.on("start", function(obj) {
-		var time = new Date().getTime();
-		obj.time = time;
-
-        io.emit("start",obj);
-    });
-	
-    socket.on("disconnect", function() {
-        console.log("a user go out");
-    });
 
     socket.on("message", function(obj) {
         //延迟3s返回信息给客户端
+		if(timeTip){
+			if(obj.timeTip-timeTip>60000){
+				obj.timeTip = new Date().getTime();
+			}else{
+				obj.timeTip = false;
+			}
+		}else{
+			obj.timeTip = new Date().getTime();
+		}
+		
 		console.log(obj);
-		var time = new Date().getTime();
-		obj.time = time;
+
         io.emit("message", obj);
     });
-    socket.on('login',function(obj){
+    socket.on('loginIn',function(obj){
 		userGroup.push(obj);
-		io.emit("logining", obj);
-        console.log(obj);
+		timeTip = new Date().getTime();
+		obj.timeTip = new Date().getTime();
+
+		io.emit("loginIn", obj);
+
 	})
-	socket.on('loginout',function(obj){
+	socket.on('loginOut',function(obj){
+
 		userGroup.forEach(function(item,i){
 			if(item.id == obj.id){
 				userGroup.splice(i,1)
 			}
 		})
-		io.emit("loginout", obj);
+
+		if(obj.senderInfo.id){
+			io.emit("loginOut", obj);
+		}
+		
     })
 });

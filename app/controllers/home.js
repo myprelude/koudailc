@@ -150,7 +150,7 @@ router.post('/upload/doc',function(req, res, next){
 		res.json({message:'您暂时没有提交权限！',code:400})
 	}
 });
-
+//  路由 配置文件 ...
 router.post('/upload/img',upload.single('avatar'), function (req, res, next) {
 	var base = req.body.base,
 	name = req.body.name,

@@ -243,7 +243,6 @@
         </div>
     </div>
     
-    
     <!-- img -->
     <div class="imgBox">
         <div class="autoimg">
@@ -292,52 +291,44 @@
         var contactid = 'ALL';
         // 聊天容器高度
         var HeightBox = $('.conetent-text-box').innerHeight();
-        var socket = io.connect('ws://scopeman.cn'),userid,timeid;
+        var socket = io.connect('ws://localhost:8099'),userid;
 
         socket.on('connect',function(){
             userid = socket.id;
             setTimeout(function(){
                 $('#loading').fadeOut();
             },500);
-            socket.emit('start',{id:userid});
-        });
-
-        socket.on("start", function(obj) {
-            timeid = obj.time;
-            if(userid==obj.id){
-                $('#id_ALL .textbox').append(timetmp({time:formatDate(obj.time)}));
-            }
         });
         //  接收信息
         socket.on("message", function(obj) {
             getMsg(obj);
         });
 
-        socket.on('logining',function(obj){
-            $('#id_ALL .textbox').append(tiptmp({tips:"--"+obj.name+'--加入聊天室'}));
+        socket.on('loginIn',function(obj){
             if(obj.id==userid){
+                $('#id_ALL .textbox').append(timetmp({time:formatDate(obj.timeTip)}));
                 $('#title-name').text(obj.name);
                 $('#title-img').attr('src',obj.img);
             }else{
                 $('#mCSB_1_container').append(peopletmp(obj));
                 $('#id_ALL .textbox').append(tiptmp());
             }
+            $('#id_ALL .textbox').append(tiptmp({tips:"--"+obj.name+'--加入聊天室'}));
         });
 
-        socket.on("loginout", function(obj) {
+        socket.on("loginOut", function(obj) {
             if(obj.status==1){
-
-                $('#'+obj.id).addClass('out');
+                $('#'+obj.senderInfo.id).addClass('out');
 
             }else if(obj.status==0){
-
-                $('#'+obj.id).parent().remove();
-
-                $('#id_ALL .textbox').append(tiptmp({tips:"--"+obj.name+'--离开聊天室'}));
+                var useid = $('#'+obj.senderInfo.id),box = $('#id_'+obj.contactid);
+                useid.length&&useid.parent().remove();
+                box.length&&box.remove();
+                contactid!='ALL'&&$('#id_ALL').fadeIn();
+                $('#id_ALL .textbox').append(tiptmp({tips:"--"+obj.senderInfo.name+'--离开聊天室'}));
 
             }else if(obj.status==2){
-
-                $('#'+obj.id).removeClass('out');
+                $('#'+obj.senderInfo.id).removeClass('out');
             }
             
         });
@@ -345,10 +336,11 @@
         //接收消息方法
         function getMsg(obj){
             
-            if(obj.time-timeid>60000){
-                $('#id_ALL .textbox').append(timetmp({time:formatDate(obj.time)}));
+            //  时间提醒
+            if(obj.timeTip){
+                $('#id_'+obj.contactid+' .textbox').append(timetmp({time:formatDate(obj.timeTip)}));
             }
-            timeid = obj.sender.time;
+
             //  判断是群聊还是私聊
             if(obj.contactid != "ALL"){
                 //  私聊
@@ -373,7 +365,12 @@
                 
             }else{
                 // 接收者
-                $('#id_ALL .textbox').append(getmsgtmp(obj));
+                if(obj.shake){
+                    obj.text = '群里有人发了震动！';
+                    shakeFun(obj);
+                }else{
+                    $('#id_ALL .textbox').append(getmsgtmp(obj));
+                }
                 // 滚动
                 boxScrollTop(obj)
                 //  收信息提醒
@@ -532,7 +529,7 @@
         }
         // 提示模板
         function tiptmp(obj){
-            var obj = obj?obj:{tips:'该成员你不认识 涉及到金钱的你们还请注意!'};
+            var obj = obj?obj:{tips:'有新成员加入 涉及到金钱的你们还请注意!'};
             var text = "<div class='chat-item chat-tip-on'><div class='chat-tips'><span class='glyphicon glyphicon-exclamation-sign' aria-hidden='true'></span><span>"+obj.tips+"</span></div></div>";
             return text;
         }
@@ -583,7 +580,7 @@
             senderInfo.name = username;
             senderInfo.img = img;
 
-            socket.emit('login',senderInfo);
+            socket.emit('loginIn',senderInfo);
             $('.modal-show').fadeOut(800);
         })
         // 获取接收者的id
@@ -638,7 +635,8 @@
                     text:text,
                     sender:senderInfo,
                     receive:receiveInfo,
-                    contactid:contactid
+                    contactid:contactid,
+                    timeTip:new Date().getTime()
                 });
             }
         })
@@ -652,7 +650,8 @@
                 sender:senderInfo,
                 receive:receiveInfo,
                 contactid:contactid,
-                shake:true
+                shake:true,
+                timeTip:new Date().getTime()
             });
         })
         //  emji 图像
@@ -679,13 +678,13 @@
         });
         ///////浏览器 关闭事件 用户离开  status 是用户状态 0  表示退出  1   表示离开状态  2  表示在线状态
         window.onbeforeunload = function(){
-            socket.emit('loginout',{id:userid,status:0})
+            socket.emit('loginOut',{senderInfo:senderInfo,contactid:contactid,status:0})
         }
         document.addEventListener('visibilitychange',function(){
             if(document.visibilityState=='hidden') {   
-                socket.emit('loginout',{id:userid,status:1})
+                socket.emit('loginOut',{senderInfo:senderInfo,contactid:contactid,status:1})
             }else{
-                socket.emit('loginout',{id:userid,status:2})
+                socket.emit('loginOut',{senderInfo:senderInfo,contactid:contactid,status:2})
             }
         });
         $('.content-info').on('click','.text-img',function(){
@@ -716,7 +715,8 @@
                         receive:receiveInfo,
                         contactid:contactid,
                         uploadimg:data.url,
-                        fileobj:obj
+                        fileobj:obj,
+                        timeTip:new Date().getTime()
                 });
 
                 $('.spinner-').hide();
