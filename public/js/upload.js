@@ -51,7 +51,7 @@
              reader.onload = (function(){
                  return function(e){
                      canvasDataURL(e.target.result,{quality:0.5},function(base){
-                         ajaxUpload({base:base,name:name,id:id,imgurl:url})                      
+                         ajaxUpload({base:base,name:name,id:id,imgurl:url,type:'img'})                      
                      })
                  }
              })()
