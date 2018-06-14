@@ -167,7 +167,7 @@ router.post('/upload/img',upload.single('avatar'), function (req, res, next) {
 	var temp = Date.now();
 	var url = imgurl?imgurl:'upload';
 	var path = 'public/'+url+"/"+temp+name;
-	var pathimg = '![img]('+url+'/'+temp+name+')';
+	var pathimg = '![img](http://scopeman.cn/'+url+'/'+temp+name+')';
 	fs.writeFile(path, dataBuffer, function(err) {
 		if(err){
 			res.json(err);

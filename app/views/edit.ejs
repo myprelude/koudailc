@@ -267,7 +267,7 @@
             var keyword = $('#keyword').val();
             var cate = $('.checkbox').find('input:checked').val();
             var auth = localStorage.getItem('DOC_AUTH');
-            var logo = $('#panel-preview').find('#imglogo img').attr('src')?$('#panel-preview').find('#imglogo img').attr('src'):'https://www.zybuluo.com/static/img/logo.png';
+            var logo = $('#panel-preview').find('img[alt="title-img"]').attr('src')?$('#panel-preview').find('img[alt="title-img"]').attr('src'):'https://www.zybuluo.com/static/img/logo.png';
             if(!title||!topic||!keyword){
                 alert('请检查填写信息是否完整！');
                 return;
@@ -323,7 +323,7 @@
                     $('#'+id).find('.btn').attr('disabled','disabled');
                 }, 1000);
                 
-            },'other'
+            }
         )
         // 手机端点击预览
         $('.phoneshow').on('click',function(){
